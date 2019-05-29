@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="fc" style="width:100%;margin-left:-96px; font-size:12">
+      <div class="capt">Select <a href="" style="font-family:Helvetica; color:white; font-size: 14px;">an input or more, then </a> submit. </div>
+  </div>
+<div class='signup' style="width:90%;margin-left: -49px; font-size:12">
+  <form action="" method="post" style="width:100%;margin-left: 30px; font-size:0.5">
+    {% csrf_token %}
+    {{ result.as_table }}
+    <input type="submit" value="Submit" style="width:13.5%; font-size:1">
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Delete!</h1>
+
+<p>Are you sure you want to delete: {{ qry.student_name }} record in {{ qry.term.subject }}?<em> <a href="{% url 'delete' pk=pk %}"><span class="glyphicon glyphicon-ok-sign"></span></a></em><em><h6>Back</h6><a href="{% url 'home' %}"><span class="glyphicon glyphicon-circle-arrow-left"></span></a></em></p>
+{% endblock %}

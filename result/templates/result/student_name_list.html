@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+  <div class="fc">
+      <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Note: Get the detail result simply by clicking the <a href="" style="font-family:Helvetica; color:red; font-size: 10px;">hyper-link</a> on any of the <strong>{{ counts }}</strong> names for subjects and scores!</em>
+  </div>
+  <ul>
+        <table style="width:89%;margin:1px font-size:12">
+          <tr>
+            <tr><th>STUDENT NAMEs ({{ counts }})</th><th>Created</th><th>Class</th></tr> 
+          </tr>
+          {% if all_page %}
+          {% for scr in all_page %} 
+          <tr>
+            <td><h6><a href="{% url 'student_subject_list' pk=scr.id %}"><h6>{{ scr.id }} : {{ scr.student_name }}</h6></a></td><td><h6>{{ scr.created }}</h6></td><td><h6>{{ scr.Class }}</h6></td>
+          </tr>
+          {% endfor %}
+          {% else %}
+              <p>There are no records.</p>
+          {% endif %}
+        </table>
+        
+  </ul>
+  {% if all_page.has_other_pages %}
+      <ul class="pagination">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+     
+
+{% endblock %}
+
+

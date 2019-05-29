@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+ 
+{% block content %}
+    {% if form.errors %}
+        {{ form.errors }}
+    {% endif %}
+    <form method="post" action="{% url 'logins' %}">
+    {% csrf_token %}
+        <div class="container text-center">
+<p style="width:50%;margin-left: 0px; style="font-family:Arial Black; color:red; font-size: 10px;">User Login!</p>
+<div class='signup' style="width:50%;margin-left: 0px; font-size:12">
+<form role="form" method="post">
+	{% csrf_token %}
+	{{form.non_field_errors}}
+	<br>
+	<div class="fieldWrapper">
+		{{form.username.errors}}
+		<label for="form.username.id_for_label"style="font-family:Arabic Typesetting; color:red; font-size: 19px;">Account Name: </label><br>
+		{{form.username}}
+	</div>
+	<div class="fieldWrapper">
+		{{form.password1.errors}}
+		{{help_text|safe}}
+		<label for="form.password1.id_for_label"style="font-family:Arabic Typesetting; color:green; font-size: 19px;">Password: </label><br>
+		{{form.password1}}
+	</div>
+	
+		<input type="submit" value="Login" class="btn button-primary"/>
+	<a href="{% url 'renew_password' %}" style="font-family:Arial Black; color:green; font-size: 9px;">Forget Password!</a>
+       <input type="hidden" name="next" value="{{ next }}" />
+</form>
+</div>
+{% endblock %}
+
+
+

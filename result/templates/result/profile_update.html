@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="fc" style="width:50%;margin-left:59; font-size:11;">
+            <div class="capt" style="font-family:Bradley Hand ITC; color:red; font-size: 17px;">Staff Details</div>
+    </div>
+    <form method="post" novalidate style="width:50%;margin-left:59; font-size:11;" enctype="multipart/form-data">
+    {% csrf_token %}
+    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Personal Info:</em>
+    <div class="row">
+      <div class="col-xs-6">
+        {{ form.first_name|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.last_name|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.birth_date|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.organization|as_crispy_field }}
+      </div>
+    </div>   
+    {{ form.bio|as_crispy_field }}
+    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Contact Info:</em>
+    <div class="row">
+      <div class="col-xs-6">
+        {{ form.phone|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.city|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.country|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.location|as_crispy_field }}
+      </div>
+    </div>
+    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Profile Info:</em>
+    <div class="row">
+      <div class="col-xs-6">
+        {{ form.department|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.photo|as_crispy_field }}
+      </div>
+    </div> 
+    <button type="submit" class="btn btn-success">Save profile</button>
+  </form>
+{% endblock %}

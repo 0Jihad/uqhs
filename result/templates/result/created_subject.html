@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New</title>
+</head>
+<body>
+    {% block content %}
+<div><strong>Subject List</strong>: All valid Subjects. </div>
+    <ul>
+        <table style="width:50%;margin:29px; font-size:12">
+          <tr>
+            <tr><th>Subject id</th><th>Subject Name</th></tr> 
+          </tr>
+          {% if check %}
+          {% for scr in check %} 
+          <tr>
+            <td>{{ scr.id }}</td><td><em> <a href="{% url 'created_subject_list' pk=scr.id %}" target = _blank>{{ scr.name }}</a></td>
+          </tr>
+          {% endfor %}
+          {% else %}
+              <p>There are no records.</p>
+          {% endif %}
+        </table>
+        <em><a href="{% url 'home' %}" target = _blank > My Subjects</a></em>  
+  </ul>
+   {% endblock %}
+ 
+ 
+</body>
+</html>
+

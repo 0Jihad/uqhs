@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+  <html>
+    <head>
+        <title>FlexBox</title>
+    </head>
+    <body>
+        
+        <div class="fcs" style="width:85%;margin:0px; font-size:12">
+            <em class="capt">User's Guide</em>
+            <p class="first">Step 1: Use Notepad or any other text editor to prepare a file containing student names, test scores, attendance scores, asignment scores and exam scores e.g (TUNDE OLUMO, 20, 10, 10, 60) in a new line for each students. Then save it with a file name e.g my_file.txt. When there are two gender classes, just separate the class A from class B by leaving an empty line. Click <a href="{% url 'user_example' %}">here </a> for sample.</p>
+            <p class="second">Step 2: Login <span class="glyphicon glyphicon-log-in"></span> or Sing-up (new users) <span class="glyphicon glyphicon-user"></span> into your account. Click on the plus-sign <span class="glyphicon glyphicon-plus"></span> in the left navigation bar. Then, locate your prepared txt file. Upload it by simply click <a href="{% url 'upload_txt' %}" class="">upload!</a>
+            <p class="third">Step 3: Complete your upload by chosen the approprate class, term, subject from the dropdown lists. Provide the subject teacher name in the space provided. Then, save to proceed. You will be redirected to your <a href="{% url 'home' %}" >DASHBOARD</a></p>
+            <p class="fourth">Note: On the DASHBORAD, you can navigate to various uploaded files through the blue links. With this, class subject can be deleted once or by each student. Student name can be edited by clicking the link to the targeted name. If you need to adjust score(s), the txt file need to be re-edited, re-saved and re-loaded, this is done after deleting the whole class affected by simply click the star-sign <span class="glyphicon glyphicon-remove"></span>. After comfirmig deletion the old records will be removed.</p>
+            <p class="fourth">Step 4: On successful completion of these steps above, scrow down to locate the download link <span class="glyphicon glyphicon-save"></span>. The processed result can be downloaded in csv format for any further uses.</p> 
+            <p class="fourth">Step 5: Annual records can be generated once third term results were successfully uploaded. After download of third term result, the annual result can be generated from the same page by clicking the mark sign <span class="glyphicon glyphicon-ok-sign"></span>.</p>                                                                                                                                                                                                                                                         
+            <p class="fourth">Step 6: By clicking on overall result, first and second term results can be edited to remove the left students before generating annual overall scores. Only students with third term and any other score should remain before clicking on generate <span class="glyphicon glyphicon-ok-sign"></span> result on the template.</p>                
+        </div>
+    </body>
+</html>
+
+
+{% endblock %}
+ 
+

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>subject per Student</title>
+    </head>
+    {% block content %}
+    <caption>
+        <p><strong><a href="{% url 'home' %}">Annual:</a></strong> Result Summary</p>
+    </caption>
+    <table style="width:60%;margin:1px; font-size:18">
+    {% if first %}
+    {% if second %}
+    {% if third %}
+    {% for scr in first %}
+    {% for scs in second %}
+    {% for scd in third %}
+        <tr>
+            <th>{{ scr.student_name }}<em></em></th>
+            <td>1st Term</td>
+            <td>2nd Term</td>
+            <td>3rd Term</td>
+        </tr>
+        <tr>
+            <th>Test:</th>
+            <td>{{ scr.test }}</td>
+            <td>{{ scs.test }}</td>
+            <td>{{ scd.test }}</td>
+        </tr>
+        <tr>
+            <th>Agns:</th>
+            <td>{{ scr.agn }}</td>
+            <td>{{ scs.agn }}</td>
+            <td>{{ scd.agn }}</td>
+        </tr>
+        <tr>
+            <th>Atd:</th>
+            <td>{{ scr.atd }}</td>
+            <td>{{ scs.atd }}</td>
+            <td>{{ scd.atd }}</td>
+        </tr>
+        <tr>
+            <th>Total:</th>
+            <td>{{ scr.total }}</td>
+            <td>{{ scs.total }}</td>
+            <td>{{ scd.total }}</td>
+        </tr>
+        <tr>    								
+            <th>Exam:</th>
+            <td>{{ scr.exam }}</td>
+            <td>{{ scs.exam }}</td>
+            <td>{{ scd.exam }}</td>
+        </tr>
+        <tr>
+            <th>Agr:</th>
+            <td>{{ scr.agr }}</td>
+            <td>{{ scs.agr }}</td>
+            <td>{{ scd.agr }}</td>
+        </tr>
+        <tr>
+            <th>Grade:</th>
+            <td>{{ scr.grade }}</td>
+            <td>{{ scs.grade }}</td>
+            <td>{{ scd.grade }}</td>
+        </tr>
+        <tr>
+            <th>Pos</th>
+            <td>{{ scr.posi }}</td>
+            <td>{{ scs.posi }}</td>
+            <td>{{ scd.posi }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        {% if anu %}
+        {% for ar in anu %}
+        <tr><td><strong>Annual Remark:</strong></td><td> <strong>sum: </strong> {{ ar.anual }}</td><td><strong>grade: </strong>{{ ar.anu_grade }}</td><td><strong>pos: </strong>{{ ar.anu_posi }}</td></tr>
+        {% endfor %}
+        {% endif %}
+    </table> 
+    {% endblock %}
+</html>

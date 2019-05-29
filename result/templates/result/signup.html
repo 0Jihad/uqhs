@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    {% if form.errors %}
+        {{ form.errors }}
+    {% endif %}
+    <form method="post" action="{% url 'ssignups' %}">
+    {% csrf_token %}
+        <div class="container text-center">
+<br><p style="width:50%;margin-left: 0px; font-size:12">Create an account now!</p>
+<div class='signup' style="width:50%;margin-left: 0px; font-size:12">
+<form method="post"class="post-form" enctype="multipart/form-data" class="form-horizontal">{% csrf_token %}
+      {{ status.as_p|crispy }}
+      {{ form.as_p|crispy }}
+      <button type="submit" class="save btn btn-default">Continue</button>
+        </form>
+</div>
+{% endblock %}

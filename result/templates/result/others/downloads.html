@@ -1,0 +1,7 @@
+{% block content %}
+<form action ='data' method='POST'>
+    {% csrf_token %}
+    <input type='hidden'>
+    <input type='submit' value='Download'>
+</form>
+{% endblock %}

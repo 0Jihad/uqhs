@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+  <div class="fc" style="width:89%;margin-left:1px; font-size:12">
+      <div class="capt"><a href="" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href=""style="font-family:Helvetica; color:white; font-size: 10px;"> Class: </a> {{ qry.Class }} <a href=""style="font-family:Helvetica; color:white; font-size: 10px;"> Term: </a> {{ qry.term }} </div>
+  </div>
+  <ul>
+        <table style="width:89%;margin:1px font-size:12">
+          <tr>
+            <tr><th>STUDENT NAME ({{ count_grade }})</th>{% if user.is_staff == True %}<th>No.</th>{% endif %}<th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Del</th></tr> 
+          </tr>
+          {% if all_page %}
+          {% for scr in all_page %} 
+          <tr>
+            <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.id }}</a></td>{% endif %}<td style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.test }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agn }}</td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.atd }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.total }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.exam }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agr }}</a></td><td><em style="font-family:Helvetica; color:green; font-size: 10px;">{{ scr.grade }}</a></td><td><em style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.posi }}</a></td><td><a href="{% url 'delete_warning' pk=scr.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+          </tr>
+          {% endfor %}
+          {% else %}
+              <p>There are no deleted records in the bin.</p>
+          {% endif %}
+        </table>
+       
+  </ul>
+  {% if all_page.has_other_pages %}
+      <ul class="pagination">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+     <div><a href="{% url 'home' %}" style="font-family:Helvetica; color:green; font-size: 17px;">Home</a></div>
+
+{% endblock %}
+
+

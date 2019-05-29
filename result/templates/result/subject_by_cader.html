@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+  <div class="fc">
+      <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Note: Get the detail result simply by clicking the <a href="" style="font-family:Helvetica; color:red; font-size: 10px;">hyper-link</a> on the student names</h5></em>
+  </div>
+  <ul>
+        <table style="width:89%;margin:1px font-size:12">
+          <tr>
+            <tr><th>STUDENT NAMEs</th><th>Subjects</th><th>Classes</th><th>Terms</th><th>Grades</th><th>Poss</th></tr> 
+          </tr>
+          {% if all_page %}
+          {% for scr in all_page %} 
+          <tr>
+            <td><h6><a href=""><h6>{{ scr.student_name }}</a></h6></td><td><h6><a href="{% url 'list_tutor_subjects' pk=scr.tutor_id %}">{{ scr.tutor.subject }}</a></h6></td><td><h6>{{ scr.tutor.Class }}</h6></td><td><h6>{{ scr.tutor.term }}</h6></td><td><h6>{{ scr.grade }}</h6></td><td><h6>{{ scr.posi }}</h6></td>
+          </tr>
+          {% endfor %}
+          {% else %}
+              <p>There are no records.</p>
+          {% endif %}
+        </table>
+        
+  </ul>
+  {% if all_page.has_other_pages %}
+      <ul class="pagination">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+     
+
+{% endblock %}
+
+

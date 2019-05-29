@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Nov  7 06:03:01 2018
+
+@author: AdeolaOlalekan
+"""
+
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+    <div class="fc">
+            <em class="capt">Load Picture</em>
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">{% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}
