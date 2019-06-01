@@ -1,1 +1,1 @@
- web: gunicorn uqhs.wsgi --log-file -
+ web: gunicorn uqi.wsgi --log-file -
