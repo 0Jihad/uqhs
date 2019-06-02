@@ -62,7 +62,7 @@ class BTUTOR(models.Model):
     males = models.IntegerField(null=True, blank=True, default='0')
     females = models.IntegerField(null=True, blank=True, default='0')
     cader = models.CharField(max_length=1, blank=True, null=True)
-    session = models.CharField(max_length=18, default='18/19', blank=True, null=True)
+    session = models.IntegerField(null=True, blank=True, default='0')
     class Meta:
           ordering = ('id',) # helps in alphabetical listing. Sould be a tuple
     #def __str__(self):
