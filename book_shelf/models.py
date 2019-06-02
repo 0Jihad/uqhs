@@ -62,7 +62,7 @@ class BookInstance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this particular book across whole library')
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True) 
     imprint = models.CharField(max_length=200)
-    due_back = models.DateField(null=True, blank=True, default='1111-11-11')
+    due_back = models.DateTimeField(null=True, blank=True, default='9999-12-31')
     borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     renew = models.CharField(max_length=5, null=True, blank=True)
     LOAN_STATUS = (
@@ -100,8 +100,8 @@ class Author(models.Model):
     """Model representing an author."""
     first_name = models.CharField(max_length=100, help_text='Middle name inclusive.')
     last_name = models.CharField(max_length=100, help_text='Surname only.')
-    date_of_birth = models.DateField(null=True, blank=True, default='1111-11-11')
-    date_of_death = models.DateField('died', null=True, blank=True, default='1111-11-11')
+    date_of_birth = models.DateTimeField(null=True, blank=True, default='9999-12-31')
+    date_of_death = models.DateTimeField('died', null=True, blank=True, default='9999-12-31')
 
     class Meta:
         ordering = ['last_name', 'first_name']
