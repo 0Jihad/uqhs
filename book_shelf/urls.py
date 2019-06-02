@@ -1,5 +1,5 @@
 from django.urls import path#, include
-"""from . import views
+from . import views
 
 
 urlpatterns = [
@@ -45,4 +45,3 @@ urlpatterns = [
     path('book/renew/', views.renew_loan_book, name='renew_approval'),
     #path('book_copies/(?P<pk>\d+)/$', views.applied_for_Book_Intances, name='book_copies'),
 ]
-"""
