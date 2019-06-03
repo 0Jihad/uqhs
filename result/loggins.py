@@ -20,9 +20,13 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.http import HttpResponse
 from django.views.generic.edit import UpdateView
-#from django.http import HttpResponseRedirect
-#from django.urls import reverse
+from django.db.models import Sum
+from django.forms import modelformset_factory
+from result.result_views import tot
 ####################################STAGE 1::::#########TUTOR GET LOG IN OR SIGN UP##########################################   
+def flexbox(request):
+    return render(request, 'result/flexbox.html')
+
 def loggin(request):
     if request.method == 'POST':
         form = login_form(request.POST)
@@ -43,6 +47,7 @@ def loggin(request):
 def logout(request):
     auth.logout(request)
     return render(request,'registration/logout.html')
+
 def admin_page(request):
     if not request.user.is_authenticated:
         return redirect('logins')
@@ -208,7 +213,6 @@ def subject_class_term_filter(request):#New teacher form for every new term, cla
 
 
 def sSum(subjects):
-    from django.db.models import Sum
     anuual = subjects.aggregate(Sum('agr'))['agr__sum']
     return anuual
 
@@ -244,7 +248,7 @@ def tutor_class_filter(request):#New teacher form for every new term, class, sub
 def Teacher_model_result_grades(request, pk):##Step 2::  every tutor home detail views
     grad = get_object_or_404(RESULT_GRADE, identifier=pk)
     grad.save()
-from result.model_views import tot
+
 def detailView(request, pk):##Step 2::  every tutor home detail views
     tutor = get_object_or_404(BTUTOR, pk=pk)
     mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')#request.user
@@ -420,8 +424,7 @@ def student_subject_detail_all_subject(request, pk):#student subject detail(sing
     return render(request, 'result/single_subject_per_student.html',  {'subjects' : subjects, 'name':many, 'anuual':anuual, 'pk':pk}) 
 
 ##########################PORTAL MANAGEMENT####################################
-def flexbox(request):
-    return render(request, 'result/flexbox.html')
+
 
 def teacher_accounts(request):
     tutors = BTUTOR.objects.all().order_by('Class')
@@ -570,7 +573,7 @@ class Subject_model_view(UpdateView):#New teacher form for every new term, class
     fields = ['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'agr', 'grade', 'posi', 'tutor']
     
 #@login_required
-from django.forms import modelformset_factory
+
 def manage_subject_updates(request, pk):
     tutor = BTUTOR.objects.get(pk=pk)
     ext = tutor.males+tutor.females - QSUBJECT.objects.filter(tutor__exact=tutor).count()

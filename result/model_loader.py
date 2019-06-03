@@ -7,7 +7,7 @@ Created on Tue Dec 18 20:05:17 2018
 
 from .models import QSUBJECT, CNAME, BTUTOR, ANNUAL
 from django.shortcuts import render, redirect, get_object_or_404
-from result.model_views import cader
+from result.result_views import cader
 from result.grader import grades, don_e
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

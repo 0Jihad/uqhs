@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from result.model_views import cader
+from result.result_views import cader
 from django.contrib.auth.decorators import login_required
 ######################STAGE 2 ::: UPLOAD SCORES##################caders = ['jfo', 'sfo']
 def bst_avg(dim):

@@ -18,13 +18,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('book_shelf/', include('book_shelf.urls')),
-    #path('', RedirectView.as_view(url='/cat_log/', permanent=True)),###
-    #path('accounts/', include('django.contrib.auth.urls')),
     path('result/', include('result.urls')),
+    path('', RedirectView.as_view(url='/result/', permanent=True)),
+    path('book_shelf/', include('book_shelf.urls')),
     #url('^', include('django.contrib.auth.urls')),
 ]# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
