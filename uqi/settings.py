@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%asj6yjpkag')
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
+                      
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,13 +29,13 @@ STATICFILES_DIRS = (
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dqtx4k0&m9expsji^cwgqec=3vmc0cyk-k_8^50ei5_0$b!ub='
+#SECRET_KEY = 'dqtx4k0&m9expsji^cwgqec=3vmc0cyk-k_8^50ei5_0$b!ub='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['127.0.0.1', 'loclabs.herokuapp.com']
+
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['uqhs.herokuapp.com', '127.0.0.1']
 #add email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -155,8 +157,8 @@ import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 ###for image upload
-MEDIA_URL = '/score_log/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'score_log')
+MEDIA_URL = '/result/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'result')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
@@ -167,3 +169,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
+
+
