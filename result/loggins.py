@@ -24,8 +24,7 @@ from django.db.models import Sum
 from django.forms import modelformset_factory
 from result.result_views import tot
 ####################################STAGE 1::::#########TUTOR GET LOG IN OR SIGN UP##########################################   
-def flexbox(request):
-    return render(request, 'result/flexbox.html')
+
 
 def loggin(request):
     if request.method == 'POST':
@@ -609,3 +608,5 @@ def new_profiles_pic(request, pk):
         return redirect('pro_detail', pk=pk)
     return render(request, 'result/picture.html')  
 
+def flexbox(request):
+    return render(request, 'result/flexbox.html')

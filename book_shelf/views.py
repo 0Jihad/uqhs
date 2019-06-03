@@ -261,9 +261,12 @@ class LoanedBooks_On_Qeue(PermissionRequiredMixin,generic.ListView):
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='Available').order_by('id') 
 
-@login_required
+#@login_required
 def my_loan_book(request):
-    book_instance = BookInstance.objects.filter(borrower = request.user, status__exact='On loan').order_by('id')
+    if request.user.is_authenticated:
+        book_instance = BookInstance.objects.filter(borrower = request.user, status__exact='On loan').order_by('id')
+    else:
+            return redirect('home')
     return render(request, 'book_shelf/my_loan_book.html', {'book_instance' : book_instance})
 
 def book_stores(request):

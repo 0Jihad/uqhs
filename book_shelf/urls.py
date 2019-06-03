@@ -1,4 +1,4 @@
-from django.urls import path#, include
+from django.urls import path#, include, my_loan_book
 from . import views
 
 
@@ -40,7 +40,7 @@ urlpatterns = [
     path('applyforbook/<uuid:pk>/qeues/', views.applied_for_Book, name='qeues'),
     path('book/<uuid:pk>/approval/', views.BookLoanApproval, name='approval'),
     path('book/qeuing/', views.LoanedBooks_On_Qeue.as_view(), name='qeuing'),
-    path('book/my_loan_book/', views.my_loan_book, name='my_loan_book'),
+    path('my_loan_book/', views.my_loan_book, name='my_loan_book'),
     path('book/<uuid:pk>/renew_qeues/', views.applied_for_Book_renew, name='renew_qeues'),
     path('book/renew/', views.renew_loan_book, name='renew_approval'),
     #path('book_copies/(?P<pk>\d+)/$', views.applied_for_Book_Intances, name='book_copies'),

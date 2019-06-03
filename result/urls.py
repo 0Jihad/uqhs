@@ -5,18 +5,18 @@ Created on Mon Jan 14 01:15:37 2019
 @author: AdeolaOlalekan
 """
 #from django.contrib.auth import views as auth_views
-from django.conf.urls import url#, include student_name_edit, subject_per_name
+from django.conf.urls import url
+#, include student_name_edit, subject_per_name
 from.import result_views, model_loader, loggins, sign_up
 urlpatterns = [
-        url('home/', loggins.home, name='home'),
-        url('', loggins.flexbox, name='flexing'),
+        url(r'home/$', loggins.home, name='home'),
         url(r'^generate/anual/(?P<pk>\d+)/', result_views.annual_agr, name='anual'),
         url(r'^get_total/(?P<pk>\d+)/', result_views.subject_total, name='get_total'),
         url(r'^upload_txt/(?P<pk>\d+)/', model_loader.upload_new_subject_scores, name='upload_txt'),
         url(r'^extract_name/subjects/(?P<pk>\d+)/', loggins.export_name_text, name='extract_name'),
         url(r'^export/scores/subjects/(?P<pk>\d+)/', loggins.export_subject_scores, name='export_users_scores'),
         url(r'^export/scores/annual/(?P<pk>\d+)/', loggins.export_annual_scores, name='export_annual_scores'),
-        url('logins/', loggins.loggin, name='logins'),
+        url(r'logins/', loggins.loggin, name='logins'),
         url('log_out/', loggins.logout, name='log_out'),
         url('subject_class_term_filter/', loggins.subject_class_term_filter, name='subject_class_term_filter'),
         url('student_name_class_filter/', loggins.student_name_class_filter, name='student_name_class_filter'),
@@ -72,5 +72,5 @@ urlpatterns = [
         url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         sign_up.reset, name='reset'),
         url('user/(?P<pk>\d+)/$', loggins.ProfileUpdate.as_view(), name='user_update'),
-        
+        url('', loggins.flexbox, name='flexing'),
                ]
