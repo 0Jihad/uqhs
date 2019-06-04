@@ -20,9 +20,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.http import HttpResponse
 from django.views.generic.edit import UpdateView
-from django.db.models import Sum
 from django.forms import modelformset_factory
-from result.result_views import tot
+from django.db.models import Sum, Avg
 ####################################STAGE 1::::#########TUTOR GET LOG IN OR SIGN UP##########################################   
 
 
@@ -256,8 +255,15 @@ def detailView(request, pk):##Step 2::  every tutor home detail views
     grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
     page = request.GET.get('page', 1)
     paginator = Paginator(mains, 60)
-    tot(mains, pk)
-    qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
+    old = TOTAL.objects.filter(subject_by__exact=tutor).count()
+    if old == 0:
+        qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
+        qar.save() 
+    else:
+        qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
+        qar.subject_scores = mains.aggregate(Sum('agr'))['agr__sum']
+        qar.subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2)
+        qar.save()
     try:
         all_page = paginator.page(page)
     except PageNotAnInteger:

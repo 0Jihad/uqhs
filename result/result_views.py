@@ -16,19 +16,6 @@ from result.grader import grades, don_e
 from django.shortcuts import render, get_object_or_404, redirect#, redirect
 from django.db.models import Sum, Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
-def tot(mains, pk):
-    tutor = get_object_or_404(BTUTOR, pk=pk)
-    old = TOTAL.objects.filter(subject_by__exact=tutor).count()
-    if old == 0:
-        qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
-        qar.save() 
-    else:
-        qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
-        qar.subject_scores = mains.aggregate(Sum('agr'))['agr__sum']
-        qar.subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2)
-        qar.save()
         
 def cader(qry):
     clas = [['', 'JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3'], ['', 'jss_one', 'jss_two', 'jss_three', 'sss_one', 'sss_two', 'sss_three']]
@@ -45,8 +32,15 @@ def subject_total(request, pk):
         mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')
     else:
         mains = ANNUAL.objects.filter(subject__exact=tutor.subject, subject_by__Class__exact=tutor.Class, term__exact='3rd Term').order_by('id')
-    tot(mains, pk)
-    qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
+    old = TOTAL.objects.filter(subject_by__exact=tutor).count()
+    if old == 0:
+        qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
+        qar.save() 
+    else:
+        qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
+        qar.subject_scores = mains.aggregate(Sum('agr'))['agr__sum']
+        qar.subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2)
+        qar.save()
     page = request.GET.get('page', 1)
     paginator = Paginator(mains, 60)
     many = mains.count()
