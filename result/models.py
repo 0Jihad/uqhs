@@ -182,7 +182,7 @@ class TOTAL(models.Model):
     subject_pert = models.FloatField(max_length=200, blank=True, null=True)
     term_status = (('1st Term', 'first term'), ('2nd Term', 'second term'), ('3rd Term', 'third term'))
     term = models.CharField(max_length=30, choices=term_status, blank=True, null=True, help_text='subject term',)
-    model_in = models.CharField(max_length=6, default='total', blank=True, null=True)
+    model_in = models.CharField(max_length=10, default='total', blank=True, null=True)
     class Meta:
           ordering = ('term',) # helps in alphabetical listing. Sould be a tuple
     def __str__(self):
