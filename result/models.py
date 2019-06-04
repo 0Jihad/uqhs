@@ -178,8 +178,8 @@ class TOTAL(models.Model):
     logged_in = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='Logged-in-user')
     subject_by = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher')
     subject =  models.ForeignKey(ASUBJECTS, on_delete=models.SET_NULL, null=True)#
-    subject_scores = models.FloatField(max_length=9, blank=True, null=True)
-    subject_pert = models.FloatField(max_length=9, blank=True, null=True)
+    subject_scores = models.FloatField(max_length=200, blank=True, null=True)
+    subject_pert = models.FloatField(max_length=200, blank=True, null=True)
     term_status = (('1st Term', 'first term'), ('2nd Term', 'second term'), ('3rd Term', 'third term'))
     term = models.CharField(max_length=30, choices=term_status, blank=True, null=True, help_text='subject term',)
     model_in = models.CharField(max_length=6, default='total', blank=True, null=True)

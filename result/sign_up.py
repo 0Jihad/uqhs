@@ -22,43 +22,6 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponse#, HttpResponseRedirect
 #from django.core.mail import send_mail
 #send_mail('noreply', 'body of the message', 'adeolaolalekan1431@yahoo.com', ['adeolaolalekan01831@gmail.com', 'adeolaolalekan1831@outlook.com'])
-def new(request, pk):
-    if request.method == "POST":
-        status = Sign_Up_Type(request.POST)
-        if status.is_valid():
-            if status.cleaned_data['account'] == 'Staff':
-                return redirect('edith', pk=pk)
-            else:
-                user = User.objects.get(pk=pk)
-                user.profile.account = 'Student'
-                user.profile.photo = User.objects.get(pk=1).profile.photo#default pics
-                user.profile.email_confirmed = True
-                user.save()
-                return redirect('logins')
-    else:
-        status = Sign_Up_Type()
-    return render(request, 'result/signup_type.html', {'status': status})
-
-def Student_signup(request):
-    if request.method == 'POST':
-        form = SSignUpForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password1 = form.cleaned_data['password1']
-            password2 = form.cleaned_data['password2']
-            email = form.cleaned_data['email']
-            password = None
-            if password1 == password2:
-                password = password1
-                if not (User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()):
-                    user = User.objects.create(username=username, email=email, password=password) 
-                    user.is_active = True
-                    user.save()
-                    return redirect('logins')
-    else:
-        form = SSignUpForm()
-    return render(request, 'result/signup.html', {'form': form})
-
 class Staff_SignUp(generic.CreateView):
     form_class = SignUpForm
     template_name = 'registration/signup.html'
@@ -88,7 +51,7 @@ class Staff_SignUp(generic.CreateView):
                     profile.save()
                     current_site = get_current_site(request)
                     mail_subject = 'Activate your blog account.'
-                    message = render_to_string('result/acc_active_email.html', {
+                    message = render_to_string('registration/account_activation_email.html', {
                         'user': User,
                         'domain': current_site.domain,
                         'uid': urlsafe_base64_encode(force_bytes(userObj.pk)).decode(),

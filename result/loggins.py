@@ -256,7 +256,7 @@ def detailView(request, pk):##Step 2::  every tutor home detail views
     grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
     page = request.GET.get('page', 1)
     paginator = Paginator(mains, 60)
-    tot(mains, tutor)
+    tot(mains, pk)
     qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
     try:
         all_page = paginator.page(page)

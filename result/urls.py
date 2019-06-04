@@ -40,7 +40,7 @@ urlpatterns = [
         url('admin_page/', loggins.admin_page, name='admin_page'),
         url('upload_photo/(?P<pk>\d+)/', loggins.new_profiles_pic, name='upload_photo'),
         url('one_subject_detail/(?P<pk>\d+)/', loggins.name_per_subject, name='one_subject_detail'),
-        #url('scaders/', loggins.Subject_by_Cader_senior, name='scaders'),
+        #url('scaders/', loggins.Subject_by_Cader_senior, name='scaders'), new
         url('list_tutor_subjects/(?P<pk>\d+)/', loggins.list_tutor_subjects, name='list_tutor_subjects'),
         url('student_names/', loggins.Student_names_list, name='student_names'),
         url('student_on_all_subjects_list/(?P<pk>\d+)/', loggins.student_on_all_subjects_list, name='student_on_all_subjects_list'),
@@ -66,7 +66,7 @@ urlpatterns = [
         url('warning_delete_anu/(?P<pk>\d+)/$', loggins.confirm_deletion_anu, name='warning_delete_anu'),
         url('signup/', sign_up.Staff_SignUp.as_view(), name='signup'),
         #url('ssignup/', sign_up.Student_signup, name='ssignup'),tutor_model_summary
-        url('new/(?P<pk>\d+)/$', sign_up.new, name='new'),
+        #url('new/(?P<pk>\d+)/$', sign_up.new, name='new'),
         url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         sign_up.activate, name='activate'), 
         url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',

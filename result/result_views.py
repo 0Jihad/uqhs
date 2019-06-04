@@ -18,7 +18,8 @@ from django.db.models import Sum, Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def tot(mains, tutor):
+def tot(mains, pk):
+    tutor = get_object_or_404(BTUTOR, pk=pk)
     old = TOTAL.objects.filter(subject_by__exact=tutor).count()
     if old == 0:
         qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
@@ -44,7 +45,7 @@ def subject_total(request, pk):
         mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')
     else:
         mains = ANNUAL.objects.filter(subject__exact=tutor.subject, subject_by__Class__exact=tutor.Class, term__exact='3rd Term').order_by('id')
-    tot(mains, tutor)
+    tot(mains, pk)
     qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
     page = request.GET.get('page', 1)
     paginator = Paginator(mains, 60)
