@@ -87,8 +87,10 @@
                         <a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Start</a>
                         <a href="{% url 'search_tutors' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Move</a>
                         <a href="{% url 'student_in_none' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Bin</a>
+                        
                     {% endif %} 
                     {% if perms.catalog.can_mark_returned %}
+                        <a href="{% url 'all_accounts' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Accounts</a>
                         <a href="{% url 'author_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Authors</a>
                         <a href="{% url 'book_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Books</a>
                         <a href="{% url 'genre_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Genre</a>
@@ -164,7 +166,7 @@
                         <ul>
                             <li>Alway with His Sincare Servant:1</li>
                             <li>He them aright!:2</li>
-                            <li>His Comfort is Certain:3</li>
+                            <li>He is Comfort is Certain:3</li>
                         </ul>
                 
                         <div>
