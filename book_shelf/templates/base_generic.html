@@ -83,7 +83,7 @@
                         <a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><h6>Sign Up</h6></a>  
                     {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
-                        <a href="{% url 'pro_detail' request.user.id %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Profile</a>
+                        {% if request.user.profile.bio != 'new!' %}<a href="{% url 'pro_detail' request.user.id %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Profile</a>{% endif %}
                         <a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Start</a>
                         <a href="{% url 'search_tutors' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Move</a>
                         <a href="{% url 'student_in_none' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Bin</a>

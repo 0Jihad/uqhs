@@ -137,6 +137,19 @@ tr:nth-child(even) {background-color: silver;}
   
 }
 
+
+}
+
+.sidenav.nav {
+ margin-top: 20px;
+ display: block;
+}
+
+@media (max-width: 250px) {
+  .sidenav {
+    display: none;
+  }
+}
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
   color: #f1f1f1;
@@ -179,7 +192,7 @@ tr:nth-child(even) {background-color: silver;}
  display: block;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 250px) {
   .sidenavs {
     display: none;
   }

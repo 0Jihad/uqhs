@@ -50,7 +50,7 @@ class Staff_SignUp(generic.CreateView):
                     profile.account = ['', 'Student', 'Staff']
                     profile.save()
                     current_site = get_current_site(request)
-                    mail_subject = 'Activate your blog account.'
+                    mail_subject = 'This email comfirmed your signup email as connected!'
                     message = render_to_string('registration/account_activation_email.html', {
                         'user': User,
                         'domain': current_site.domain,
