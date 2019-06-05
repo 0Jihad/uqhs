@@ -21,7 +21,7 @@
         <p><a href="{% url 'home' %}"><strong>Current Location:</strong></a> {{ qry.location }}</p>
         <p><a href="{% url 'home' %}"><strong>Birth:</strong></a> {{ qry.birth_date }}</p>
         <p><a href="{% url 'home' %}"><strong>Department:</strong></a> {{ qry.department }}</p>
-	<h6> {{ request.user.email|default:"Action required!" }} </h6>
+	<em class="capt">{{ request.user.email|default:"Action required!" }}:</em> <a href="{% url 'password' %}"><strong>reset password</strong></a>
      </span> 
     </div> 
     {% endblock %}

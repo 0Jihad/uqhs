@@ -15,7 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import login_form, ProfileForm, tutor_class_Form, student_names, subjectforms, subject_class_term_Form, name_class_Form
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required#, @permission_required
-from django.contrib.auth.forms import AdminPasswordChangeForm#, PasswordChangeForm
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.http import HttpResponse
@@ -53,22 +53,43 @@ def admin_page(request):
 
 ################################UPDATING USER ACCOUNT###############################################
 @login_required
-def password(request):
+def password1(request, pk):
+    users = get_object_or_404(User, pk=pk)
     PasswordForm = AdminPasswordChangeForm
+    if request.method == 'POST':
+        form = PasswordForm(users, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Your password was successfully updated!')
+            if request.user.is_superuser:
+                return redirect('all_accounts')
+            return redirect('logins')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordForm(users)
+    return render(request, 'registration/password.html', {'form': form})
+
+@login_required
+def password2(request):
+    if request.user.has_usable_password():
+        PasswordForm = PasswordChangeForm
+    else:
+        PasswordForm = AdminPasswordChangeForm
+
     if request.method == 'POST':
         form = PasswordForm(request.user, request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('logins')
+            return redirect('home')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordForm(request.user)
     return render(request, 'registration/password.html', {'form': form})
-
-
 
 ##################################DOWNLOAD MANAGMENTS##############################################    
 def export_name_text(request, pk):#result download based on login tutor
@@ -542,7 +563,8 @@ def edit_user(request, pk):
                 profile.photo = request.FILES['photo']
             profile.email_confirmed = True
             profile.save()
-            #form.save()
+            if request.user.is_authenticated:
+                return redirect('home')
             return redirect('logins')                
     else:
         form = ProfileForm(instance=user.profile)
@@ -599,11 +621,14 @@ def manage_subject_updates(request, pk):
 def profiles(request, pk):#show single candidate profile
     qry = get_object_or_404(Edit_User, pk=pk)
     return render(request, 'result/profiles.html', {'qry' : qry})
+
+
 #@login_required
 class ProfileUpdate(UpdateView):
     model = Edit_User
     fields = ['first_name', 'last_name', 'bio', 'phone', 'city', 'department', 'location', 'birth_date', 'country', 'organization']
     success_url = reverse_lazy('home')
+
 @login_required
 def new_profiles_pic(request, pk):
     user = User.objects.get(pk=pk)
@@ -616,3 +641,25 @@ def new_profiles_pic(request, pk):
 
 def flexbox(request):
     return render(request, 'result/flexbox.html')
+
+def all_users(request):#show single candidate profile
+    qry = User.objects.all()
+    return render(request, 'result/all_users.html', {'qry' : qry})
+
+class Users_update(UpdateView):#New teacher form for every new term, class, subjects
+    model = User
+    fields = '__all__'#['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_superuser']
+    success_url = reverse_lazy('all_accounts')
+
+def confirm_deleting_a_user(request, pk):
+    qry = get_object_or_404(User, pk=pk)
+    return render(request, 'result/confirm_delete_a_user.html', {'qry' : qry, 'pk': pk})   
+def delete_user(request, pk):#delete single candidate
+    get_object_or_404(User, pk=pk).delete()
+    return redirect('all_accounts')
+
+def yes_no(request, pk):#delete single candidate
+    qry = get_object_or_404(User, pk=pk)
+    return render(request, 'result/yes_no.html', {'qry' : qry, 'pk': pk})
+
+

@@ -40,9 +40,9 @@ ALLOWED_HOSTS = ['uqhs.herokuapp.com', '127.0.0.1']
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'adezolasr@gmail.com'
+EMAIL_HOST_USER = 'uqhs2019@gmail.com'
 EMAIL_HOST_PASSWORD = 'Ll018311'
-DEFAULT_FROM_EMAIL = 'adezolasr@gmail.com'
+DEFAULT_FROM_EMAIL = 'uqhs2019@gmail.com'
 
 # Application definition
 

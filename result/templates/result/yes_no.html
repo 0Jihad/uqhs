@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Delete!</h1>
+
+<p>Are you sure you want to delete: <em style="font-family:Helvetica; color:red; font-size: 12px;"> {{ qry.username }}</em> account completely?<a href="{% url 'delete_a_user' pk=pk %}">Yes</a>/<a href="{% url 'all_accounts' %}">No</a></p>
+{% endblock %}
