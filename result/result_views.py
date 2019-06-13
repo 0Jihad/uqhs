@@ -134,7 +134,7 @@ def tutor_model_summary(request, pk):
         avg = round(QSUBJECT.objects.filter(tutor__subject__exact=t.subject, tutor__Class__exact=t.Class, tutor__term__exact=t.term).aggregate(Avg('agr'))['agr__avg'],2)
         count = QSUBJECT.objects.filter(tutor__subject__exact=t.subject, tutor__Class__exact=t.Class, tutor__term__exact=t.term).count()
         t.model_summary = {str(t.teacher_name)+':'+str(t.subject.name)[:3]+':'+str(t.Class)+':'+str(t.term)+':'+str(count)+':'+str(avg)+'%'}
-        #t.save()
+        t.save()
     count_t = BTUTOR.objects.all().count()
     page = request.GET.get('page', 1)
     paginator = Paginator(BTUTOR.objects.all(), 60)
