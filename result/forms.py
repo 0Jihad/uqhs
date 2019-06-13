@@ -10,7 +10,7 @@ Created on Wed Jan 23 08:25:37 2019
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import BTUTOR, CNAME, ASUBJECTS, Edit_User, QSUBJECT
+from .models import BTUTOR, CNAME, ASUBJECTS, Edit_User, QSUBJECT, Post
 from django.core.files.images import get_image_dimensions
 
 class subjectforms(forms.ModelForm):
@@ -124,10 +124,7 @@ class PhotoForm(forms.ModelForm):
 
         return avatar
     
-class Sign_Up_Type(forms.ModelForm):
-    class Meta:
-        model = Edit_User
-        fields = ('account',)    
+ 
 
 class subject_class_term_Form(forms.ModelForm):
     class Meta:
@@ -144,4 +141,7 @@ class tutor_class_Form(forms.ModelForm):
         model = QSUBJECT
         fields = ('tutor','cader',)
         
-    
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('Account_Username', 'subject', 'text')  

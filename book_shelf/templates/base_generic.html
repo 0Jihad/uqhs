@@ -12,24 +12,28 @@
             <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
             <link rel="stylesheet" href="{% static 'css/result.css' %}">
             <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+            
             <div class="header-right">
-                <div class="fc">
-                    <div class="capt" style="font-family:Bradley Hand ITC; color:red; font-size: 31px;"><em style="font-family:Calibri; color:white; font-size: 32px;">Welcom to</em> UMMUL_QURA RESULT PORTAL</div>
-                </div>
+            {% if user.is_authenticated%}
+                   <small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span><h6>Logout</h6></a></small>
+            {% else %}
+                   <a href="{% url 'logins' %}"><span class="glyphicon glyphicon-log-in"></span><h6>Login</h6></a>
+                   <a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><h6>Sign Up</h6></a> 
+            {% endif %}
             </div>
             <div class="navbar">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static "result/iiro.jpg"%}" alt="iiro-logo"  width="30"/></a>
                 </div>
                 <a href="{% url 'home' %}"><h6>Home</h6></a>
-                <a href="#news"><h6>Mail</h6></a>
+                <a href="{% url 'my_post_list' %}"><h6>Mail</h6></a>
                 <div class="dropdown">
                   <span class="dropbtn">Juniors</span>
                   <div class="dropdown-content">
                     <a href="{% url 'results_junior_senior' pk=0 %}"><h6>JSS 1</h6></a>
                     <a href="{% url 'results_junior_senior' pk=1 %}"><h6>JSS 2</h6></a>
                     <a href="{% url 'results_junior_senior' pk=2 %}"><h6>JSS 3</h6></a>
-                    <a href="#"><h6>Info</h6></a>
+                    <a href="{% url 'post_list' %}"><h6>Info</h6></a>
                   </div>
                 </div>
                 <div class="dropdown">
@@ -57,6 +61,7 @@
                     <a href="#"><h6>Non-Staff</h6></a>
                     <a href="{% url 'student_names' %}"><h6>Students</h6></a>
                     <a href="{% url 'flexing' %}"><h6>How</h6></a>
+                    
                   </div>
                 </div>
                 <div class="dropdown">
@@ -65,22 +70,30 @@
                     <a class="active" href="{% url 'tutor_class_filter' %}"><h6>Teacher</h6></a>
                     <a class="active" href="{% url 'subject_class_term_filter' %}"><h6>Class</h6></a>
                     <a href="{% url 'student_name_class_filter' %}"><h6>Student</h6></a>
-                    <a href="#"><h6>Info</h6></a>
+                    
                   </div>
                 </div>
-                <ul class="nav navbar-nav navbar-right">
-                   <a href="{% url 'logins' %}"><span class="glyphicon glyphicon-log-in"></span><h6>Login</h6></a>
-                   <a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><h6>Sign Up</h6></a> 
-                </ul>
+                
             </div>
               <!-- Side navigation -->
+            <navz>
+                <span><em style="margin-left:250px;">Welcom to UMMUL_QURA RESULT PORTAL </em></span>
+            </navz>
             <div class="sidenav">
                 <div style="margin-right:5px;margin-top:5px"><h6 style="font-family:Helvetica; color:white; font-size: 9px;">Menue</h6>
                     {% if user.is_authenticated %}
                         <img class="rounded-circle" src="{% static "result/Jagun.jpg"%}" alt="My_pics" style="max-width: 2em; margin: auto 0px;"/>
                     {% else %}
-                        <a href="{% url 'logins' %}"><span class="glyphicon glyphicon-log-in"></span><h6>Login</h6></a>
-                        <a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><h6>Sign Up</h6></a>  
+                        <a class="active" href="{% url 'tutor_summary' pk=1 %}"><h6>Staff</h6></a>
+                        <a href="{% url 'results_junior_senior' pk=0 %}"><h6>JSS 1</h6></a>
+                        <a href="{% url 'results_junior_senior' pk=1 %}"><h6>JSS 2</h6></a>
+                        <a href="{% url 'results_junior_senior' pk=2 %}"><h6>JSS 3</h6></a> 
+                        <a href="{% url 'results_junior_senior' pk=3 %}"><h6>SSS 1</h6></a>
+                        <a href="{% url 'results_junior_senior' pk=4 %}"><h6>SSS 2</h6></a>
+                        <a href="{% url 'results_junior_senior' pk=5 %}"><h6>SSS 3</h6></a>
+                        <a href="{% url 'student_names' %}"><h6>Students</h6></a>
+                        <a href="{% url 'flexing' %}"><h6>How</h6></a>
+                        
                     {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
                         {% if request.user.profile.bio != 'new!' %}<a href="{% url 'pro_detail' request.user.id %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Profile</a>{% endif %}
@@ -99,6 +112,7 @@
                         <a href="{% url 'br-books' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Loans</a>
                         <a href="{% url 'renew_approval'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Renew Books</a>
                         <a href="{% url 'qeuing'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Grant Requests</a>
+                        <a href="{% url 'post_draft_list'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Posts</a>
                     {% endif %}
                 </div>
                 
@@ -114,6 +128,7 @@
             </div>
             <!-- Side navigation -->
             <!-- Side navigation -->
+            
             <div class="sidenavs">
                 <bodys>
                     <h1><P class='blocktext'>ADMONITIONS</P></h1>
@@ -216,7 +231,7 @@
         <div style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">©Copyright 2019 examing body. All rights reversed.</div>
         <div class="footer-left">
             {% if user.is_authenticated%}
-             <div class="ft" style="font-family:Helvetica; color:red; font-size: 10px;"> {{ user.username }} <small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span></small></a></div>
+             <div class="ft" style="font-family:Helvetica; color:red; font-size: 10px;"> {{ user.username }} <small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span></a></small></div>
                  {% if request.user.profile.email_confirmed == False %}
                  <div class="ft"><a href="{% url 'edith' request.user.id %}"><small><span class="glyphicon glyphicon-flag" style="color:white;"></small></span><h6>{{ request.user.profile.bio|default:"Action required!" }}</h6></a></div>
                  {% endif %}

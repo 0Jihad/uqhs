@@ -2,6 +2,7 @@
 /* Style the header with a grey background and some padding */
 body {
   font-family: Bodoni MT, Helvetica, sans-serif;
+  background-color: hsla(209, 31%, 49%, 0.295);
    
 }
 
@@ -17,7 +18,7 @@ P.blocktext{
   overflow: hidden;
   background-color: dodgerblue;
   padding: 20px 10px;
-  width: 57%
+  width: 57%;
   
 }
 
@@ -80,8 +81,8 @@ P.blocktext{
   padding: 20px; /* Some padding */
   text-align: center; /* Center text*/
   background-color: dodgerblue; /* Grey background */
-  height: 100%;
-  width: 57%
+  width: 57%;
+  margin-top: 600px;
 }
 
 
@@ -125,6 +126,7 @@ tr:nth-child(even) {background-color: silver;}
   background-color: #818181; /* Black #111;*/
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
+  border-radius: 5px;
 }
 
 /* The navigation menu links */
@@ -145,11 +147,7 @@ tr:nth-child(even) {background-color: silver;}
  display: block;
 }
 
-@media (max-width: 250px) {
-  .sidenav {
-    display: none;
-  }
-}
+
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
   color: #f1f1f1;
@@ -162,25 +160,21 @@ tr:nth-child(even) {background-color: silver;}
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
 
 /* The sidebar menu */
 .sidenavs {
-  height: 90%; /* Full-height: remove this if you want "auto" height */
-  width: 624px; /* Set the width of the sidebar */
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 620px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 1; /* Stay on top */
-  top: 64px; /* Stay at the top */
+  top: 0px; /* Stay at the top */
   right: 0;
   background-color: #f1f1f1; /* Black */
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
   background: #408000;
   box-shadow: 0px 0px 45px 0px rgba(0, 0, 0, 0.6);
-  margin-top: 80px;
+  margin-top: 0px;
   margin-left: 20px;
   border-radius: 5px;
 }
@@ -192,11 +186,7 @@ tr:nth-child(even) {background-color: silver;}
  display: block;
 }
 
-@media (max-width: 250px) {
-  .sidenavs {
-    display: none;
-  }
-}
+
 /* The navigation menu links */
 .sidenavs a {
   padding: 6px 8px 6px 16px;
@@ -218,10 +208,7 @@ tr:nth-child(even) {background-color: silver;}
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenavs {padding-top: 15px;}
-  .sidenavs a {font-size: 18px;}
-}
+
 
 navs{
         background: hsla(249, 13%, 89%, 0.952);
@@ -229,6 +216,15 @@ navs{
         position: fixed;
         top: 4rem;
         opacity: 0.8;
+        
+    }
+navz{
+        background: orange;
+        width: 60em;
+        position: fixed;
+        top: 4rem;
+        opacity: 0.5;
+        
     }
     img{
         
@@ -308,7 +304,7 @@ navs{
   }
 }
   
-body{ margin: 0px;}
+
 
 p{ margin: 0px;
    margin-right: 130;
@@ -356,7 +352,7 @@ p{ margin: 0px;
 .gr_as{   
         
         background-color: red;
-        margin: 0px
+        margin: 0px;
         width: 90px;
         height: 90%;
         opacity: 0.9;
@@ -369,7 +365,7 @@ p{ margin: 0px;
 .gr_bs{   
         font-family: Helvetica;
         background-color: brown;
-        margin: 0px
+        margin: 0px;
         width: 90px;
         height: 90%;
         opacity: 0.9;
@@ -381,7 +377,7 @@ p{ margin: 0px;
 .gr_cs{   
         font-family: Helvetica;
         background-color: blue;
-        margin: 0px
+        margin: 0px;
         width: 90px;
         height: 90%;
         opacity: 0.9;
@@ -392,7 +388,7 @@ p{ margin: 0px;
 .gr_ps{   
         font-family: Helvetica;
         background-color: green;
-        margin: 0px
+        margin: 0px;
         width: 90px;
         height: 90%;
         opacity: 0.9;
@@ -403,7 +399,7 @@ p{ margin: 0px;
 .gr_fs{   
         font-family: Helvetica;
         background-color: orange;
-        margin: 0px
+        margin: 0px;
         width: 90px;
         height: 90%;
         opacity: 0.9;
@@ -416,12 +412,36 @@ p{ margin: 0px;
   overflow: hidden;
   background-color: dodgerblue;
   font-family: Helvetica;
+  top: 0px;
+  width: 49%;
+  
 }
 
-/* Links inside the navbar */
 .navbar a {
   float: left;
   font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.header-right {
+  overflow: hidden;
+  background-color: dodgerblue;
+  font-family: Helvetica;
+  top: 0px;
+  width: 5%;
+  margin-right: 620.5px;
+  font-size: 8px;
+  
+  
+}
+
+/* Links inside the navbar */
+.header-right a {
+  float: right;
+  font-size: 10px;
   color: white;
   text-align: center;
   padding: 14px 16px;
@@ -501,3 +521,128 @@ p{ margin: 0px;
   background-color: orange;
 }
 
+@media (max-width: 900px) 
+{
+  .sidenavs {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .header-right {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .footer {
+    width: 100%;
+  }
+  
+  .navbar {
+    width: 100%;
+  }
+  
+  .div { margin-left: 40px;
+         width: 100%;
+  }
+  
+  .form { margin-left: 40px;
+         width: 100%;
+  }
+  .sidenav {
+      height: 60%; /* Full-height: remove this if you want "auto" height */
+      width: 9%;
+  }
+  
+  table{ margin-left: 40px;
+        width: 100%;}
+}
+
+@media (max-width: 700px) 
+{
+  .sidenavs {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .header-right {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .footer {
+    width: 100%;
+  }
+  
+  .navbar {
+    width: 100%;
+  }
+  
+  .div { margin-left: 40px;
+         width: 100%;
+  }
+  
+  .form { margin-left: 40px;
+         width: 100%;
+  }
+  .sidenav {
+      height: 50%; /* Full-height: remove this if you want "auto" height */
+      width: 9%;
+  }
+  
+  table{ margin-left: 40px;
+        width: 100%;}
+}
+
+@media (max-width: 500px) 
+{
+  .sidenavs {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .header-right {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .footer {
+    width: 100%;
+  }
+  
+  .navbar {
+    width: 100%;
+  }
+  
+  .div { margin-left: 40px;
+         width: 100%;
+  }
+  
+  .form { margin-left: 40px;
+         width: 100%;
+  }
+  .sidenav {
+      height: 45%; /* Full-height: remove this if you want "auto" height */
+      width: 9%;
+  }
+  
+  table{ margin-left: 40px;
+        width: 100%;}
+}
+  
+@media screen and (max-height: 900px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 15px;}
+  .navbar a {font-size: 11px;}
+}
+
+@media screen and (max-height: 700px) {
+  .sidenav {padding-top: 13px;}
+  .sidenav a {font-size: 13px;}
+  .navbar a {font-size: 8px;}
+}
+
+@media screen and (max-height: 500px) {
+  .sidenav {padding-top: 10px;}
+  .sidenav a {font-size: 10px;}
+  .navbar a {font-size: 7px;}
+}

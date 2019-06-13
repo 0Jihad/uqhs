@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+ 
+{% block content %}
+    <h3>Post Request</h3>
+    <form method="POST" class="post-form" style="width:86%;margin-left:21px; font-size:12">
+	{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock %}

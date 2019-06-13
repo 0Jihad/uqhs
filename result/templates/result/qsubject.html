@@ -42,9 +42,10 @@
         {% else %}
           <li class="disabled"><span>&raquo;</span></li>
         {% endif %}
+	<a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:160px; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a>
       </ul>
     {% endif %}
-     <div><a href="{% url 'home' %}" style="font-family:Helvetica; color:green; font-size: 17px;">Home</a></div>
+     
 
 {% endblock %}
 

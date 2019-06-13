@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+ 
+
+
+{% block content %}   
+    {% for post in posts %}       
+        <div class="post" style="width:76%;margin-left:1px; font-size:11;">
+              <p class="date">created: {{ post.created_date|date:'d-m-Y' }}</p>
+              <h6><a href="{% url 'post_detail' pk=post.pk %}">{{ post.Account_Username }}::{{ post.subject }}</a></h6>
+              <p>{{ post.text|truncatechars:200 }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

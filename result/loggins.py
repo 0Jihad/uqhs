@@ -4,7 +4,7 @@ Created on Mon Jan 28 00:51:16 2019
 
 @author: AdeolaOlalekan
 """
-from .models import QSUBJECT, Edit_User, ASUBJECTS, TOTAL, ANNUAL, BTUTOR, CNAME, RESULT_GRADE
+from .models import QSUBJECT, Edit_User, ASUBJECTS, TOTAL, ANNUAL, BTUTOR, CNAME, RESULT_GRADE, Post
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -12,7 +12,7 @@ import csv
 #from result.model_views import cader
 from .grad_counter import grade_counter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import login_form, ProfileForm, tutor_class_Form, student_names, subjectforms, subject_class_term_Form, name_class_Form
+from .forms import login_form, ProfileForm, tutor_class_Form, student_names, subjectforms, subject_class_term_Form, name_class_Form, PostForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required#, @permission_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
@@ -22,6 +22,9 @@ from django.http import HttpResponse
 from django.views.generic.edit import UpdateView
 from django.forms import modelformset_factory
 from django.db.models import Sum, Avg
+import os
+from wsgiref.util import FileWrapper
+from django.utils import timezone
 ####################################STAGE 1::::#########TUTOR GET LOG IN OR SIGN UP##########################################   
 
 
@@ -91,7 +94,21 @@ def password2(request):
         form = PasswordForm(request.user)
     return render(request, 'registration/password.html', {'form': form})
 
-##################################DOWNLOAD MANAGMENTS##############################################    
+##################################DOWNLOAD MANAGMENTS##############################################   18 
+
+
+def sample_disply(request):
+    os.chdir('/office/jango_env/uqi/result/')
+    empty_list = open('test.txt', "r" )
+    return HttpResponse(empty_list, content_type='text/plain')
+
+def sample_down(request):
+    os.chdir('/office/jango_env/uqi/result/')
+    wrapper = FileWrapper(open('test.txt', "r" ))
+    response=HttpResponse(wrapper, content_type="text/plain")
+    response['Content-Disposition'] ='attachment; filename="samples.txt"'
+    return response 
+
 def export_name_text(request, pk):#result download based on login tutor
     response = HttpResponse(content_type='text')
     response['Content-Disposition'] = 'attachment; filename="student_names.txt"'
@@ -662,4 +679,65 @@ def yes_no(request, pk):#delete single candidate
     qry = get_object_or_404(User, pk=pk)
     return render(request, 'result/yes_no.html', {'qry' : qry, 'pk': pk})
 
+#@login_required
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('my_post_list')
+    else:
+        form = PostForm()
+    return render(request, 'result/post_edit.html', {'form': form})
 
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'result/post_detail.html', {'post': post})
+
+def post_list(request):
+    posts = Post.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 30)
+    try:
+        all_page = paginator.page(page)
+    except PageNotAnInteger:
+        all_page = paginator.page(1)
+    except EmptyPage:
+        all_page = paginator.page(paginator.num_pages)
+    return render(request, 'result/all_post_list.html', {'all_page': all_page})
+    
+    
+@login_required
+def posts_publishing(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.published_date = timezone.now()
+    post.save()
+    return redirect('post_edit', pk=pk)
+
+class post_edit(UpdateView):
+    model = Post
+    fields = ['subject', 'text', 'comment']
+    success_url = reverse_lazy('post_list')
+
+@login_required
+def post_draft_list(request):#post approvals(#review post uncomment for no review)
+    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
+    return render(request, 'result/post_draft_list.html', {'posts': posts})
+@login_required
+def my_post(request):#adding publish button(#review post uncomment for no review)
+    post = Post.objects.filter(Account_Username=request.user)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post, 30)
+    try:
+        all_page = paginator.page(page)
+    except PageNotAnInteger:
+        all_page = paginator.page(1)
+    except EmptyPage:
+        all_page = paginator.page(paginator.num_pages)
+    return render(request, 'result/post_list.html', {'all_page': all_page})
+@login_required
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('my_post_list')

@@ -6,7 +6,8 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
-################################################################################################
+from django.utils import timezone
+################################################################################################'18/19'
 
 class ASUBJECTS(models.Model):
     code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('others', 'others')] )
@@ -235,3 +236,16 @@ def update_user_profile(sender, instance, created, **kwargs):
             Edit_User.objects.create(user=instance)
     instance.profile.save()
 
+class Post(models.Model):
+    Account_Username = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    subject = models.CharField(max_length=200)
+    text = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+    published_date = models.DateTimeField(blank=True, null=True)
+    comment = models.TextField(max_length=1000)
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
+ 
+    def __str__(self):
+        return self.title

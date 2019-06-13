@@ -7,8 +7,8 @@
     <form method="post" action="{% url 'logins' %}">
     {% csrf_token %}
         <div class="container text-center">
-<p style="width:50%;margin-left: 0px; style="font-family:Arial Black; color:red; font-size: 10px;">User Login!</p>
-<div class='signup' style="width:50%;margin-left: 0px; font-size:12">
+<p style="width:40%;margin-left: 0px; style="font-family:Arial Black; color:red; font-size: 10px;">User Login!</p>
+<div class='signup' style="width:45%;margin-left: 0px; font-size:12">
 <form role="form" method="post">
 	{% csrf_token %}
 	{{form.non_field_errors}}
@@ -26,7 +26,7 @@
 	</div>
 	
 		<input type="submit" value="Login" class="btn button-primary"/>
-	<a href="{% url 'renew_password' %}" style="font-family:Arial Black; color:green; font-size: 9px;">Forget Password!</a>
+	<a href="{% url 'post_new' %}" style="font-family:Arial Black; color:green; font-size: 9px;">Forget Password!</a>|<a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><h6>Sign Up</h6></a>
        <input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div>

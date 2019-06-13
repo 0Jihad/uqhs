@@ -9,7 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
-from .forms import SignUpForm, new_password, Sign_Up_Type, SSignUpForm
+from .forms import SignUpForm
 from django.shortcuts import render, redirect
 from .tokens import account_activation_token
 from django.contrib.auth import login
@@ -102,31 +102,6 @@ def reset(request, uidb64, token):
     else:
         return HttpResponse('Activation link is invalid!')
     
-def lost_password(request):
-    if request.method == 'POST':
-        form = new_password(request.POST)
-        if form.is_valid():
-            to_email = form.cleaned_data.get('email') 
-            nill = User.objects.filter(email = to_email).count()
-            if nill != 0:
-                userObj = User.objects.get(email = to_email)
-                userObj.is_active = False
-                userObj.save()             
-                current_site = get_current_site(request)
-                mail_subject = 'Follow the link to Reset Your Password.'
-                message = render_to_string('result/re_acc_active_email.html', {
-                'user': User,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(userObj.pk)).decode(),
-                'token': account_activation_token.make_token(userObj),
-                })
-                email = EmailMessage(mail_subject, message, to=[to_email])
-                email.send()
-                return render(request, 'registration/account_re_activation_sent.html')
-            else:
-                return HttpResponse("This Email does NOT exists, Use corect email address please!")           
-    else:
-        form = new_password()
-    return render(request, 'registration/get_email.html', {'form': form})
+
 ###############################################################################
 
