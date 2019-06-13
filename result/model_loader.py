@@ -65,9 +65,6 @@ def upload_new_subject_scores(request, pk):
         for line in contents:
             each_student = [new.strip() for new in line.split(',')]
             named_scores[0] += [each_student]
-        from django.http import HttpResponse
-        if len(named_scores[0][0]) != 5:
-            return HttpResponse(named_scores[0], content_type='text/plain')
         serial_no = [named_scores[0].index(x) for x in named_scores[0]]#get name indexes
         valid_input = [n[:] for n in named_scores[0] if len(n) > 2]
         males = serial_no[-1]#last_no on male list
