@@ -7,23 +7,19 @@
         <title>subject per Student</title>
     </head>
     {% block content %}
-    <div style="width:90%;margin-left:30px; font-size:9">
-    <span>
-	<div class="fc" style="width:50%;margin-left:59; font-size:11;">
-            <div class="capt"><a href="{% url 'home' %}" style="font-family:Bradley Hand ITC; color:Green; font-size: 17px;">Username: </a><em style="font-size: 17px;">{{ qry.user }}</em></div>
-    </div> 
-        <p><a href="{% url 'user_update' qry.id %}">Edit Profile:</a><em><a href="{% url 'upload_photo' pk=qry.id %}"><img class="rounded-circle" src="{{ qry.photo }}" alt="My_pics" style="max-width: 3em; margin-left: 400px;"/></a></em></p>
-        <p><a href="{% url 'home' %}"><strong>Surname:</strong></a> {{ qry.user.last_name }}, <a href=""><strong style="max-width: 3em; margin-left: 200px;">Other Name:</strong></a> {{ qry.user.first_name }}</p>
-        <p><a href="{% url 'home' %}"><strong>About You:</strong></a> {{ qry.bio }}</p>
-        <p><a href="{% url 'home' %}"><strong>City:</strong></a> {{ qry.city }}</p>
-        <p><a href="{% url 'home' %}"><strong>Nationality:</strong></a> {{ qry.country }}</p>
-        <p><a href="{% url 'home' %}"><strong>Organization:</strong></a> {{ qry.organization }}</p>    								
-        <p><a href="{% url 'home' %}"><strong>Current Location:</strong></a> {{ qry.location }}</p>
-        <p><a href="{% url 'home' %}"><strong>Birth:</strong></a> {{ qry.birth_date }}</p>
-        <p><a href="{% url 'home' %}"><strong>Department:</strong></a> {{ qry.department }}</p>
-	<em class="capt">{{ request.user.email|default:"Action required!" }}:</em> <a href="{% url 'password' %}"><strong>reset password</strong></a>
-     </span> 
-    </div> 
+    <form>
+      <div class="capt"><a href="{% url 'home' %}" style="font-family:Bradley Hand ITC; color:blue; font-size: 17px;">Username: </a><em style="font-size: 17px;">{{ qry.user }}</em></div>
+        <em><a href="{% url 'user_update' qry.id %}" style="font-family:Bradley Hand ITC; color:red; font-size: 17px;">Edit Profile:</a><em><a href="{% url 'upload_photo' pk=qry.id %}"><img class="rounded-circle" src="{{ qry.photo }}" alt="My_pics" style="max-width: 3em; margin-left: 400px;"/></a></em></em>
+        <pre><a href="{% url 'home' %}"><strong>Surname:</strong></a> {{ qry.user.last_name }}, <a href=""><strong style="max-width: 3em; margin-left: 200px;">Other Name:</strong></a> {{ qry.user.first_name }}</pre>
+        <pre><a href="{% url 'home' %}"><strong>About You:</strong></a> {{ qry.bio }}</pre>
+        <pre><a href="{% url 'home' %}"><strong>City:</strong></a> {{ qry.city }}</pre>
+        <pre><a href="{% url 'home' %}"><strong>Nationality:</strong></a> {{ qry.country }}</pre>
+        <pre><a href="{% url 'home' %}"><strong>Organization:</strong></a> {{ qry.organization }}</pre>    								
+        <pre><a href="{% url 'home' %}"><strong>Current Location:</strong></a> {{ qry.location }}</pre>
+        <pre><a href="{% url 'home' %}"><strong>Birth:</strong></a> {{ qry.birth_date }}</pre>
+        <pre><a href="{% url 'home' %}"><strong>Department:</strong></a> {{ qry.department }}</pre>
+	<em class="capt">{{ request.user.email|default:"Action required!" }}:</em> <a href="{% url 'password' %}"><strong style="font-family:Bradley Hand ITC; color:purple; font-size: 17px;">reset password</strong></a>
+    </form> 
     {% endblock %}
 </html>
 

@@ -3,10 +3,15 @@
 body {
   font-family: Bodoni MT, Helvetica, sans-serif;
   background-color: hsla(209, 31%, 49%, 0.295);
-   
-}
+   }
 
-
+form {
+  overflow: hidden;
+  background-color: dodgerblue;
+  padding: 20px 10px;
+  width: 80%;
+  border-radius: 5px;
+   }
 
 P.blocktext{
         text-align: center;
@@ -332,11 +337,12 @@ p{ margin: 0px;
     flex: 2;
             }
 .capt{margin:0 auto;
-      border-radius: 10px;
-      background-color: dodgerblue;
+      border-radius: 5px;
+      background-color: red;
       text-align: center;
-      color: red;
+      color: white;
       font-size:17px;
+      width: 50%;
       }
 
 
@@ -545,7 +551,7 @@ p{ margin: 0px;
          width: 100%;
   }
   
-  .form { margin-left: 40px;
+  form { margin-left: 40px;
          width: 100%;
   }
   .sidenav {
@@ -581,7 +587,7 @@ p{ margin: 0px;
          width: 100%;
   }
   
-  .form { margin-left: 40px;
+  form { margin-left: 40px;
          width: 100%;
   }
   .sidenav {
@@ -617,7 +623,7 @@ p{ margin: 0px;
          width: 100%;
   }
   
-  .form { margin-left: 40px;
+  form { margin-left: 40px;
          width: 100%;
   }
   .sidenav {

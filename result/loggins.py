@@ -52,7 +52,9 @@ def logout(request):
 def admin_page(request):
     if not request.user.is_authenticated:
         return redirect('logins')
-    return render(request, 'registration/admin.html')
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+    return render(request, 'registration/admin.html', {'num_visits': num_visits})
 
 ################################UPDATING USER ACCOUNT###############################################
 @login_required
@@ -310,6 +312,23 @@ def detailView(request, pk):##Step 2::  every tutor home detail views
         all_page = paginator.page(paginator.num_pages)
     return render(request, 'result/qsubject.html',  {'grad' : grad, 'count_grade' : count_grade, 'all_page': all_page, 'qar': qar, 'qry' : tutor, 'pk': pk})
 
+def detail_all(request, pk):##Step 2::  every tutor home detail views
+    tutor = get_object_or_404(BTUTOR, pk=pk)
+    mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')#request.user
+    count_grade = QSUBJECT.objects.filter(tutor__exact=tutor).count()
+    grade_counter(mains, tutor)
+    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
+    old = TOTAL.objects.filter(subject_by__exact=tutor).count()
+    if old == 0:
+        qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
+        qar.save() 
+    else:
+        qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
+        qar.subject_scores = mains.aggregate(Sum('agr'))['agr__sum']
+        qar.subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2)
+        qar.save()
+    return render(request, 'result/all_qsubject.html',  {'grad' : grad, 'count_grade' : count_grade, 'mains': mains, 'qar': qar, 'qry' : tutor, 'pk': pk})
+
 
 def annual_view(request, pk):##Step 2::  every tutor home detail views
     tutor = get_object_or_404(BTUTOR, pk=pk)
@@ -399,7 +418,7 @@ def Student_names_list(request):##Step 2::  every tutor home detail views
     counts = mains.count()
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(mains, 60)
+    paginator = Paginator(mains, 200)
     try:
         all_page = paginator.page(page)
     except PageNotAnInteger:
@@ -705,7 +724,7 @@ def post_list(request):
         all_page = paginator.page(1)
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/all_post_list.html', {'all_page': all_page})
+    return render(request, 'result/all_post_list.html', {'all_page': all_page, 'post': posts.count()})
     
     
 @login_required
@@ -735,7 +754,7 @@ def my_post(request):#adding publish button(#review post uncomment for no review
         all_page = paginator.page(1)
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/post_list.html', {'all_page': all_page})
+    return render(request, 'result/post_list.html', {'all_page': all_page, 'post': post.count()})
 @login_required
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)

@@ -1,11 +1,8 @@
 {% extends "base_generic.html" %}
  
 {% block content %}
-<div style="width:76%;margin-left:21px; font-size:12">
-    <div class="fc">
-         <div class="capt" style="width:76%;margin:1px; font-size:21"><a href="" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">{{ posts.count }}|</a></strong>Posts</div>
-    </div>
-    <tbody>
+<form>
+<div class="capt" ><a href="" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">{{ post }}|</a></strong>Posts</div>
     {% if all_page %}
     	{% for sub in all_page %}
         	{% if sub.published_date %}
@@ -27,9 +24,8 @@
     {% else %}
           <p>There are no post yet.</p>
     {% endif %} 
-    <div><a href="{% url 'post_new' %}"><h6>request</h6></a></div>    
-    </tbody>
-</div>
+    <div><a href="{% url 'post_new' %}" style="font-family:Helvetica; color:red; font-size: 10px;"><h6>New request</h6></a></div>    
+</form>
 
 {% if all_page.has_other_pages %}
       <ul class="pagination">

@@ -6,10 +6,10 @@
     {% endif %}
     <form method="post" action="{% url 'logins' %}">
     {% csrf_token %}
-        <div class="container text-center">
-<p style="width:40%;margin-left: 0px; style="font-family:Arial Black; color:red; font-size: 10px;">User Login!</p>
+    <div class="container text-center">
 <div class='signup' style="width:45%;margin-left: 0px; font-size:12">
 <form role="form" method="post">
+	<em class="capt">User Login</em>
 	{% csrf_token %}
 	{{form.non_field_errors}}
 	<br>
@@ -21,12 +21,12 @@
 	<div class="fieldWrapper">
 		{{form.password1.errors}}
 		{{help_text|safe}}
-		<label for="form.password1.id_for_label"style="font-family:Arabic Typesetting; color:green; font-size: 19px;">Password: </label><br>
+		<label for="form.password1.id_for_label"style="font-family:Arabic Typesetting; color:red; font-size: 19px;">Password: </label><br>
 		{{form.password1}}
 	</div>
 	
-		<input type="submit" value="Login" class="btn button-primary"/>
-	<a href="{% url 'post_new' %}" style="font-family:Arial Black; color:green; font-size: 9px;">Forget Password!</a>|<a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><h6>Sign Up</h6></a>
+		<button class="btn btn-primary"> <span class="glyphicon glyphicon-log-in" style="margin-right:5px;"></span>Login</button>
+	<a href="{% url 'post_new' %}" style="font-family:Arial Black; color:green; font-size: 9px;">Forget Password!</a>|<a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><em style="font-family:Arial Black; color:red; font-size: 9px;">Sign Up</em></a>
        <input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div>

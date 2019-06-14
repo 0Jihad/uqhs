@@ -2,7 +2,7 @@
 {% extends "base_generic.html" %}
 {% block content %}
     <div class="fc">
-     <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
+     <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
     </div>
 
   <ul>
@@ -13,7 +13,7 @@
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.student_name }}</a></td><td>{{ scr.first }}</td><td>{{ scr.second }}</td><td>{{ scr.third }}</td><td>{{ scr.anual }}</td><td>{{ scr.agr }}</td><td>{{ scr.grade }}</td><td>{{ scr.anu_posi }}</td>
+                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:blue; font-size: 10px;">{{ scr.student_name }}</a></td><td>{{ scr.first }}</td><td>{{ scr.second }}</td><td>{{ scr.third }}</td><td>{{ scr.anual }}</td><td>{{ scr.agr }}</td><td>{{ scr.grade }}</td><td>{{ scr.anu_posi }}</td>
           </tr>
           {% endfor %}
           {% else %}

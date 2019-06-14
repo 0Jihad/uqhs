@@ -4,9 +4,9 @@ Created on Mon Jan 14 01:15:37 2019
 
 @author: AdeolaOlalekan
 """
-#from django.contrib.auth import views as auth_views
+#from django.contrib.auth import views as auth_views detailView
 from django.conf.urls import url
-#, include student_name_edit, subject_per_name
+#, include student_name_edit, subject_per_name 
 from.import result_views, model_loader, loggins, sign_up
 urlpatterns = [
         url(r'home/$', loggins.home, name='home'),
@@ -72,6 +72,7 @@ urlpatterns = [
         url(r'^deletes/(?P<pk>\d+)/', loggins.delete_all, name='deletes'),
         url(r'^term_summary/(?P<pk>\d+)/', loggins.term_summary, name='term_summary'),
         url(r'^(?P<pk>\d+)/', loggins.detailView, name='subject_view'),
+        url(r'^_all/(?P<pk>\d+)/', loggins.detail_all, name='subject_view_all'),
         url(r'^results_junior_senior/(?P<pk>\d+)/', loggins.results_junior_senior, name='results_junior_senior'),
         url(r'^annual/(?P<pk>\d+)/$', loggins.annual_view, name='annual_view'),
         url(r'^search_tutors', loggins.teacher_accounts, name='search_tutors'),

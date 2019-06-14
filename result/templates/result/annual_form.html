@@ -8,8 +8,9 @@
 </head>
 <body>
     {% block content %}
-    <form method="post" style="width:70%;margin-left:89; font-size:11;">
+    <form method="post" >
     {% csrf_token %}
+    <em class="capt">Edit Records</em>
     <div><strong>Teacher</strong>: Correct student name should be selected. </div>
      {{ form.student_name|as_crispy_field }}
     <div class="row">
@@ -23,8 +24,7 @@
         {{ form.third|as_crispy_field }}
       </div>
     </div>
-    Create subject not enlisted <em> <a href="{% url 'create_subject' %}" target = _blank> here.</a></em>
-    <button type="submit" class="btn btn-success">Done!</button>
+    <button type="submit" class="btn btn-success">Save</button>
   </form>
    {% endblock %}
  

@@ -2,21 +2,18 @@
 {% extends "base_generic.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container text-center">
-<div class="fc" style="width:89%;margin-left:-196px; font-size:12">
-      <div class="capt"><a href="{% url 'subject_view' pk=pk %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{tutor.subject}} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Class: </a> {{ tutor.Class }} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Term: </a> {{ tutor.term }} </div>
-  </div>
-<div class='signup' style="width:60%;margin-left: 149px; font-size:12">
-<form action="" method="post" style="width:100%;margin-left: 36px; font-size:0.5">
+<div class='signup' >
+<form action="" method="post">
+   <div class="capt"><a href="{% url 'subject_view' pk=pk %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{tutor.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class: </a> {{ tutor.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term: </a> {{ tutor.term }} </div>
     {% csrf_token %}
-    <table>
+    <div>
     {{ formset.management_form }}
     {% for form in formset %}
      {% csrf_token %}
-    {{ form.as_table }}
+    {{ form|crispy }}
     {% endfor %}
-    </table>
-    <input type="submit" value="Submit" style="width:11%;margin-left:-222px; font-size:1">
+    </div>
+    <button type="submit" class="btn btn-success" style="margin-left:2%;"><em style="font-family:Helvetica; color:white; font-size: 10px;">Save</em></button>
   </form>
 </div>
 

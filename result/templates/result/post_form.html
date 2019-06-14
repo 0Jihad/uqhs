@@ -8,10 +8,11 @@
 </head>
 <body>
     {% block content %}
-    <form method="post" style="width:76%;margin-left:1px; font-size:11;">
+    <form method="post">
+     <em class="capt" style="width:76%;margin:1px; font-size:21">Edit Post</em>
     {% csrf_token %}
      {{ form|crispy }}
-    <button type="submit" class="btn btn-success">Done!</button>
+    <button type="submit" class="btn btn-success">Save</button>
   </form>
    {% endblock %}
  

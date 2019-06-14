@@ -8,12 +8,12 @@
 </head>
 <body>
     {% block content %}
-    <form method="post" style="width:40%;margin-left:159px; font-size:11;">
+    <form method="post">
     {% csrf_token %}
-    <div><strong>Teacher</strong>: Correct User account should be selected. </div>
+    <em class="capt">Change User</em>
      {{ form|crispy }}
-    Change user password <em> <a href="" target = _blank> here.</a></em>
-    <button type="submit" class="btn btn-success">Done!</button>
+    <button type="submit" class="btn btn-success" style="margin-left:2%;"><em style="font-family:Helvetica; color:white; font-size: 10px;">Save</em></button>
+    <a href="{% url 'all_accounts' %}" style="margin-left:76%;"><button type="submit" class="btn btn-success"><em style="font-family:Helvetica; color:red; font-size: 10px;">Delete!</em></button></a>
   </form>
    {% endblock %}
  

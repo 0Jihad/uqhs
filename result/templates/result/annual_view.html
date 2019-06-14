@@ -2,7 +2,7 @@
 {% extends "base_generic.html" %}
 {% block content %}
     <div class="fc">
-     <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
+     <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
     </div>
 
   <ul>
@@ -13,7 +13,7 @@
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'edit_annual' pk=scr.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.id }}</a></td>{% endif %}<td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.first }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.second }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.third }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.anual }}</em></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agr }}</em></td><td><em style="font-family:Helvetica; color:green; font-size: 10px;">{{ scr.grade }}</em></td><td><em style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.anu_posi }}</em></td>
+                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:blue; font-size: 10px;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'edit_annual' pk=scr.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.id }}</a></td>{% endif %}<td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.first }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.second }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.third }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.anual }}</em></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agr }}</em></td><td><em style="font-family:Helvetica; color:green; font-size: 10px;">{{ scr.grade }}</em></td><td><em style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.anu_posi }}</em></td>
           </tr>
           {% endfor %}
           {% else %}
