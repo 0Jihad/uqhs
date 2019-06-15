@@ -7,7 +7,7 @@
 
     </head>
     <body>
-            <table style="width:86%;margin-left:-21px; font-size:12">
+            <table>
                     <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;">Subjects:</a></strong> Records</div>
                 <thead>
                     <tr><th>Teacher</th><th>Subject</th><th>Names</th><th>Review</th><th>Annual</th><th>Scores</th><th>Delete</th></tr>      
@@ -23,5 +23,6 @@
                 </tbody>
             </table>
     </body>
+	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
     {% endblock %}
 </html>

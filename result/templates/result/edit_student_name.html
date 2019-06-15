@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-<div class="fc">
-      <em class="capt" style="font-family:Helvetica; color:red; font-size: 10px;">Note:<em style="font-family:Helvetica; color:white; font-size: 10px;"> Changes made to <em style="font-family:Helvetica; color:purple; font-size: 10px;">{{ qrn.student_name }}</em> will chenge the name in all related records!.</em></em>
-  </div>
   <form action="" method="post">
+	<em class="capt" style="font-family:Helvetica; color:red; font-size: 10px;">Note:<em style="font-family:Helvetica; color:white; font-size: 10px;"> Changes made to <em style="font-family:Helvetica; color:purple; font-size: 10px;">{{ qrn.student_name }}</em> will chenge the name in all related records!.</em></em>
     {% csrf_token %}
     <table>
     {{ result.as_p }}

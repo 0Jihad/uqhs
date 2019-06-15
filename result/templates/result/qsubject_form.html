@@ -8,9 +8,6 @@
 </head>
 <body>
     {% block content %}
-    <div class="fc">
-      <div class="capt"></div>
-    </div>
     <form method="post">
     <em class="capt">Update Subject:</em>
     <em style="font-family:Helvetica; color:white; font-size: 10px;">Correct student <a style="font-family:Helvetica; color:white; font-style: italic; font-size: 12px;" href="{% url 'student_name_edit' pk=qsubject.id %}" target=_blank>NAME</a> should be </em><em style="font-family:Helvetica; color:yellow; font-size: 10px;">ENSURED,</em><em style="font-family:Helvetica; color:white; font-size: 10px;">while updating records!</em>

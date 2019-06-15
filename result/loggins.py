@@ -268,7 +268,7 @@ def student_name_class_filter(request):#New teacher form for every new term, cla
                 return redirect('student_name_class_filter') 
     else:
         result = name_class_Form()
-    return render(request, 'result/class_filter.html', {'result': result})  
+    return render(request, 'result/name_class_filter.html', {'result': result})  
 
 
 def tutor_class_filter(request):#New teacher form for every new term, class, subjects
@@ -492,14 +492,14 @@ def teacher_accounts(request):
     tutors = BTUTOR.objects.all().order_by('Class')
     page = request.GET.get('page', 1)
 
-    paginator = Paginator(tutors, 60)
+    paginator = Paginator(tutors, 30)
     try:
-        tutor = paginator.page(page)
+        all_page = paginator.page(page)
     except PageNotAnInteger:
-        tutor = paginator.page(1)
+        all_page = paginator.page(1)
     except EmptyPage:
-        tutor = paginator.page(paginator.num_pages)
-    return render(request, 'result/all_tutor.html', {'tutor': tutor})
+        all_page = paginator.page(paginator.num_pages)
+    return render(request, 'result/all_tutor.html', {'all_page': all_page})
 
 
 def results_junior_senior(request, pk):
@@ -567,12 +567,6 @@ def three_term_records(request, pk):
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
     return render(request, 'result/all_three_term.html', {'all_page': all_page, 'qry' : qry, 'pk': pk})
-
-def user_example(request):
-   f = open('/uqi/result/templates/result/ft_jss_1.txt', 'r')
-   file_content = f.read()
-   f.close()
-   return HttpResponse(file_content, content_type='text/plain')
     
 #################################################################################
 def edit_user(request, pk):
@@ -705,7 +699,7 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('my_post_list')
+            return redirect('post_list')
     else:
         form = PostForm()
     return render(request, 'result/post_edit.html', {'form': form})

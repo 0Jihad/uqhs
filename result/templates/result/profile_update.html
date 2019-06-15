@@ -2,10 +2,9 @@
 {% extends "base_generic.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="fc" style="width:50%;margin-left:59; font-size:11;">
-            <div class="capt" style="font-family:Bradley Hand ITC; color:red; font-size: 17px;">Staff Details</div>
-    </div>
-    <form method="post" novalidate style="width:50%;margin-left:59; font-size:11;" enctype="multipart/form-data">
+<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>    
+    <form method="post" novalidate  enctype="multipart/form-data">
+	<div class="capt" style="font-family:Bradley Hand ITC; color:red; font-size: 17px;">Staff Details</div>
     {% csrf_token %}
     <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Personal Info:</em>
     <div class="row">

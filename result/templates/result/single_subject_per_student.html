@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>subject per Student</title>
     </head>
     {% block content %}
-    <div class="fc">
-      <div class="capt" style="width:80%;margin:1px; font-size:13"><a href="{% url 'student_subject_detail_all_subject' pk=pk %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">{{ name.student_name }}:</a></strong> summarised results: <em style="font-family:Helvetica; color:white; font-size: 15px;">{{ anuual }}!</em></div>
-    </div>
-    <table style="width:80%;margin:1px; font-size:28">
+    <table>
+	<div class="capt" style="width:80%;margin:1px; font-size:13"><a href="{% url 'student_subject_detail_all_subject' pk=pk %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">{{ name.student_name }}:</a></strong> summarised results: <em style="font-family:Helvetica; color:white; font-size: 15px;">{{ anuual }}!</em></div>
         {% if subjects %}    
         {% for scr in subjects %}
         <tr>

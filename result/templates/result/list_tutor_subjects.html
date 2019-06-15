@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <div class="fc">
-      <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Class: </a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Term: </a> {{ qry.term }} </div>
-  </div>
   <ul>
-        <table style="width:89%;margin:1px font-size:12">
+        <table>
+           <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Class: </a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:white; font-size: 10px;"> Term: </a> {{ qry.term }} </div>
           <tr>
             <tr><th>STUDENT NAME ({{ counts.count }})</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th></tr> 
           </tr>
@@ -43,8 +41,7 @@
         {% endif %}
       </ul>
     {% endif %}
-     
-
+     <div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
 
 

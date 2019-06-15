@@ -5,7 +5,7 @@
       <em class="capt"><h5>{{ sub }}</h5></em>
   </div>
   <ul>
-        <table style="width:89%;margin:1px font-size:9">
+        <table>
           <tr>
             <tr><th>STUDENT NAME ({{ count_grade }})</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Class</th><th>Term</th></tr> 
           </tr>
@@ -41,8 +41,7 @@
         {% endif %}
       </ul>
     {% endif %}
-     
-
+     <div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
 
 

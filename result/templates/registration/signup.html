@@ -3,7 +3,7 @@
     {% if form.errors %}
         {{ form.errors }}
     {% endif %}
-    <form method="post" action="{% url 'logins' %}">
+    <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     <div class="container text-center">
 <div class='signup' style="width:45%;margin-left: 0px; font-size:12">

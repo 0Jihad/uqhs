@@ -5,14 +5,6 @@ body {
   background-color: hsla(209, 31%, 49%, 0.295);
    }
 
-form {
-  overflow: hidden;
-  background-color: dodgerblue;
-  padding: 20px 10px;
-  width: 80%;
-  border-radius: 5px;
-   }
-
 P.blocktext{
         text-align: center;
         background: #4ec29565
@@ -90,6 +82,15 @@ P.blocktext{
   margin-top: 600px;
 }
 
+form {
+  overflow: hidden;
+  background-color: dodgerblue;
+  padding: 20px 10px;
+  width: 68%;
+  border-radius: 5px;
+  margin-left: 8px;
+   }
+
 
 table, th, td {
         border: 1px solid rgba(247, 238, 238, 0.918);
@@ -98,9 +99,18 @@ table, th, td {
         font-size: 11px;
 }
 table {border-collapse: collapse;
-       margin-left: -53px
-       
+       margin-left: -53px;
+       width: 90%;
     }
+
+.capt{margin-left: 8px;
+      border-radius: 5px;
+      background-color: red;
+      text-align: center;
+      color: white;
+      font-size:17px;
+      width: 60%;
+      }
 
 th, td {padding: 0px;}
 
@@ -336,14 +346,6 @@ p{ margin: 0px;
 .second{
     flex: 2;
             }
-.capt{margin:0 auto;
-      border-radius: 5px;
-      background-color: red;
-      text-align: center;
-      color: white;
-      font-size:17px;
-      width: 50%;
-      }
 
 
 .grd_count{margin:0 auto;
@@ -419,7 +421,7 @@ p{ margin: 0px;
   background-color: dodgerblue;
   font-family: Helvetica;
   top: 0px;
-  width: 49%;
+  width: 51%;
   
 }
 
@@ -437,8 +439,8 @@ p{ margin: 0px;
   background-color: dodgerblue;
   font-family: Helvetica;
   top: 0px;
-  width: 5%;
-  margin-right: 620.5px;
+  width: 44px;
+  margin-right: 617px;
   font-size: 8px;
   
   
@@ -541,15 +543,16 @@ p{ margin: 0px;
   
   .footer {
     width: 100%;
+    font-size: 8px;
+    
   }
   
   .navbar {
     width: 100%;
+    font-size: 8px;
   }
   
-  .div { margin-left: 40px;
-         width: 100%;
-  }
+  
   
   form { margin-left: 40px;
          width: 100%;
@@ -557,10 +560,12 @@ p{ margin: 0px;
   .sidenav {
       height: 60%; /* Full-height: remove this if you want "auto" height */
       width: 9%;
+      font-size: 8px;
   }
   
   table{ margin-left: 40px;
-        width: 100%;}
+        width: 100%;
+        font-size: 8px;}
 }
 
 @media (max-width: 700px) 
@@ -577,26 +582,29 @@ p{ margin: 0px;
   
   .footer {
     width: 100%;
+    font-size: 8px;
   }
   
   .navbar {
     width: 100%;
+    font-size: 8px;
   }
   
-  .div { margin-left: 40px;
-         width: 100%;
-  }
+
   
   form { margin-left: 40px;
          width: 100%;
+         font-size: 8px;
   }
   .sidenav {
       height: 50%; /* Full-height: remove this if you want "auto" height */
       width: 9%;
+      font-size: 8px;
   }
   
   table{ margin-left: 40px;
-        width: 100%;}
+        width: 100%;
+        font-size: 8px;}
 }
 
 @media (max-width: 500px) 
@@ -613,42 +621,82 @@ p{ margin: 0px;
   
   .footer {
     width: 100%;
+    font-size: 8px;
   }
   
   .navbar {
     width: 100%;
+    font-size: 8px;
   }
   
-  .div { margin-left: 40px;
-         width: 100%;
-  }
   
-  form { margin-left: 40px;
+  form { margin-left: 42px;
          width: 100%;
+         font-size: 8px;
   }
   .sidenav {
       height: 45%; /* Full-height: remove this if you want "auto" height */
       width: 9%;
+      font-size: 8px;
   }
   
   table{ margin-left: 40px;
-        width: 100%;}
+        width: 100%;
+        font-size: 8px;}
+}
+  
+@media (max-width: 250px) 
+{
+  .sidenavs {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .header-right {
+    display: none;
+    visibility: hidden;
+  }
+  
+  .footer {
+    width: 100%;
+    font-size: 8px;
+  }
+  
+  .navbar {
+    width: 100%;
+    font-size: 8px;
+  }
+  
+  
+  form { margin-left: 42px;
+         width: 100%;
+         font-size: 8px;
+  }
+  .sidenav {
+      height: 45%; /* Full-height: remove this if you want "auto" height */
+      width: 9%;
+      font-size: 8px;
+  }
+  
+  table{ margin-left: 40px;
+        width: 100%;
+        font-size: 8px;}
 }
   
 @media screen and (max-height: 900px) {
   .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 15px;}
-  .navbar a {font-size: 11px;}
+  .sidenav a {font-size: 11px;}
+  .navbar a {font-size: 10px;}
 }
 
 @media screen and (max-height: 700px) {
   .sidenav {padding-top: 13px;}
-  .sidenav a {font-size: 13px;}
+  .sidenav a {font-size: 9px;}
   .navbar a {font-size: 8px;}
 }
 
 @media screen and (max-height: 500px) {
   .sidenav {padding-top: 10px;}
-  .sidenav a {font-size: 10px;}
+  .sidenav a {font-size: 8px;}
   .navbar a {font-size: 7px;}
 }

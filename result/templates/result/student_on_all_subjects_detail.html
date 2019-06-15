@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <div class="fc">
-      <div class="capt"><em style="font-family:Helvetica; color:white; font-size: 17px;">{{ count_t }}</em> Subject Teachers, <em style="font-family:Helvetica; color:white; font-size: 13px;"> select an account for subject details </em></div>
-  </div>
   <ul>
-        <table style="width:89%;margin:1px font-size:12">
+        <table>
+	   <div class="capt"><em style="font-family:Helvetica; color:white; font-size: 17px;">{{ count_t }}</em> Subject Teachers, <em style="font-family:Helvetica; color:white; font-size: 13px;"> select an account for subject details </em></div>
           <tr>
             <tr><th>Accounts ({{ count_t }})</th><th>Activity_Summary: {{ count_s }}</th></tr> 
           </tr>
@@ -20,8 +18,7 @@
           {% endif %}
          </table>
         <div>{% if pk != '1' %}<a href="{% url 'get_total' pk=pk %}">Detail</a>{% endif %}</div>
-  </ul>
-  {% if all_page.has_other_pages %}
+	{% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}
           <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
@@ -42,8 +39,8 @@
         {% endif %}
       </ul>
     {% endif %}
-     
-     <div><a href="{% url 'home' %}" style="font-family:Helvetica; color:green; font-size: 17px;">Home</a></div>
+  </ul>
+     <div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
 
 

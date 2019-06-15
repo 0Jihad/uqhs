@@ -12,7 +12,6 @@
             <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
             <link rel="stylesheet" href="{% static 'css/result.css' %}">
             <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-            
             <div class="header-right">
             {% if user.is_authenticated%}
                    <small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span><em class="capt"><em style="font-family:Helvetica; font-size:9px;">Logout</em></em></a></small>
@@ -55,21 +54,19 @@
                     <a href="{% url 'my_loan_book' %}" class="top-menu"><h6>My Lib</h6></a>
                   </div>
                 </div>
-                
-                <div class="dropdown">
-                  <span class="dropbtn">Search by</span>
-                  <div class="dropdown-content">
-                    <a class="active" href="{% url 'tutor_class_filter' %}"><h6>Teacher</h6></a>
-                    <a class="active" href="{% url 'subject_class_term_filter' %}"><h6>Class</h6></a>
-                    <a href="{% url 'student_name_class_filter' %}"><h6>Student</h6></a>
-                  </div>
-                </div>
                 <div class="dropdown">
                   <span class="dropbtn">Portal</span>
                   <div class="dropdown-content">
                     <a class="active" href="{% url 'tutor_summary' pk=1 %}"><h6>Staff</h6></a>
                     <a href="{% url 'student_names' %}"><h6>Students</h6></a>
                     <a href="{% url 'flexing' %}"><h6>How</h6></a>
+                  </div>
+                </div>
+                <div class="dropdown">
+                  <span class="dropbtn">Search by</span>
+                  <div class="dropdown-content">
+                    <a class="active" href="{% url 'subject_class_term_filter' %}"><h6>Class</h6></a>
+                    <a href="{% url 'student_name_class_filter' %}"><h6>Student</h6></a>
                   </div>
                 </div>
             </div>
@@ -117,13 +114,7 @@
             </div>
         
             <!-- Page content -->
-            <div class="fc">
-                 {% if user.is_authenticated %}
-                 {% if request.user.is_superuser == True  and user.is_staff == True %}<em class="grd_count"><div style="font-family:Helvetica; color:green; font-size: 11px;"> Logged-in as Admin</div></em>{% endif %}
-                 {% if request.user.is_superuser == False and user.is_staff == True %}<em class="grd_count"><div style="font-family:Helvetica; color:green; font-size: 11px;"> Logged-in as Staff</div></em>{% endif %}
-                 {% if request.user.is_staff == False and user.is_staff == False %}<em class="grd_count"><div style="font-family:Helvetica; color:green; font-size: 11px;"> Logged-in as Non-Staff</div><em></em></em>{% endif %}
-                 {% endif %}
-            </div>
+            
             <!-- Side navigation -->
             <!-- Side navigation -->
             

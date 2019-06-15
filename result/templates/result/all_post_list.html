@@ -1,10 +1,8 @@
 {% extends "base_generic.html" %}
  
 {% block content %}
-<div style="width:76%;margin-left:21px; font-size:12">
-    <div class="fc">
+<form>
          <div class="capt" style="width:76%;margin:1px; font-size:21"><a href="" style="font-family:Helvetica; color:white; font-size: 10px;">{{ post }}|</a></strong>Posts</div>
-    </div>
     <tbody>
     {% if all_page %}
     	{% for sub in all_page %}
@@ -26,7 +24,7 @@
     {% endif %} 
     <div><a href="{% url 'post_new' %}" style="font-family:Helvetica; color:red; font-size: 10px;"><h6>New request</h6></a></div>    
     </tbody>
-</div>
+</form>
 
 {% if all_page.has_other_pages %}
       <ul class="pagination">
@@ -47,7 +45,7 @@
         {% else %}
           <li class="disabled"><span>&raquo;</span></li>
         {% endif %}
-	<a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:160px; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a>
       </ul>
     {% endif %}
+<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}

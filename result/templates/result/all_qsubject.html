@@ -2,7 +2,7 @@
 {% extends "base_generic.html" %}
 {% block content %}
   <ul>
-        <table style="width:89%;margin:1px font-size:12">
+        <table>
 	<div class="capt"><a href="{% url 'subject_home' pk_code=pk|add:'S1' %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="{% url 'subject_home' pk_code=pk|add:'C1' %}"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class: </a> {{ qry.Class }} <a href="{% url 'subject_home' pk_code=pk|add:'T1' %}"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term: </a> {{ qry.term }} </div>
           <tr>
             <tr><th>STUDENT NAME ({{ count_grade }})</th>{% if user.is_staff == True %}<th>No.</th>{% endif %}<th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th></tr> 

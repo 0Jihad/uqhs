@@ -5,11 +5,10 @@
     <head>
 
     </head>
-    <div class="fc">
-      <div class="capt" style="width:80%;margin:1px; font-size:13"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">Required:</a></strong> No record for this tutor exit yet! Create tutor account<a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:white; font-size: 15px;"> now!!</a></div>
-    </div>
     <body>
-            <table style="width:80%;margin:1px; font-size:12">
+            <table>
+		<div class="capt" style="width:80%;margin:1px; font-size:13"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">Required:</a></strong> No record for this tutor exit yet! Create tutor account<a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:white; font-size: 15px;"> now!!</a></div>
+
                 <thead>
                           
                 </thead>
@@ -44,5 +43,6 @@
       </ul>
     {% endif %}
     </body>
+	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
     {% endblock %}
 </html>

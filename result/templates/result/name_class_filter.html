@@ -6,14 +6,11 @@
 	<div class="capt">Searching</div>
     {% csrf_token %}
     <div class="row">
-    <div class="col-xs-4">
-        {{ result.subject|as_crispy_field }}
+    <div class="col-xs-6">
+        {{ result.student_name|as_crispy_field }}
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-6">
         {{ result.Class|as_crispy_field }}
-    </div>
-    <div class="col-xs-4">
-        {{ result.term|as_crispy_field }}
     </div>
     </div>
     <input type="submit" value="Submit" style="width:13.5%; font-size:1">

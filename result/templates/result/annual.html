@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-    <div class="fc">
-     <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
-    </div>
-
   <ul>
-        <table style="width:89%">
+        <table>
+		<div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
+
           <tr>
             <tr><th>STUDENT NAME ({{ count_grade }})</th><th>First</th><th>Second</th><th>Third</th><th>Agr</th><th>Anu_avg</th><th>Anu_grd</th><th>Anu_pos</th></tr> 
           </tr>
@@ -44,6 +42,7 @@
         {% endif %}
       </ul>
     {% endif %}
+	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
  
 
