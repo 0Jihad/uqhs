@@ -602,6 +602,10 @@ p{ margin: 0px;
       font-size: 8px;
   }
   
+.capt {
+      width: 56%;
+      font-size: 10px;
+  }
   table{ margin-left: 40px;
         width: 100%;
         font-size: 8px;}
@@ -640,6 +644,11 @@ p{ margin: 0px;
       font-size: 8px;
   }
   
+.capt {
+      width: 54%;
+      font-size: 10px;
+  }
+  
   table{ margin-left: 40px;
         width: 100%;
         font-size: 8px;}
@@ -675,6 +684,11 @@ p{ margin: 0px;
   .sidenav {
       height: 45%; /* Full-height: remove this if you want "auto" height */
       width: 9%;
+      font-size: 8px;
+  }
+  
+  .capt {
+      width: 50%;
       font-size: 8px;
   }
   
