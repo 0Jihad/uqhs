@@ -4,9 +4,45 @@
   <form action="" method="post">
     <em class="capt">Edit User Profile</em>
     {% csrf_token %}
-    <table>
-    {{ form|crispy }}
-    </table>
-    <button class="btn btn-primary"> <span class="glyphicon glyphicon-save" style="margin-right:5px;"></span>Save Changes</button>
+    <div class="row">
+      <div class="col-xs-4">
+        {{ form.first_name|as_crispy_field }}
+      </div>
+      <div class="col-xs-4">
+        {{ form.last_name|as_crispy_field }}
+      </div>
+      <div class="col-xs-4">
+        {{ form.birth_date|as_crispy_field }}
+      </div>
+    </div>   
+    {{ form.bio|as_crispy_field }}
+    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Contact Info:</em>
+    <div class="row">
+      <div class="col-xs-3">
+        {{ form.phone|as_crispy_field }}
+      </div>
+      <div class="col-xs-3">
+        {{ form.city|as_crispy_field }}
+      </div>
+      <div class="col-xs-3">
+        {{ form.country|as_crispy_field }}
+      </div>
+      <div class="col-xs-3">
+        {{ form.location|as_crispy_field }}
+      </div>
+    </div>
+    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Profile Info:</em>
+    <div class="row">
+      <div class="col-xs-6">
+        {{ form.department|as_crispy_field }}
+      </div>
+      <div class="col-xs-6">
+        {{ form.organization|as_crispy_field }}
+      </div>
+    </div> 
+    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Save</span></button>
   </form>
 {% endblock %}
+
+<em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Personal Info:</em>
+    

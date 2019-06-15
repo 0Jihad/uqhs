@@ -12,8 +12,8 @@
     {% csrf_token %}
     <em class="capt">Change User</em>
      {{ form|crispy }}
-    <button type="submit" class="btn btn-success" style="margin-left:2%;"><em style="font-family:Helvetica; color:white; font-size: 10px;">Save</em></button>
-    <a href="{% url 'all_accounts' %}" style="margin-left:76%;"><button type="submit" class="btn btn-success"><em style="font-family:Helvetica; color:red; font-size: 10px;">Delete!</em></button></a>
+    <button type="submit" class="btn btn-success" style="margin-left:2%;"><em style="font-family:Helvetica; color:white; font-size: 10px;"><span class="glyphicon glyphicon-check">Save</span></em></button>
+    <a href="{% url 'all_accounts' %}" style="margin-left:76%;"><button type="submit" class="btn btn-success"><em style="font-family:Helvetica; color:red; font-size: 10px;"><span class="glyphicon glyphicon-remove">Delete!</span></em></button></a>
   </form>
    {% endblock %}
  

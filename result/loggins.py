@@ -59,6 +59,8 @@ def admin_page(request):
 ################################UPDATING USER ACCOUNT###############################################
 @login_required
 def password1(request, pk):
+    if request.user.profile.email_confirmed == False:
+        return redirect('edith', pk=request.user.id)
     users = get_object_or_404(User, pk=pk)
     PasswordForm = AdminPasswordChangeForm
     if request.method == 'POST':
@@ -78,6 +80,8 @@ def password1(request, pk):
 
 @login_required
 def password2(request):
+    if request.user.profile.email_confirmed == False:
+        return redirect('edith', pk=request.user.id)
     if request.user.has_usable_password():
         PasswordForm = PasswordChangeForm
     else:
@@ -649,7 +653,7 @@ def manage_subject_updates(request, pk):
 ###############################################################################
 @login_required
 def profiles(request, pk):#show single candidate profile
-    qry = get_object_or_404(Edit_User, pk=pk)
+    qry = get_object_or_404(Edit_User, user=get_object_or_404(User, pk=pk).id)
     return render(request, 'result/profiles.html', {'qry' : qry})
 
 

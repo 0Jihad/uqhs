@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <ul>
+	<div class="capt"><em style="color:yellow;">Name:</em><a href="{% url 'student_subject_detail_all_subject' pk=pk %}" style="color:white;">{{ name }}</a> <em style="color:yellow;">Subject</em>: <small style="font-family:Helvetica; color:white; font-size: 10px;">{{ counts.count }}</small></div>
+  <div>
         <table>
-	   <div class="capt" style="width:80%;margin:1px; font-size:21"><div class="capt" style="width:80%;margin:1px; font-size:21"><a href="{% url 'student_subject_detail_all_subject' pk=pk %}" style="font-family:Helvetica; color:white; font-size: 10px;">{{ name }}</a> subject: <small style="font-family:Helvetica; color:white; font-size: 10px;">{{ counts.count }}</small></div></div>
           <tr>
             <th>Subject S/N <th>Subject List</th><th>Class</th><th>Term</th><th>Sum</th><th>Grade</th><th>Pos</th>
           </tr>
@@ -18,7 +18,7 @@
           {% endif %}
         </table>
         
-  </ul>
+  </div>
   {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}

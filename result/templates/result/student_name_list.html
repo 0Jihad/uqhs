@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-      
-  <ul>
-	<em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Note: Get the detail result simply by clicking the <a href="" style="font-family:Helvetica; color:blue; font-size: 10px;">hyper-link</a> on any of the <strong style="font-family:Helvetica; color:blue; font-size: 10px;">{{ counts }}</strong> names for subjects and scores!</em>	
-
+<div>
+	
+   <em class="capt" style="color:white;">Note: Click the <a href="" style="color:blue;">hyper-link</a> from <strong style="color:blue;">{{ counts }}</strong> names, subjects and scores for review!</em>	   
+  
         <table>
 	          <tr>
             <tr><th>STUDENT NAMEs ({{ counts }})</th><th>Created</th><th>Class</th></tr> 
@@ -19,7 +19,8 @@
               <p>There are no records.</p>
           {% endif %}
         </table>
-        {% if all_page.has_other_pages %}
+  </div>
+     {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}
           <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
@@ -39,10 +40,7 @@
           <li class="disabled"><span>&raquo;</span></li>
         {% endif %}
       </ul> 
-  </ul>
-  
-    {% endif %}
-     
+{% endif %}
 	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
 

@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <ul>
+	<div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="color:blue;"> Subject:</a> {{qry.subject}} <a href="#"style="color:blue;"> Class:</a> {{ qry.Class }} <a href="#"style="color:blue;"> Term:</a> {{ qry.term }}</div>
+  <div>
         <table>
-	<div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
-
           <tr>
             <tr><th>STUDENT NAME ({{ count_grade }})</th>{% if user.is_staff == True %}<th>No.</th>{% endif %}<th>First</th><th>Second</th><th>Third</th><th>Agr</th><th>Anu_avg</th><th>Anu_grd</th><th>Anu_pos</th></tr> 
           </tr>
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:blue; font-size: 10px;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'edit_annual' pk=scr.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.id }}</a></td>{% endif %}<td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.first }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.second }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.third }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.anual }}</em></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agr }}</em></td><td><em style="font-family:Helvetica; color:green; font-size: 10px;">{{ scr.grade }}</em></td><td><em style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.anu_posi }}</em></td>
+                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'edit_annual' pk=scr.id %}" style="color:sienna;">{{ scr.id }}</a></td>{% endif %}<td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="color:sienna;">{{ scr.first }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="color:sienna;">{{ scr.second }}</a></td><td><a href="{% url 'one_subject_detail' pk=scr.student_name.id %}" style="color:sienna;">{{ scr.third }}</a></td><td><em style="color:sienna;">{{ scr.anual }}</em></td><td><em style="color:sienna;">{{ scr.agr }}</em></td><td><em style="color:green;">{{ scr.grade }}</em></td><td><em style="color:red;">{{ scr.anu_posi }}</em></td>
           </tr>
           {% endfor %}
           {% else %}
@@ -19,7 +18,7 @@
           {% endif %}
         </table>
         
-    </ul> 
+    </div> 
     {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}

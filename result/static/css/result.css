@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* Style the header with a grey background and some padding */
 body {
-  font-family: Bodoni MT, Helvetica, sans-serif;
+  font-family: Baskerville Old Face, Bodoni MT, Helvetica, sans-serif;
   background-color: hsla(209, 31%, 49%, 0.295);
    }
 
@@ -86,30 +86,39 @@ form {
   overflow: hidden;
   background-color: dodgerblue;
   padding: 20px 10px;
-  width: 68%;
+  width: 85%;
   border-radius: 5px;
-  margin-left: 8px;
+  margin-left: -13px;
    }
 
 
 table, th, td {
         border: 1px solid rgba(247, 238, 238, 0.918);
-        font-family: Courier;
+        font-family: Baskerville Old Face;
         text-align: center;
         font-size: 11px;
 }
 table {border-collapse: collapse;
-       margin-left: -53px;
-       width: 90%;
+       margin-left: -13px;
+       width: 85%;
     }
 
-.capt{margin-left: 8px;
+.capt{margin-left: -13px;
       border-radius: 5px;
       background-color: red;
       text-align: center;
       color: white;
       font-size:17px;
       width: 60%;
+      }
+
+.cap_form{margin-left: -13px;
+      border-radius: 5px;
+      background-color: red;
+      text-align: center;
+      color: white;
+      font-size:17px;
+      width: 110%;
       }
 
 th, td {padding: 0px;}
@@ -119,17 +128,7 @@ thead, tfoot {background-color: rgb(206, 172, 127);}
 tbody {background-color: seashell;}
 tr:nth-child(even) {background-color: silver;}
 
-.caps{
-        background-color: hsla(249, 42%, 37%, 0.494);
-        margin: 0px
-        
-        }
 
-
-.login {margin-left: 1px
-        }
-.each{margin-left: 100px
-        }
 /* The sidebar menu */
 .sidenav {
   height: 90%; /* Full-height: remove this if you want "auto" height */
@@ -239,6 +238,7 @@ navz{
         position: fixed;
         top: 4rem;
         opacity: 0.5;
+        width: 100%
         
     }
     img{
@@ -550,8 +550,13 @@ p{ margin: 0px;
   .navbar {
     width: 100%;
     font-size: 8px;
+    margin-right: 0px;
   }
   
+.capt { margin-left: -3px;
+         width: 40%;
+         font-size: 8px;
+  }
   
   
   form { margin-left: 40px;
@@ -563,144 +568,17 @@ p{ margin: 0px;
       font-size: 8px;
   }
   
-  table{ margin-left: 40px;
+  table{ margin-left: -3px;
         width: 100%;
         font-size: 8px;}
 }
 
-@media (max-width: 700px) 
-{
-  .sidenavs {
-    display: none;
-    visibility: hidden;
-  }
-  
-  .header-right {
-    display: none;
-    visibility: hidden;
-  }
-  
-  .footer {
-    width: 100%;
-    font-size: 8px;
-  }
-  
-  .navbar {
-    width: 100%;
-    font-size: 8px;
-  }
-  
 
-  
-  form { margin-left: 40px;
-         width: 100%;
-         font-size: 8px;
-  }
-  .sidenav {
-      height: 50%; /* Full-height: remove this if you want "auto" height */
-      width: 9%;
-      font-size: 8px;
-  }
-  
-.capt {
-      width: 56%;
-      font-size: 10px;
-  }
-  table{ margin-left: 40px;
-        width: 100%;
-        font-size: 8px;}
-}
-
-@media (max-width: 500px) 
-{
-  .sidenavs {
-    display: none;
-    visibility: hidden;
-  }
-  
-  .header-right {
-    display: none;
-    visibility: hidden;
-  }
-  
-  .footer {
-    width: 100%;
-    font-size: 8px;
-  }
-  
-  .navbar {
-    width: 100%;
-    font-size: 8px;
-  }
-  
-  
-  form { margin-left: 42px;
-         width: 100%;
-         font-size: 8px;
-  }
-  .sidenav {
-      height: 45%; /* Full-height: remove this if you want "auto" height */
-      width: 9%;
-      font-size: 8px;
-  }
-  
-.capt {
-      width: 54%;
-      font-size: 10px;
-  }
-  
-  table{ margin-left: 40px;
-        width: 100%;
-        font-size: 8px;}
-}
-  
-@media (max-width: 250px) 
-{
-  .sidenavs {
-    display: none;
-    visibility: hidden;
-  }
-  
-  .header-right {
-    display: none;
-    visibility: hidden;
-  }
-  
-  .footer {
-    width: 100%;
-    font-size: 8px;
-  }
-  
-  .navbar {
-    width: 100%;
-    font-size: 8px;
-  }
-  
-  
-  form { margin-left: 42px;
-         width: 100%;
-         font-size: 8px;
-  }
-  .sidenav {
-      height: 45%; /* Full-height: remove this if you want "auto" height */
-      width: 9%;
-      font-size: 8px;
-  }
-  
-  .capt {
-      width: 50%;
-      font-size: 8px;
-  }
-  
-  table{ margin-left: 40px;
-        width: 100%;
-        font-size: 8px;}
-}
   
 @media screen and (max-height: 900px) {
   .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 11px;}
-  .navbar a {font-size: 10px;}
+  .sidenav a {font-size: 9px;}
+  .navbar a {font-size: 8px;}
 }
 
 @media screen and (max-height: 700px) {

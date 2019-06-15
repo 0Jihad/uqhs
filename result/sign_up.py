@@ -44,6 +44,7 @@ class Staff_SignUp(generic.CreateView):
                 if not (User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()):
                     userObj = User.objects.create_user(username=username, email=email, password=password)
                     userObj.is_active = False
+                    userObj.email = fd['email']
                     userObj.save()
                     profile = userObj.profile
                     profile.bio = 'new!'

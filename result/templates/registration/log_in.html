@@ -15,18 +15,18 @@
 	<br>
 	<div class="fieldWrapper">
 		{{form.username.errors}}
-		<label for="form.username.id_for_label"style="font-family:Arabic Typesetting; color:red; font-size: 19px;">Account Name: </label><br>
+		<label for="form.username.id_for_label"style="font-family:Arabic Typesetting; color:white; font-size: 19px;">Account Name: </label><br>
 		{{form.username}}
 	</div>
 	<div class="fieldWrapper">
 		{{form.password1.errors}}
 		{{help_text|safe}}
-		<label for="form.password1.id_for_label"style="font-family:Arabic Typesetting; color:red; font-size: 19px;">Password: </label><br>
+		<label for="form.password1.id_for_label"style="font-family:Arabic Typesetting; color:white; font-size: 19px;">Password: </label><br>
 		{{form.password1}}
 	</div>
 	
 		<button class="btn btn-primary"> <span class="glyphicon glyphicon-log-in" style="margin-right:5px;"></span>Login</button>
-	<a href="{% url 'post_new' %}" style="font-family:Arial Black; color:green; font-size: 9px;">Forget Password!</a>|<a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><em style="font-family:Arial Black; color:red; font-size: 9px;">Sign Up</em></a>
+	<a href="{% url 'post_new' %}" style="font-family:Arial Black; color:red; font-size: 9px;">Forget Password!</a>|<a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span><em style="font-family:Arial Black; color:green; font-size: 9px;">Sign Up</em></a>
        <input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div>

@@ -2,7 +2,11 @@
 
 {% block content %}
 
-<h1>Delete/Reset!</h1>
 
-<p>Select an action to perform on <a style="font-family:Helvetica; color:orange; font-size: 12px;">{{ qry.username }}</a> account:|<a href="{% url 'yes_no' pk=pk %}" style="font-family:Helvetica; color:red; font-size: 12px;">Delete!</a>|<a href="{% url 'passwords' pk=pk %}" style="font-family:Helvetica; color:purple; font-size: 12px;">reset password!</a>|<a href="{% url 'all_accounts' %}" class="capt">Go Back!</a></p>
+<form>
+<div class="cap_form">Action:<pre>Delete/Reset!</pre></div>
+Select an action to perform on <a style="font-family:Helvetica; color:white;">{{ qry.username }}'s</a> account:<a href="{% url 'yes_no' pk=pk %}" style="font-family:Helvetica; color:red; font-size: 12px;">Delete!</a>/<a href="{% url 'passwords' pk=pk %}" style="font-family:Helvetica; color:purple; font-size: 12px;">Reset</a>
+<div><a href="{% url 'all_accounts' %}" class="capt" style="margin-left:59%;">Go Back!</a></div>
+</form>
+
 {% endblock %}

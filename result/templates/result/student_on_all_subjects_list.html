@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <ul>
+  <div>
         <table>
 	   <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{ tutors }}, <a href="{% url 'student_on_all_subjects_list' '1' %}" style="font-family:Helvetica; color:white; font-size: 20px;"> viwe detail </a></div>
           <tr>
@@ -17,7 +17,7 @@
               <p>There are no records.</p>
           {% endif %}
          </table>
-  </ul>
+  </div>
   {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}

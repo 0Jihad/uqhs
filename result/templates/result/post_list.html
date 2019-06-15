@@ -2,7 +2,7 @@
  
 {% block content %}
 <form>
-<div class="capt" ><a href="" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">{{ post }}|</a></strong>Posts</div>
+<div class="cap_form" ><a href="" style="color:palegoldenrod;">Posts</a><pre>{{ post }}</pre></div>
     {% if all_page %}
     	{% for sub in all_page %}
         	{% if sub.published_date %}
