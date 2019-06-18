@@ -300,7 +300,7 @@ def detailView(request, pk):##Step 2::  every tutor home detail views
     grade_counter(mains, tutor)
     grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
     page = request.GET.get('page', 1)
-    paginator = Paginator(mains, 60)
+    paginator = Paginator(mains, 30)
     old = TOTAL.objects.filter(subject_by__exact=tutor).count()
     if old == 0:
         qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
@@ -343,7 +343,7 @@ def annual_view(request, pk):##Step 2::  every tutor home detail views
     #if tutor.term == '3rd Term':
         #return redirect('get_total', pk=pk)
     page = request.GET.get('page', 1)
-    paginator = Paginator(mains, 10)
+    paginator = Paginator(mains, 30)
     try:
         all_page = paginator.page(page)
     except PageNotAnInteger:
