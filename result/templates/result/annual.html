@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <ul>
+  <div>
         <table>
 		<div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
 
@@ -20,7 +20,7 @@
             <tr class="capt"><td colspan="4"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:green; font-size: 10px;">Subject_by:</a>|{{ qry.teacher_name }}|</td><td> <strong>AGR:</strong></td><td style="font-family:Helvetica; color:white; font-size: 10px;">{{ qar.subject_scores }}</td><td><strong>PER:</strong></td><td style="font-family:Helvetica; color:white; font-size: 10px;">{{ qar.subject_pert }}%</td></tr>
 	    <tr class="capt"><td colspan="7" >{% if qry.Class == 'JSS 1' or qry.Class == 'JSS 2' or qry.Class == 'JSS 3' %}{% if grad.grade_A != 0 %}<em class="gr_as"><a href="{% url 'grade_list' pk_code=pk|add:'A0' %}"> A: {{ grad.grade_A }}</a></em> {% endif %}{% if grad.grade_C != 0 %}<em class="gr_cs"><a href="{% url 'grade_list' pk_code=pk|add:'C0' %}">C: {{ grad.grade_C }}</a></em>{% endif %}</em><em class="" style="width:20%;margin-left: 64px; font-size:9">{% if grad.grade_P != 0 %}<em class="gr_ps"><a href="{% url 'grade_list' pk_code=pk|add:'P0' %}">P: {{ grad.grade_P }} </a>{% endif %}</em> {% if grad.grade_F != 0 %}<em class="gr_fs"><a href="{% url 'grade_list' pk_code=pk|add:'F0' %}">F: {{ grad.grade_F }}</a></em> {% endif %}{% else %}{% if grad.grade_A1 != 0 %}<em class="gr_as"><a href="{% url 'grade_list' pk_code=pk|add:'A1' %}"> A1: {{ grad.grade_A1 }}</a></em> {% endif %}{% if grad.grade_B2 != 0 %}<em class="gr_bs"><a href="{% url 'grade_list' pk_code=pk|add:'B2' %}">B2: {{ grad.grade_B2 }}</a></em>{% endif %}</em>{% if grad.grade_B3 != 0 %}<em class="gr_bs"><a href="{% url 'grade_list' pk_code=pk|add:'B3' %}"> B3: {{ grad.grade_B3 }}</a></em> {% endif %}{% if grad.grade_C4 != 0 %}<em class="gr_cs"><a href="{% url 'grade_list' pk_code=pk|add:'C4' %}">C4: {{ grad.grade_C4 }}</a></em>{% endif %}</em>{% if grad.grade_C5 != 0 %}<em class="gr_cs"><a href="{% url 'grade_list' pk_code=pk|add:'C5' %}"> C5: {{ grad.grade_C5 }}</a></em> {% endif %}{% if grad.grade_C6 != 0 %}<em class="gr_cs"><a href="{% url 'grade_list' pk_code=pk|add:'C6' %}">C6: {{ grad.grade_C6 }}</a></em>{% endif %}</em>{% if grad.grade_D7 != 0 %}<em class="gr_ps"><a href="{% url 'grade_list' pk_code=pk|add:'D7' %}"> D7: {{ grad.grade_D7 }}</a></em> {% endif %}{% if grad.grade_E8 != 0 %}<em class="gr_ps"><a href="{% url 'grade_list' pk_code=pk|add:'E8' %}">E8: {{ grad.grade_E8 }}</a></em>{% endif %}</em>{% if grad.grade_F9 != 0 %}<em class="gr_fs"><a href="{% url 'grade_list' pk_code=pk|add:'F9' %}">F9: {{ grad.grade_F9 }}</a></em>{% endif %}{% endif %}</strong></td><td><a href="{% url 'home' %}">Download</a></td></tr>
         </table>
-    </ul> 
+    </div> 
     {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}
@@ -42,7 +42,7 @@
         {% endif %}
       </ul>
     {% endif %}
-	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+	<div><a href="{% url 'all_annual_view' pk=pk %}" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
  
 

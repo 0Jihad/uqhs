@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 {% block content %}
-  <ul>
+<div class="capt"><a href="" style="color:blue;"> Subject:</a> {{qry.subject}} <a href=""style="color:blue;"> Class: </a> {{ qry.Class }} <a href=""style="color:blue;"> Term: </a> {{ qry.term }} </div>
+
+  <div>
         <table>
-	<div class="capt"><a href="" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href=""style="font-family:Helvetica; color:blue; font-size: 10px;"> Class: </a> {{ qry.Class }} <a href=""style="font-family:Helvetica; color:blue; font-size: 10px;"> Term: </a> {{ qry.term }} </div>
           <tr>
             <tr><th>STUDENT NAME ({{ count_grade }})</th>{% if user.is_staff == True %}<th>No.</th>{% endif %}<th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Del</th></tr> 
           </tr>
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-            <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.id }}</a></td>{% endif %}<td style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.test }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agn }}</td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.atd }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.total }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.exam }}</a></td><td><em style="font-family:Helvetica; color:sienna; font-size: 10px;">{{ scr.agr }}</a></td><td><em style="font-family:Helvetica; color:green; font-size: 10px;">{{ scr.grade }}</a></td><td><em style="font-family:Helvetica; color:red; font-size: 10px;">{{ scr.posi }}</a></td><td><a href="{% url 'delete_warning' pk=scr.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+            <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="color:red;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="color:sienna;">{{ scr.id }}</a></td>{% endif %}<td style="color:sienna;">{{ scr.test }}</a></td><td><em style="color:sienna;">{{ scr.agn }}</td><td><em style="color:sienna;">{{ scr.atd }}</a></td><td><em style="color:sienna;">{{ scr.total }}</a></td><td><em style="color:sienna;">{{ scr.exam }}</a></td><td><em style="color:sienna;">{{ scr.agr }}</a></td><td><em style="color:green;">{{ scr.grade }}</a></td><td><em style="color:red;">{{ scr.posi }}</a></td><td><a href="{% url 'delete_warning' pk=scr.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>
           </tr>
           {% endfor %}
           {% else %}
@@ -18,7 +19,7 @@
           {% endif %}
         </table>
        
-  </ul>
+  </div>
   {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}

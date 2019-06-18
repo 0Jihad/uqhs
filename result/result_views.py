@@ -65,13 +65,37 @@ def single_student_update(request, pk):#student
         obj.agr = obj.exam + obj.total
         obj.grade = grades([obj.agr], cader(obj.tutor.Class))[0]
         obj.save()
+        first = ANNUAL.objects.filter(student_name__exact=obj.student_name, term='1st Term', subject__exact=obj.tutor.subject).count()
+        if first == 0:#create new record
+            if obj.tutor.term == '1st Term':
+                ann_scr = ANNUAL(student_name=obj.student_name, first = obj.agr, subject_by=obj.tutor, subject=obj.tutor.subject, term = '1st Term')
+                ann_scr.save()
+            elif obj.tutor.term == '2nd Term':
+                ann_scr = ANNUAL(student_name=obj.student_name, second = obj.agr, subject_by=obj.tutor, subject=obj.tutor.subject, term = '1st Term')
+                ann_scr.save()
+            else:
+                if obj.tutor.term == '3rd Term':
+                    ann_scr = ANNUAL(student_name=obj.student_name, third = obj.agr, subject_by=obj.tutor, subject=obj.tutor.subject, term = '1st Term')
+                    ann_scr.save()
+        else:#update records
+            ann_scr = get_object_or_404(ANNUAL, student_name__exact=obj.student_name, subject__exact=obj.tutor.subject, term__exact='1st Term')
+            if obj.tutor.term == '1st Term':
+                ann_scr.first = obj.agr
+                ann_scr.save()
+            elif obj.tutor.term == '2nd Term':
+                ann_scr.second = obj.agr
+                ann_scr.save()
+            else:
+                if obj.tutor.term == '3rd Term':
+                    ann_scr.third = obj.agr
+                    ann_scr.save()
         return redirect('position_updates', pk=obj.tutor.id)
     else:
         return redirect('home')
 @login_required
 def subject_position_updates(request, pk):#all
     query = QSUBJECT.objects.filter(tutor__exact=BTUTOR.objects.get(pk=pk))
-    students = list(query.values_list('agr', 'id'))
+    students = [x[:] for x in list(query.values_list('agr', 'id')) if x[0] != None]
     agr = [r[0] for r in students]###############news
     posi = don_e(agr[:])
     ids = [r[1] for r in students]

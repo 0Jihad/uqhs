@@ -144,4 +144,21 @@ class tutor_class_Form(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('Account_Username', 'subject', 'text')  
+        fields = ('Account_Username', 'subject', 'text') 
+        
+class a_student_form_new(forms.ModelForm):
+    class Meta:
+        model = QSUBJECT
+        fields = ('student_name','test', 'agn','atd', 'exam','tutor', 'Class',)
+        
+
+class student_name(forms.ModelForm):
+    class Meta:
+        model = CNAME
+        fields = ('student_name','Class',)
+#class student_name(forms.Form):
+    #student_name = forms.DateField(help_text="Enter student Name")
+    #def clean_renewal_date(self):
+        #data = self.cleaned_data['student_name']
+        #return data
+    

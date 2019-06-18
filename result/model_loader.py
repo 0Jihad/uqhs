@@ -11,7 +11,7 @@ from result.result_views import cader
 from result.grader import grades, don_e
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import teacherform
+from .forms import teacherform, a_student_form_new, student_name
 
 #####################################STAGE 1:::: CREATE_TUTOR ##########################STARTS
 @login_required
@@ -97,6 +97,31 @@ def upload_new_subject_scores(request, pk):
         return render(request, 'result/loader.html', {'pk':pk, 'qry':tutor})
     ######################STAGE 2 ::: UPLOAD SCORES##################ENDS
     return redirect('tutor_summary', pk=pk)#summarise all tutor's uploads
+    
+
+def a_student_exist(request, pk):
+    tutor = get_object_or_404(BTUTOR, pk=pk)
+    if request.method == 'POST':
+        result = a_student_form_new(request.POST)
+        if result.is_valid():
+            exist_student = QSUBJECT(student_name=CNAME.objects.get(student_name__exact=str(result.cleaned_data['student_name']).split(':')[1]), test=result.cleaned_data['test'], agn=result.cleaned_data['agn'], atd=result.cleaned_data['atd'], exam=result.cleaned_data['exam'], tutor = tutor)
+            exist_student.save() 
+            return redirect('subject_updates_model', pk=exist_student.id)
+    else:
+        result = a_student_form_new()
+        #group = student_Class()
+    return render(request, 'result/a_student_form.html', {'result': result})
+
+def new_student_name(request):
+    if request.method == 'POST':
+        result = student_name(request.POST)
+        if result.is_valid():
+            new_name = CNAME(student_name=result.cleaned_data['student_name'], Class=result.cleaned_data['Class'])#adding new student_name
+            new_name.save() 
+            return redirect('student_names')
+    else:
+        result = student_name()
+    return render(request, 'result/a_student_name.html', {'result': result})
 
 ######################STAGE 3 ::: CREATE/UPDATE_ANNUAL SCORES##################STARTS
 

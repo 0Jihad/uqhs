@@ -78,7 +78,8 @@ class CNAME(models.Model):
     updated = models.DateTimeField(editable=False, blank=True, null=True,)
     subject_code = models.IntegerField(blank=True, null=True, default='0',)
     model_summary = models.CharField(max_length=200, default='student_names', blank=True, null=True)
-    Class = models.CharField(max_length=200, default='None', blank=True, null=True)
+    class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
+    Class = models.CharField(max_length=30, choices=class_status, blank=True, null=True)
     class Meta:
           ordering = ('student_name',) # helps in alphabetical listing. Sould be a tuple
     def __str__(self):

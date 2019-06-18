@@ -72,7 +72,7 @@
             </div>
               <!-- Side navigation -->
             <navz>
-                <span><em style="margin-left:250px;">Welcom to UMMUL_QURA RESULT PORTAL </em></span>
+                <span><em style="margin-left:250px; color: white;">Welcom to UMMUL_QURA RESULT PORTAL </em></span>
             </navz>
             <div class="sidenav">
                 <div style="margin-right:5px;margin-top:5px"><h6 style="font-family:Helvetica; color:white; font-size: 9px;">Menue</h6>
@@ -91,23 +91,35 @@
                         
                     {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
-                        {% if request.user.profile.bio != 'new!' %}<a href="{% url 'pro_detail' request.user.id %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Profile</a>{% endif %}
+                        {% if request.user.profile.bio != 'new!' %}
+                        <div class="dropdowns">
+                      <span class="dropbtns">Mains</span>
+                      <div class="dropdown-contents">
+                        <a href="{% url 'pro_detail' request.user.id %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Profile</a>{% endif %}
                         <a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Start</a>
                         <a href="{% url 'search_tutors' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Move</a>
                         <a href="{% url 'student_in_none' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Bin</a>
-                        
+                      </div>
+                </div>
+                                                
                     {% endif %} 
                     {% if perms.catalog.can_mark_returned %}
-                        <a href="{% url 'all_accounts' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Accounts</a>
-                        <a href="{% url 'author_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Authors</a>
-                        <a href="{% url 'book_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Books</a>
-                        <a href="{% url 'genre_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Genre</a>
-                        <a href="{% url 'language_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Language</a>
-                        <a href="{% url 'books' %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Stores</a>
-                        <a href="{% url 'br-books' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Loans</a>
-                        <a href="{% url 'renew_approval'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Renew Books</a>
-                        <a href="{% url 'qeuing'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Grant Requests</a>
-                        <a href="{% url 'post_draft_list'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Posts</a>
+                <div class="dropdowns">
+                      <span class="dropbtns">Admin</span>
+                      <div class="dropdown-contents">
+                            <a href="{% url 'all_accounts' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Accounts</a>
+                            <a href="{% url 'author_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Authors</a>
+                            <a href="{% url 'book_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Books</a>
+                            <a href="{% url 'genre_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Genre</a>
+                            <a href="{% url 'language_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Language</a>
+                            <a href="{% url 'books' %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Stores</a>
+                            <a href="{% url 'br-books' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Loans</a>
+                            <a href="{% url 'renew_approval'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Renew Books</a>
+                            <a href="{% url 'qeuing'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Grant Requests</a>
+                            <a href="{% url 'post_draft_list'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Posts</a>
+                      </div>
+                </div>
+                        
                     {% endif %}
                 </div>
                 
