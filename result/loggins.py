@@ -4,7 +4,7 @@ Created on Mon Jan 28 00:51:16 2019
 
 @author: AdeolaOlalekan
 """
-from .models import QSUBJECT, Edit_User, ASUBJECTS, TOTAL, ANNUAL, BTUTOR, CNAME, RESULT_GRADE, Post
+from .models import QSUBJECT, Edit_User, ASUBJECTS,  ANNUAL, BTUTOR, CNAME, RESULT_GRADE, Post, OVERALL_ANNUAL, TERM
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -23,6 +23,7 @@ from django.views.generic.edit import UpdateView
 from django.forms import modelformset_factory
 from django.db.models import Sum, Avg
 import os
+import datetime
 from wsgiref.util import FileWrapper
 from django.utils import timezone
 ####################################STAGE 1::::#########TUTOR GET LOG IN OR SIGN UP##########################################   
@@ -143,22 +144,63 @@ def export_subject_scores(request, pk):#result download based on login tutor
     	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).student_name
     for each in sd:
         writer.writerow(each)
-    return response    
+    return response 
 
-def export_annual_scores(request, pk):#result download based on login tutor
+def broad_sheet(request):
+    sd = []
+    dim = ['student_name']
+    mid = ['eng', 'mat', 'agr', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'acc', 'his', 'Agr', 'Avr', 'grade', 'posi']
+    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=str(datetime.date.today().year))
+    if al.count() != 0:
+        sd = []
+        x = list(al.values_list('student_name', 'eng', 'mat', 'agr', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'acc', 'his', 'Agr', 'Avr', 'grade', 'posi'))
+        lst = [list(i[:13]) for i in x]
+        lss = [list(i[13:]) for i in x]
+        for i in range(0, len(lst)):
+            ds = [CNAME.objects.get(pk=x[i][0]).student_name]
+            try:
+                while True:
+                    lst[i][lst[i].index(None)] = 0
+            except ValueError:
+                pass         
+            for r in range(1, len(lst[i])):
+                if lst[i][r] != 0:
+                    ds += [TERM.objects.get(pk=lst[i][r]).avr]
+                    dim += [mid[r-1]]
+            sd += [ds+lss[i]]
+    return [sd, dim[:3]+['Agr', 'Avr', 'grade', 'posi']]
+
+def export_broadsheet(request):#result download based on login tutor teacher_accounts
+    sd = broad_sheet(request)
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="annual.csv"'
+    response['Content-Disposition'] = 'attachment; filename="broadsheet.csv"'
     writer = csv.writer(response)
-    writer.writerow(['student_name', 'first', 'second', 'third', 'anual', 'agr', 'grade', 'anu_posi'])
+    writer.writerow(sd[1])
+    for each in sd[0]:
+        writer.writerow(each)
+    return response 
+
+
+def export_all(request, pk):#result download based on login tutor 
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="annua_score.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'third', 'second', 'first', 'anual', 'agr', 'grade', 'anu_posi'])
     tutor = get_object_or_404(BTUTOR, pk=pk)
+    subjects = QSUBJECT.objects.filter(tutor__exact=tutor).values_list('student_name', 'test', 'agn', 'atd', 'total', 'exam')
+    scores = [list(x) for x in subjects]
     subject = ANNUAL.objects.filter(subject__exact=tutor.subject, subject_by__Class__exact=tutor.Class, term__exact='3rd Term')
-    sets = [x[:] for x in list(subject.values_list('student_name', 'first', 'second', 'third', 'anual', 'agr', 'grade', 'anu_posi')) if x[3] != None]
-    sd = [list(x) for x in sets]
+    sets = [x[:] for x in list(subject.values_list('third', 'second', 'first', 'anual', 'agr', 'grade', 'anu_posi')) if x[3] != None]
+    annual = [list(x) for x in sets]
+    sd = []
+    for i in range(0, len(annual)):
+        sd += [scores[i]+annual[i]]
     for i in range(0, len(sd)):
     	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).student_name
     for each in sd:
         writer.writerow(each)
     return response    
+  
 ###############################################################################
 def create_subjects(request):#New teacher form for every new term, class, subjects
     if request.method == 'POST':
@@ -204,7 +246,7 @@ def home(request):#Step 1:: list of tutor's subjects with class, term
     """
     # If a tutor is authenticated then redirect them to the tutor's page
     if request.user.is_authenticated:#a tutor page
-        tutor = BTUTOR.objects.filter(user=request.user).order_by('Class')
+        tutor = BTUTOR.objects.filter(accounts=request.user).order_by('Class')
         #mains = QSUBJECT.objects.filter(term__term__exact=qry.term, term__Class__exact=qry.Class, term__teacher_name__exact=qry.teacher_name).order_by('grade')
         return render(request, 'result/tutor.html', {'tutor':tutor})
     else:#general login page
@@ -293,73 +335,62 @@ def Teacher_model_result_grades(request, pk):##Step 2::  every tutor home detail
     grad = get_object_or_404(RESULT_GRADE, identifier=pk)
     grad.save()
 
-def detailView(request, pk):##Step 2::  every tutor home detail views
-    tutor = get_object_or_404(BTUTOR, pk=pk)
-    mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')#request.user
-    count_grade = QSUBJECT.objects.filter(tutor__exact=tutor).count()
-    grade_counter(mains, tutor)
-    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
-    page = request.GET.get('page', 1)
-    paginator = Paginator(mains, 30)
-    old = TOTAL.objects.filter(subject_by__exact=tutor).count()
-    if old == 0:
-        qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
-        qar.save() 
+def sum_avg(mains):
+    if mains.count() !=0:
+        subject_scores = round(mains.aggregate(Sum('agr'))['agr__sum'], 1)
+        subject_pert = round(mains.aggregate(Avg('agr'))['agr__avg'],2)
     else:
-        qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
-        qar.subject_scores = mains.aggregate(Sum('agr'))['agr__sum']
-        qar.subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2)
-        qar.save()
-    try:
-        all_page = paginator.page(page)
-    except PageNotAnInteger:
-        all_page = paginator.page(1)
-    except EmptyPage:
-        all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/qsubject.html',  {'grad' : grad, 'count_grade' : count_grade, 'all_page': all_page, 'qar': qar, 'qry' : tutor, 'pk': pk})
+        subject_pert = None
+        subject_scores = None
+    return [subject_scores, subject_pert]
+
+def detailView(request, pk):##Step 2::  every tutor home detail views 
+    tutor = get_object_or_404(BTUTOR, pk=pk)
+    mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')#request.user 
+    if mains.count() != 0:
+        count_grade = QSUBJECT.objects.filter(tutor__exact=tutor).count()
+        grad = grade_counter(mains, tutor.id, tutor.subject.name)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(mains, 30)
+        if tutor.term == '3rd Term' and tutor.model_in != 'annual':
+            return redirect('compute_annual', pk=tutor.id)
+        try:
+            all_page = paginator.page(page)
+        except PageNotAnInteger:
+            all_page = paginator.page(1)
+        except EmptyPage:
+            all_page = paginator.page(paginator.num_pages)
+    else:
+        return redirect('upload_txt', pk=tutor.id)
+    return render(request, 'result/qsubject.html',  {'grad' : grad, 'count_grade' : count_grade, 'all_page': all_page, 'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'qry' : tutor, 'pk': pk})
 
 def detail_all(request, pk):##Step 2::  every tutor home detail views
     tutor = get_object_or_404(BTUTOR, pk=pk)
     mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')#request.user
     count_grade = QSUBJECT.objects.filter(tutor__exact=tutor).count()
-    grade_counter(mains, tutor)
-    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
-    old = TOTAL.objects.filter(subject_by__exact=tutor).count()
-    if old == 0:
-        qar = TOTAL(subject_by=tutor, subject_scores=mains.aggregate(Sum('agr'))['agr__sum'], subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2), model_in=tutor.model_in)
-        qar.save() 
-    else:
-        qar = get_object_or_404(TOTAL, subject_by__exact=tutor)
-        qar.subject_scores = mains.aggregate(Sum('agr'))['agr__sum']
-        qar.subject_pert=round(mains.aggregate(Avg('agr'))['agr__avg'],2)
-        qar.save()
-    return render(request, 'result/all_qsubject.html',  {'grad' : grad, 'count_grade' : count_grade, 'mains': mains, 'qar': qar, 'qry' : tutor, 'pk': pk})
+    grad = grade_counter(mains, tutor.id, tutor.subject.name)
+    return render(request, 'result/all_qsubject.html',  {'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'grad' : grad, 'count_grade' : count_grade, 'mains': mains, 'qry' : tutor, 'pk': pk})
 
 
-def annual_view(request, pk):##Step 2::  every tutor home detail views
+def annual_view(request, pk):##Step 2::  every tutor home detail views 
     tutor = get_object_or_404(BTUTOR, pk=pk)
     mains = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject).order_by('id')#request.user
-    count_grade = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject).count()
-    #if tutor.term == '3rd Term':
-        #return redirect('get_total', pk=pk)
     page = request.GET.get('page', 1)
     paginator = Paginator(mains, 30)
+    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
     try:
         all_page = paginator.page(page)
     except PageNotAnInteger:
         all_page = paginator.page(1)
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/annual_view.html',  {'count_grade' : count_grade, 'all_page': all_page, 'qry' : tutor, 'pk': pk})
-
+    return render(request, 'result/all_annual.html',  {'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'count_grade' : mains.count(), 'all_page': all_page, 'qry' : tutor, 'pk': pk, 'grad': grad})
 
 def all_annual_view(request, pk):##Step 2::  every tutor home detail views
     tutor = get_object_or_404(BTUTOR, pk=pk)
     mains = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject).order_by('id')#request.user
-    count_grade = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject).count()
-    #if tutor.term == '3rd Term':
-        #return redirect('get_total', pk=pk)
-    return render(request, 'result/annual_view_all.html',  {'count_grade' : count_grade, 'mains': mains, 'qry' : tutor, 'pk': pk})
+    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
+    return render(request, 'result/all_annual_all.html',  {'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'count_grade' : mains.count(), 'mains': mains, 'qry' : tutor, 'pk': pk, 'grad': grad})
 
 def name_per_subject(request, pk):#student subject detail(single term)
     many = QSUBJECT.objects.filter(student_name_id__exact=pk)
@@ -369,8 +400,6 @@ def name_per_subject(request, pk):#student subject detail(single term)
     else:
         one_by_one = get_object_or_404(QSUBJECT, pk=pk)
     return render(request, 'result/subject_per_name.html',  {'qry': one_by_one, 'many': many})  
-
-
 
 def student_in_None(request):#student subject detail(single term)
     subjects = QSUBJECT.objects.filter(tutor__id__exact=None)
@@ -385,34 +414,36 @@ def student_in_None(request):#student subject detail(single term)
         all_page = paginator.page(paginator.num_pages)
     return render(request, 'result/qsubject_none.html',  {'all_page' : all_page, 'count_grade':count_grade})    
 
-
-
-def group_by_grade(request, pk_code):##Step 2::  every tutor home detail views
+def qsubject_on_grade(request, pk_code):##Step 2::  every tutor home detail views
     pk=pk_code[:len(pk_code)-2]
     tutor = get_object_or_404(BTUTOR, pk=pk_code[:len(pk_code)-2])
-    total = get_object_or_404(TOTAL, subject_by__exact=tutor)
-    grad = get_object_or_404(RESULT_GRADE, identifier=pk)
-    if grad.remark == False:
-        if tutor.Class == 'JSS 1' or tutor.Class == 'JSS 2' or tutor.Class == 'JSS 3':
-            mains = QSUBJECT.objects.filter(tutor__exact=tutor, grade=pk_code[-2])
-        else:
-            mains = QSUBJECT.objects.filter(tutor__exact=tutor, grade=pk_code[len(pk_code)-2:])
-    elif grad.remark == True:
-        mains = ANNUAL.objects.filter(subject__exact=tutor.subject, student_name__Class__exact=tutor.Class, grade=pk_code[-2])
-    count_grade = mains.count()
-    paginator = Paginator(mains, 60)
-    page = request.GET.get('page', 1)
-    try:
-        all_page = paginator.page(page)
-    except PageNotAnInteger:
-        all_page = paginator.page(1)
-    except EmptyPage:
-        all_page = paginator.page(paginator.num_pages)
-    if grad.remark == False:
-        return render(request, 'result/qsubject.html',  {'grad' : grad, 'count_grade' : count_grade, 'all_page': all_page, 'qar': total, 'qry' : tutor, 'pk': pk})
-    elif grad.remark == True:
-        return render(request, 'result/annual.html', {'grad': grad, 'count_grade' : count_grade, 'qar' : total, 'qry': tutor, 'all_page': all_page, 'pk':pk})
+    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
+    if tutor.Class == 'JSS 1' or tutor.Class == 'JSS 2' or tutor.Class == 'JSS 3':
+        mains = QSUBJECT.objects.filter(tutor__exact=tutor, grade=pk_code[-2])
+    else:
+        mains = QSUBJECT.objects.filter(tutor__exact=tutor, grade=pk_code[len(pk_code)-2:])
+    return render(request, 'result/qsubject.html',  {'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'grad' : grad, 'count_grade' : mains.count(), 'all_page': mains, 'qry' : tutor, 'pk': pk})
+    
+def annual_on_grade(request, pk_code):##Step 2::  every tutor home detail views
+    pk=pk_code[:len(pk_code)-2]
+    tutor = get_object_or_404(BTUTOR, pk=pk_code[:len(pk_code)-2])
+    grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
+    if tutor.Class == 'JSS 1' or tutor.Class == 'JSS 2' or tutor.Class == 'JSS 3':
+        mains = ANNUAL.objects.filter(subject_by__Class=tutor.Class, subject_by__session=tutor.session, subject__exact=tutor.subject, grade=pk_code[-2])
+    else:
+        mains = ANNUAL.objects.filter(subject_by__Class=tutor.Class, subject_by__session=tutor.session, subject__exact=tutor.subject, grade=pk_code[len(pk_code)-2:])
+    return render(request, 'result/annual_on_grade.html', {'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'grad': grad, 'count_grade' : mains.count(), 'qry': tutor, 'all_page': mains, 'pk':pk})
 
+def broadsheet_on_grade(request, pk_code):##Step 2::  every tutor home detail views
+    if request.user.profile.class_in == 'JSS 1' or request.user.profile.class_in == 'JSS 2' or request.user.profile.class_in == 'JSS 3':
+        al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, grade=pk_code[-2])
+    else:
+        al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, grade=pk_code[len(pk_code)-2:])
+    total_scores = round(al.aggregate(Sum('Avr'))['Avr__sum'], 1)
+    avg_pert = round(al.aggregate(Avg('Avr'))['Avr__avg'],2)
+    grad = grade_counter(al, request.user.id, 'BroadSheet')
+    return render(request, 'result/yearly_apage.html',  {'grad':grad, 'total_scores':total_scores, 'avg_pert':avg_pert, 'all_page': al, 'in_class': al.count(), 'last_name':request.user.profile.last_name, 'first_name':request.user.profile.first_name, 'class_in':request.user.profile.class_in })
+    
 def list_tutor_subjects(request, pk):##Step 2::  every tutor home detail views
     qry = BTUTOR.objects.get(pk=pk)
     mains = QSUBJECT.objects.filter(tutor__subject__exact=qry.subject)
@@ -529,7 +560,7 @@ def results_junior_senior(request, pk):
     return render(request, 'result/results_junior_senior.html', {'tutor': tutors})
    
 def term_summary(request, pk):#student subject detail(all terms)
-    terms = QSUBJECT.objects.filter(tutor__user__exact=request.user, student_name=pk).values_list('id')
+    terms = QSUBJECT.objects.filter(tutor__accounts__exact=request.user, student_name=pk).values_list('id')
     sub = get_object_or_404(QSUBJECT, id=terms[0][0])#one subject
     anu = ANNUAL.objects.filter(student_name = pk, subject=sub.tutor.subject, subject_by__user__exact=request.user)
     if len(terms) == 3:
@@ -602,15 +633,9 @@ def student_name_edit(request, pk):#editing student_name /every tutor home detai
         result = student_names()
     return render(request, 'result/edit_student_name.html', {'result': result, 'qrn':qrn})
 
-
-class edit_annual(UpdateView):#New teacher form for every new term, class, subjects
-    model = ANNUAL
-    fields = ['student_name', 'first', 'second', 'third']
-    success_url = reverse_lazy('home')
-
 class Teacher_model_view(UpdateView):#New teacher form for every new term, class, subjects
     model = BTUTOR
-    fields = ['user', 'teacher_name', 'subject', 'Class', 'term', 'males', 'females']
+    fields = ['accounts', 'teacher_name', 'subject', 'Class', 'term', 'males', 'females', 'teacher_in', 'session']
     success_url = reverse_lazy('home') 
     
 class Subject_model_view(UpdateView):#New teacher form for every new term, class, subjects
@@ -644,7 +669,7 @@ def profiles(request, pk):#show single candidate profile
 #@login_required
 class ProfileUpdate(UpdateView):
     model = Edit_User
-    fields = ['first_name', 'last_name', 'bio', 'phone', 'city', 'department', 'location', 'birth_date', 'country', 'organization']
+    fields = ['first_name', 'last_name', 'bio', 'phone', 'city', 'department', 'location', 'birth_date', 'country', 'organization', 'class_in']
     success_url = reverse_lazy('home')
 
 @login_required
@@ -663,6 +688,8 @@ def flexbox(request):
 def all_users(request):#show single candidate profile
     qry = User.objects.all()
     return render(request, 'result/all_users.html', {'qry' : qry})
+
+
 
 class Users_update(UpdateView):#New teacher form for every new term, class, subjects
     model = User
@@ -739,55 +766,41 @@ def student_subject_detail_all_subject(request, pk):#student subject detail(sing
     subjects = QSUBJECT.objects.filter(student_name_id = many.student_name_id)
     anuual = sSum(subjects)
     return render(request, 'result/single_subject_per_student.html',  {'subjects' : subjects, 'name':many, 'anuual':anuual, 'pk':pk}) 
+
 @login_required
 def confirm_deleting_a_user(request, pk):
     qry = get_object_or_404(User, pk=pk)
     return render(request, 'result/confirm_delete_a_user.html', {'qry' : qry, 'pk': pk}) 
-@login_required  
-def delete_user(request, pk):#delete single candidate
-    get_object_or_404(User, pk=pk).delete()
-    return redirect('all_accounts')
 @login_required
 def yes_no(request, pk):#delete single candidate
     qry = get_object_or_404(User, pk=pk)
     return render(request, 'result/yes_no.html', {'qry' : qry, 'pk': pk})
+@login_required  
+def delete_user(request, pk):#delete single candidate
+    get_object_or_404(User, pk=pk).delete()
+    return redirect('all_accounts')
+
 @login_required
-def confirm_deletion(request, pk):#delete single candidate
+def confirm_deletion(request, pk):#sort for a deletion confirmation
     qry = get_object_or_404(QSUBJECT, pk=pk)
     return render(request, 'result/confirm_delete_a_student.html', {'qry' : qry, 'pk': pk})
 @login_required
-def confirmed_delete(request, pk):#delete single candidate
+def confirmed_delete(request, pk):#Yes delete
     get_object_or_404(QSUBJECT, pk=pk).delete()
     return redirect('student_in_none')
+
 @login_required
-def confirm_deletions(request, pk):#delete single subject
+def confirm_deletions(request, pk):#sort for many deletions confirmations
     qry = get_object_or_404(BTUTOR, pk=pk)
-    qery =  QSUBJECT.objects.filter(tutor__term__exact=qry.term, tutor__Class__exact=qry.Class, tutor__teacher_name__exact=qry.teacher_name, tutor__user__exact=request.user)
+    qery =  QSUBJECT.objects.filter(tutor__term__exact=qry.term, tutor__Class__exact=qry.Class, tutor__subject__exact=qry.subject, tutor__exact = qry)
     return render(request, 'result/confirm_deletes_a_class.html', {'qery' : qery, 'pk': pk, 'qry' : qry})
 @login_required
-def delete_all(request, pk):#delete single subject
+def delete_all(request, pk):#Yes deletes
     qry = get_object_or_404(BTUTOR, pk=pk)
-    QSUBJECT.objects.filter(tutor__term__exact=qry.term, tutor__Class__exact=qry.Class, tutor__teacher_name__exact=qry.teacher_name, tutor__user__exact=request.user).delete()
-    TOTAL.objects.filter(subject_by__exact=qry, subject__exact=qry.subject, term__exact=qry.term).delete()
-    #RESULT_GRADE.objects.get(identifier=pk#).delete()
+    QSUBJECT.objects.filter(tutor__term__exact=qry.term, tutor__Class__exact=qry.Class, tutor__subject__exact=qry.subject, tutor__exact = qry).delete()
     qry.delete()
     return redirect('home')
-@login_required
-def student_record_delete(request, pk):#delete single candidate
-    get_student = ANNUAL.objects.get(student_name=get_object_or_404(QSUBJECT, pk=pk).student_name)
-    get_student.third = None
-    get_student.term = None
-    get_object_or_404(QSUBJECT, pk=pk).delete()
-    return redirect('home')
-@login_required
-def confirm_deletion_anu(request, pk):
-    qry = get_object_or_404(ANNUAL, pk=pk)
-    return render(request, 'result/confirm_delete_anuual.html', {'qry' : qry, 'pk': pk})  
-@login_required
-def annual_record_delete(request, pk):#delete single candidate
-    qry = get_object_or_404(ANNUAL, pk=pk)
-    qry.delete()
-    return redirect('home')
+
 @login_required
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)

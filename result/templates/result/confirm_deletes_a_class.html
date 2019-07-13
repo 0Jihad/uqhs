@@ -2,13 +2,16 @@
 
 {% block content %}
 
-<h1>Delete!</h1>
+<form>
+<div class="cap_form">Action:<pre style="line-height: 1px;">Delete!</pre></div>
 {% if qery %}
 {% for scr in qery %} 
-<li>
-    {{ scr.student_name }}
-</li>
+
+<li class="cap_form" style="color: white; font-size: 10px;">{{ scr.student_name }}</li>
+
 {% endfor %}
 {% endif %}
-<p>Are you sure you want to delete these students in {{ qry.subject.name }}?<em> <a href="{% url 'deletes' pk=pk %}"><span class="glyphicon glyphicon-ok-sign"></span></a></em> <em><h6>Back</h6><a href="{% url 'home' %}"><span class="glyphicon glyphicon-circle-arrow-left"></span></a></em></p>                                                                              
+Are you sure you want to delete the listed names from this subject completely ? <a href="{% url 'deletes' pk=pk %}" style="font-family:Helvetica; color:red; font-size: 12px;">Yes</a>/<a href="{% url 'home' %}" style="font-family:Helvetica; color:purple; font-size: 12px;">No</a>
+</form>
 {% endblock %}
+

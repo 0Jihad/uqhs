@@ -10,7 +10,7 @@ from django.utils import timezone
 ################################################################################################'18/19'
 
 class ASUBJECTS(models.Model):
-    code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('others', 'others')] )
+    code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('History', 'History')] )
     name = models.CharField(max_length=30, choices= code, blank=True, null=True, default='English',)
     model_in = models.CharField(max_length=8, default='subject', blank=True, null=True)
     class Meta:
@@ -22,8 +22,8 @@ class ASUBJECTS(models.Model):
 class RESULT_GRADE(models.Model):
    identifier = models.IntegerField(null=True, blank=True, default='0')
    model_in = models.CharField(max_length=6, default='grades', blank=True, null=True)
-   code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('others', 'others')] )
-   subject = models.CharField(max_length=30, choices= code, blank=True, null=True, default='English',)
+   code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('History', 'History')] )
+   subject = models.CharField(max_length=30, choices= code, blank=True, null=True, default='BroadSheet',)
    grade_A = models.IntegerField(null=True, blank=True, default='0')
    grade_C = models.IntegerField(null=True, blank=True, default='0')
    grade_P = models.IntegerField(null=True, blank=True, default='0')
@@ -50,27 +50,29 @@ class RESULT_GRADE(models.Model):
     
      
 class BTUTOR(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='loggon-account:move account here')
-    teacher_name = models.CharField(max_length=30, blank=True, null=True)#, help_text='subject_teacher')
-    subject = models.ForeignKey(ASUBJECTS, on_delete=models.SET_NULL, null=True, blank=True)
+    accounts = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='loggon-account:move account here', related_name='btutor')
+    teacher_name = models.CharField(max_length=30, blank=True, null=True, help_text='Subject Teacher')
+    subject = models.ForeignKey(ASUBJECTS, on_delete=models.SET_NULL, null=True, blank=True, help_text='Select subject')
     class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
-    Class = models.CharField(max_length=30, choices=class_status, blank=True, null=True)
+    Class = models.CharField(max_length=30, choices=class_status, blank=True, null=True, help_text='Select subject class')
     term_status = (('1st Term', 'first term'), ('2nd Term', 'second term'), ('3rd Term', 'third term'))
-    term = models.CharField(max_length=30, choices=term_status, blank=True, null=True)#, help_text='subject term',)
+    term = models.CharField(max_length=30, choices=term_status, blank=True, null=True, help_text='Select subject term')#, help_text='subject term',)
     graded = models.ForeignKey(RESULT_GRADE, on_delete=models.CASCADE, blank=True, null=True, help_text='Grade Counts')
     model_summary = models.CharField(max_length=1000, default='tutor', blank=True, null=True)
     model_in = models.CharField(max_length=8, default='qsubject', blank=True, null=True)
-    males = models.IntegerField(null=True, blank=True, default='0')
-    females = models.IntegerField(null=True, blank=True, default='0')
-    cader = models.CharField(max_length=1, blank=True, null=True)
-    session = models.IntegerField(null=True, blank=True, default='0')
+    males = models.IntegerField(null=True, blank=True, default='0', help_text='Enter number of male in class')
+    females = models.IntegerField(null=True, blank=True, default='0', help_text='Enter number of female in class')
+    cader = models.CharField(max_length=1, blank=True, null=True, help_text='Senior/Junior')
+    session = models.CharField(max_length=5, blank=True, null=True, help_text='Must be 4 didits {2016}')
+    teacher_in = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='my_account', help_text= 'Class Teachers')
+    class_teacher_id = models.CharField(max_length=200, blank=True, null=True, help_text='Class teacher id')
     class Meta:
           ordering = ('id',) # helps in alphabetical listing. Sould be a tuple
     #def __str__(self):
          #return self.model_in+" : "+self.user#+" : "+self.subject_class+" : "+self.subject_term
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.Class}:{self.subject}:{self.term}'
+        return f'{self.accounts.username}:{self.Class}:{self.subject}:{self.term}'
     
 class CNAME(models.Model):
     student_name = models.CharField(max_length=30, blank=True, null=True)
@@ -103,7 +105,7 @@ class QSUBJECT(models.Model):#step5-subject
      grade = models.CharField(max_length=5, blank=True, null=True)
      posi = models.CharField(max_length=5, blank=True, null=True)
      gender = models.CharField(max_length=10, blank=True, null=True, help_text='sex',)#
-     logged_in = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher')
+     logged_in = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher', related_name='logins')
      created = models.DateTimeField(auto_now_add=True) 
      updated = models.DateTimeField(editable=False, blank=True, null=True,)
      tutor = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, blank=True, null=True)
@@ -114,7 +116,7 @@ class QSUBJECT(models.Model):#step5-subject
      ###Just for searching
      class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
      Class = models.CharField(max_length=30, choices=class_status, blank=True, null=True)
-     
+     #qteacher = user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='select class teache', related_name='qsubject')
      class Meta:
           ordering = ('student_name_id',) # helps in alphabetical listing. Sould be a tuple
      def __str__(self):
@@ -129,70 +131,30 @@ class QSUBJECT(models.Model):#step5-subject
         self.updated = datetime.datetime.today()
         super(QSUBJECT, self).save()
         
-class QUEST_MODEL(models.Model):#step5-subject 
-     #user_account = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-     student_name = models.ForeignKey(CNAME, on_delete=models.SET_NULL, null=True)#
-     test = models.FloatField(max_length=4, blank=True, null=True)
-     agn = models.FloatField(max_length=4, blank=True, null=True)
-     atd = models.FloatField(max_length=4, blank=True, null=True)
-     total = models.FloatField(max_length=4, blank=True, null=True)
-     exam = models.FloatField(max_length=4, blank=True, null=True)
-     agr = models.FloatField(max_length=4, blank=True, null=True)
-     grade = models.CharField(max_length=5, blank=True, null=True)
-     posi = models.CharField(max_length=5, blank=True, null=True)
-     gender = models.CharField(max_length=10, blank=True, null=True, help_text='sex',)#
-     logged_in = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher')
-     created = models.DateTimeField(auto_now_add=True) 
-     updated = models.DateTimeField(editable=False, blank=True, null=True,)
-     tutor = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, blank=True, null=True, help_text='terms')
-     cader = models.CharField(max_length=1, blank=True, null=True)
-     model_in = models.CharField(max_length=8, default='qsubject', blank=True, null=True)
-     def save(self):
-        if not self.id:
-            self.created = datetime.date.today()
-        self.updated = datetime.datetime.today()
-        super(QUEST_MODEL, self).save()
+
 ################################################################################################         
 class ANNUAL(models.Model):
-    logged_in = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher')
     student_name = models.ForeignKey(CNAME, on_delete=models.SET_NULL, null=True)#
-    first = models.FloatField(max_length=4, blank=True, null=True)
-    second = models.FloatField(max_length=4, blank=True, null=True)
-    third = models.FloatField(max_length=4, blank=True, null=True)
+    first = models.ForeignKey(QSUBJECT, on_delete=models.SET_NULL, null=True, related_name = 'annual_first')
+    second = models.ForeignKey(QSUBJECT, on_delete=models.SET_NULL, null=True, related_name = 'annual_second')
+    third = models.ForeignKey(QSUBJECT, on_delete=models.SET_NULL, null=True, related_name = 'annual_third')
     anual = models.FloatField(max_length=10, blank=True, null=True)#
     agr = models.FloatField(max_length=10, blank=True, null=True)
     grade = models.CharField(max_length=5, blank=True, null=True)
     anu_posi = models.CharField(max_length=5, blank=True, null=True)
     subject_by = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher')
     subject =  models.ForeignKey(ASUBJECTS, on_delete=models.SET_NULL, null=True)
-    term = models.CharField(max_length=15, default='None', blank=True, null=True)
-    model_in = models.CharField(max_length=15, default='None', blank=True, null=True)
+    
+    
     class Meta:
           ordering = ('student_name_id',) # helps in alphabetical listing. Sould be a tuple
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id}:{self.subject_by.user}'
+        return f'{self.id}:{self.student_name.student_name}'
     def get_absolute_url(self):
         """Returns the url to access a detail record for this student."""
         return reverse('annualmodel-detail', args=[str(self.id)])
    
-class TOTAL(models.Model):
-    logged_in = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='Logged-in-user')
-    subject_by = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, blank=True, null=True, help_text='subject_teacher')
-    subject =  models.ForeignKey(ASUBJECTS, on_delete=models.SET_NULL, null=True)#
-    subject_scores = models.FloatField(max_length=200, blank=True, null=True)
-    subject_pert = models.FloatField(max_length=200, blank=True, null=True)
-    term_status = (('1st Term', 'first term'), ('2nd Term', 'second term'), ('3rd Term', 'third term'))
-    term = models.CharField(max_length=30, choices=term_status, blank=True, null=True, help_text='subject term',)
-    model_in = models.CharField(max_length=10, default='total', blank=True, null=True)
-    class Meta:
-          ordering = ('term',) # helps in alphabetical listing. Sould be a tuple
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.id}:{self.subject_by.user}'
-    def get_absolute_url(self):
-        """Returns the url to access a detail record for this student."""
-        return reverse('totalmodel-detail', args=[str(self.id)])
 
 class Edit_User(models.Model):
    def validate_image(fieldfile_obj):
@@ -216,7 +178,8 @@ class Edit_User(models.Model):
    account_status = (('Student', 'Student'), ('Staff', 'Staff'))
    account = models.CharField(max_length=30, choices=account_status, blank=True, null=True)
    email_confirmed = models.BooleanField(default=False, help_text='True/False')
-   model_in = models.CharField(max_length=15, default='user_profile', blank=True, null=True)
+   class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
+   class_in = models.CharField(max_length=15, choices=class_status, blank=True, null=True, help_text='Select class in charge')
        
    def __str__(self):
         """String for representing the Model object."""
@@ -250,3 +213,52 @@ class Post(models.Model):
  
     def __str__(self):
         return self.title
+
+   
+
+class TERM(models.Model):
+    student_name = models.ForeignKey(CNAME, on_delete=models.SET_NULL, null=True)
+    code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('History', 'History')] )
+    subject = models.CharField(max_length=30, choices= code, blank=True, null=True, default='English',)
+    class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
+    class_in = models.CharField(max_length=30, choices=class_status, blank=True, null=True)
+    first = models.ForeignKey(QSUBJECT, on_delete=models.SET_NULL, null=True, blank=True, related_name='first')
+    second = models.ForeignKey(QSUBJECT, on_delete=models.SET_NULL, null=True, blank=True, related_name='second')
+    third =  models.ForeignKey(QSUBJECT, on_delete=models.SET_NULL, null=True, blank=True, related_name='third')#
+    avr = models.FloatField(max_length=8, blank=True, null=True, default='0')
+    terms_by = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, blank=True, null=True, help_text='term_by', related_name='each_term')
+    class Meta:
+          ordering = ('third',) # helps in alphabetical listing. Sould be a tuple
+    def __str__(self):
+        return str(self.avr)
+
+
+class OVERALL_ANNUAL(models.Model):
+    student_name = models.ForeignKey(CNAME, on_delete=models.SET_NULL, null=True)
+    class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
+    class_in = models.CharField(max_length=30, choices=class_status, blank=True, null=True)
+    eng = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='eng')
+    mat = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='mat')
+    agr = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='agr')
+    bus =  models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='bus')
+    bst = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='bst')
+    yor = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='yor')
+    nva = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='nva')
+    irs = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='irs')
+    prv =  models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='prv')
+    ict = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='arb')
+    acc = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='acc')
+    his = models.ForeignKey(TERM, on_delete=models.SET_NULL, null=True, blank=True, related_name='his')
+    Agr = models.FloatField(max_length=8, blank=True, null=True, default='0')
+    Avr = models.FloatField(max_length=8, blank=True, null=True, default='0')
+    grade = models.CharField(max_length=8, null=True, blank=True, default='0')
+    posi = models.CharField(max_length=8, null=True, blank=True, default='0')
+    teacher_in = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='all_subject')
+    session = models.CharField(max_length=5, blank=True, null=True, help_text='Must be 4 didits {2016}')
+    
+    class Meta:
+          ordering = ('class_in',) # helps in alphabetical listing. Sould be a tuple
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.id}:{self.student_name.student_name}:{self.class_in}:{self.teacher_in.username}'
+       

@@ -21,7 +21,7 @@ class subjectforms(forms.ModelForm):
 class teacherform(forms.ModelForm):
     class Meta:
         model = BTUTOR
-        fields = ('user', 'subject', 'Class', 'term', 'teacher_name',)
+        fields = ('accounts', 'subject', 'Class', 'term', 'teacher_name', 'teacher_in', 'session',)
         
         
 class student_names(forms.ModelForm):

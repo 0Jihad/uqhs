@@ -20,7 +20,7 @@
                         <tr><td>{{ sub.teacher_name }}</td><td>{{ sub.subject }}</td><td>{{ sub.klass }}</td><td>{{ sub.term }}</td><td><a href="{% url 'subject_view' pk=sub.id %}">view</a></td>{% if request.user.is_staff %}<td><a href="{% url 'warning_delete' pk=sub.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>{% endif %}</tr>
                     {% endfor %}
                     {% else %}
-                        <p>There are no records in your account yet.</p>
+                        <pre>There are no records in your account yet.</pre>
                     {% endif %}       
                 </tbody>
             </table>

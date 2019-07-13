@@ -11,14 +11,14 @@
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-            <td><a href="{% url 'subject_view' pk=scr.id %}">{{ scr.user }}</a></td><td>{{ scr.model_summary }}</td>
+            <td><a href="{% url 'subject_view' pk=scr.id %}">{{ scr.accounts }}</a></td><td>{{ scr.model_summary }}</td>
           </tr>
           {% endfor %}
           {% else %}
               <p>There are no records.</p>
           {% endif %}
          </table>
-        <div>{% if pk != '1' %}<a href="{% url 'get_total' pk=pk %}">Detail</a>{% endif %}</div>
+        <div>{% if pk != '1' %}<a href="{% url 'subject_view' pk=pk %}">Detail</a>{% endif %}</div>
   </div>
 	{% if all_page.has_other_pages %}
       <ul class="pagination">

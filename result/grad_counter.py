@@ -7,13 +7,12 @@ Created on Sat Apr  6 06:09:36 2019
 
 from .models import RESULT_GRADE
 from django.shortcuts import get_object_or_404
-def grade_counter(mains, tur):
-    grd = RESULT_GRADE.objects.filter(subject__exact = tur.subject.name, identifier__exact = tur.id).count()
-    if grd == 0:
-        grd = RESULT_GRADE(subject = tur.subject.name, identifier = tur.id)
+def grade_counter(mains, tur_id, tur_subject):
+    if RESULT_GRADE.objects.filter(subject__exact = tur_subject, identifier__exact = tur_id).count() == 0:
+        grd = RESULT_GRADE(subject = tur_subject, identifier = tur_id)
         grd.save()
     else:
-        grd = get_object_or_404(RESULT_GRADE, subject = tur.subject.name, identifier = tur.id)
+        grd = get_object_or_404(RESULT_GRADE, subject = tur_subject, identifier = tur_id)
     grades = list(mains.values_list('grade'))
     grade_list = [n[0] for n in [list(x) for x in grades]]
     set_uni = list(set(grade_list))
@@ -35,7 +34,4 @@ def grade_counter(mains, tur):
     grd.grade_E8 = grd_lst[1][11]
     grd.grade_F9 = grd_lst[1][12]
     grd.save()
-    if tur.term == '3rd Term':
-        grd.remark = True
-        grd.save()
     return grd

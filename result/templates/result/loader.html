@@ -7,7 +7,7 @@
 </head>
 {% block content %}
     <form class="upload" action="{% url 'upload_txt' pk=pk%}" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
-	<div class="cap_form"><em color:white;>{{qry.Class}}:{{qry.term}} </em><em style="color:red;"><pre>{{qry.subject}}</em>, uploading..</pre></div>
+	<div class="cap_form"><em color:white;>{{qry.Class}}:{{qry.term}} </em><em style="color:red;"><pre style="line-height: 3px;">uploading.., {{qry.subject}}</em></pre></div>
       	 {% csrf_token %}
 	<div class="row">
    <div class="col-xs-6">

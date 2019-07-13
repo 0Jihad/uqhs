@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+  <div>
+        <table>
+		<div class="capt"><a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject_Teacher:</a> {{ tutor.teacher_name }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ tutor.Class }}<a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{ tutor.subject.name }}</div>
+
+          <tr>
+             
+	    <tr><th>STUDENT NAME ({{ in_class }})</th><th>First</th><th>Second</th><th>Third</th><th>Avg</th></tr>
+
+          </tr>
+          {% if all_page %}
+          {% for scr in all_page %}
+          <tr>
+                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}">{{ scr.student_name }}</a></td><td style="color:sienna;">{{ scr.first.agr }}</a></td><td><em style="color:sienna;">{{ scr.second.agr }}</td><td><em style="color:sienna;">{{ scr.third.agr }}</a></td><td><em style="color:sienna;">{{ scr.avr }}</a></td>
+          </tr>
+          {% endfor %}
+          {% else %}
+              <pre>There are no records.</pre>
+          {% endif %}
+        </table>
+    </div> 
+	<div><a href="{% url 'compute_annual' pk=pk %}" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+{% endblock %}
+ 
+
