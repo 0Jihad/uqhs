@@ -99,6 +99,9 @@
                         <a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Start</a>
                         <a href="{% url 'search_tutors' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Move</a>
                         <a href="{% url 'student_in_none' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Bin</a>
+                        {% if request.user.profile.class_in == 'JSS 1' or request.user.profile.class_in == 'JSS 2' or request.user.profile.class_in == 'JSS 3' or request.user.profile.class_in == 'SS 1' or request.user.profile.class_in == 'SS 2' or request.user.profile.class_in == 'SS 3' %}
+                        <a href="{% url 'class_record_view' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">{{ request.user.profile.class_in }}</a>
+                        {% endif %}
                       </div>
                 </div>
                                                 
