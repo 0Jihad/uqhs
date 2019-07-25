@@ -10,7 +10,7 @@ from django.conf.urls import url
 from.import result_views, model_loader, loggins, sign_up
 urlpatterns = [
         url(r'home/$', loggins.home, name='home'),
-        #url(r'^generate/anual/(?P<pk>\d+)/', result_views.annual_agr, name='anual'), 
+        url(r'^generate/', loggins.Pdf.as_view(), name='pdf'), 
         url(r'^export_broadsheet/', loggins.export_broadsheet, name='export_broadsheet'),
         url(r'^upload_txt/(?P<pk>\d+)/', model_loader.upload_new_subject_scores, name='upload_txt'),
         url(r'^extract_name/subjects/(?P<pk>\d+)/', loggins.export_name_text, name='extract_name'),

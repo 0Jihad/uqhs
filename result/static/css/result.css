@@ -103,6 +103,13 @@ table {border-collapse: collapse;
        width: 85%;
     }
 
+th, td {padding: 0px;}
+
+thead, tfoot {background-color: rgb(206, 172, 127);}
+
+tbody {background-color: seashell;}
+tr:nth-child(even) {background-color: silver;}
+
 .capt{margin-left: -13px;
       border-radius: 5px;
       background-color: red;
@@ -120,15 +127,6 @@ table {border-collapse: collapse;
       font-size:17px;
       width: 110%;
       }
-
-th, td {padding: 0px;}
-
-thead, tfoot {background-color: rgb(206, 172, 127);}
-
-tbody {background-color: seashell;}
-tr:nth-child(even) {background-color: silver;}
-
-
 /* The sidebar menu */
 .sidenav {
   height: 90%; /* Full-height: remove this if you want "auto" height */

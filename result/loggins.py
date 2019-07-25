@@ -9,7 +9,8 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 import csv
-#from result.model_views import cader
+from django.views.generic import View
+from .utils import Render
 from .grad_counter import grade_counter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import login_form, ProfileForm, tutor_class_Form, student_names, subjectforms, subject_class_term_Form, name_class_Form, PostForm
@@ -23,7 +24,7 @@ from django.views.generic.edit import UpdateView
 from django.forms import modelformset_factory
 from django.db.models import Sum, Avg
 import os
-import datetime
+from datetime import datetime
 from wsgiref.util import FileWrapper
 from django.utils import timezone
 ####################################STAGE 1::::#########TUTOR GET LOG IN OR SIGN UP##########################################   
@@ -199,8 +200,29 @@ def export_all(request, pk):#result download based on login tutor
     	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).student_name
     for each in sd:
         writer.writerow(each)
-    return response    
-  
+    return response   
+ 
+class Pdf(View):
+
+    def get(self, request):
+        tutor = get_object_or_404(BTUTOR, pk=request.user.profile.account_id)
+        if tutor.term == '3rd Term':
+            mains = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject).order_by('id')
+        else:
+            mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')
+        today = datetime.now()
+        params = {
+            'count_grade': mains.count(),
+            'tutor': tutor,
+            'mains': mains,
+            'today': today,
+            'subject_scores': round(mains.aggregate(Sum('agr'))['agr__sum'],2),
+            'subject_pert': round(mains.aggregate(Avg('agr'))['agr__avg'],2)
+        }
+        if tutor.term == '3rd Term':
+            return Render.render('result/anu_pdf.html', params)
+        else:
+            return Render.render('result/pdf.html', params)
 ###############################################################################
 def create_subjects(request):#New teacher form for every new term, class, subjects
     if request.method == 'POST':
@@ -347,6 +369,10 @@ def sum_avg(mains):
 def detailView(request, pk):##Step 2::  every tutor home detail views 
     tutor = get_object_or_404(BTUTOR, pk=pk)
     mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')#request.user 
+    if request.user.is_authenticated:
+        pro = get_object_or_404(Edit_User, user=request.user)
+        pro.account_id = pk
+        pro.save()
     if mains.count() != 0:
         count_grade = QSUBJECT.objects.filter(tutor__exact=tutor).count()
         grad = grade_counter(mains, tutor.id, tutor.subject.name)
