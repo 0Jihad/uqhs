@@ -43,20 +43,32 @@
         pre{
         text-align: center;
         font-size: 31px; 
-    }
-        .thr{
-        text-align: center;
-        font-size: 19px; 
+        }
+            .thr{
+            text-align: center;
+            font-size: 19px; 
+            margin-top: 40px;
+        }
+        .header {
+      padding: 20px; /* Some padding */
+      text-align: center; /* Center text*/
+      background-color: dodgerblue; /* Grey background */
+      width: 57%;
+      margin-top: 50px;
+      line-height: 20px;
+      
     }
     </style>
+<div class="header">
+        <div style="font-family:Helvetica; color:white; font-size: 31px;">UMMUL_QURA_HIGH_SCHOOL</div>
+</div>
 </head>
 <body>
 
 <div class="container">
     <div class="card">
+        <div style="text-align: center; font-size: 11px;">/Result generated: - {{ today }}/{{ tutor.teacher_name }}/{{tutor.subject}}/{{ tutor.Class }}/{{ tutor.term }}/</div>
         <div class="card-header">
-        <h6>/Result: - {{ today }}/{{ tutor.teacher_name }}/{{tutor.subject}}/{{ tutor.Class }}/{{ tutor.term }}/</h5>
-        <pre>UMMUL_QURA_HIGH_SCHOOL </pre>
         <em class="thr"><strong>Result Sheet</strong> </em>
             <h1>SUBJECT: {{tutor.subject}}, CLASS: {{ tutor.Class }}, TERM:  {{ tutor.term }}</h1>
         </div>

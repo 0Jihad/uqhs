@@ -634,7 +634,6 @@ def edit_user(request, pk):
             profile.location = form.cleaned_data['location']
             profile.birth_date = form.cleaned_data['birth_date']
             profile.department = form.cleaned_data['department']
-            profile.account_id = pk
             if 'photo' in request.FILES:
                 profile.photo = request.FILES['photo']
             profile.email_confirmed = True

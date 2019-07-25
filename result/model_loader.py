@@ -153,7 +153,7 @@ def compute_annual(request, pk):
                     dim[dim.index(None)] = 0
             except ValueError:
                 pass
-            sd = [sum(dim), round((sum(dim[:])+0.1)/sum(x > 0 for x in dim[:]), 1)]
+            sd = [sum(dim), round((sum(dim[:])+0.1)/sum(x > 0 for x in dim[:]), 2)]
             ANNUAL(subject_by = tutor, student_name=student_name, first = first, second = second, third = third, anual = sd[0], agr = sd[1], subject=tutor.subject).save()
             term_scores = TERM.objects.create(student_name=student_name, class_in=tutor.Class, terms_by = tutor, subject=tutor.subject.name, first=first, second=second, third=third)
             term_scores.save()
