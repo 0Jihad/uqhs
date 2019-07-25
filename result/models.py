@@ -175,7 +175,7 @@ class Edit_User(models.Model):
    birth_date = models.DateField(null=True, blank=True, help_text='Date format: MM/DD/YYYY')
    section_status = (('Sc', 'Sciences'), ('SSc', 'Social Sciences'), ('Art', 'Arts and Humanities'))
    department = models.CharField(max_length=30, choices=section_status, blank=True, null=True)
-   account_id = models.CharField(max_length=30, blank=True, null=True)
+   account_id = models.CharField(max_length=30, default = 0, blank=True, null=True)
    email_confirmed = models.BooleanField(default=False, help_text='True/False')
    class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
    class_in = models.CharField(max_length=15, choices=class_status, blank=True, null=True, help_text='Select class in charge')
