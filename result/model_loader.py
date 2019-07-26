@@ -126,7 +126,7 @@ def new_student_name(request):
 @login_required
 def compute_annual(request, pk):
     tutor = get_object_or_404(BTUTOR, pk=pk)
-    if tutor.model_in == 'qsubject':
+    if tutor.model_in == 'qsubject' or tutor.model_in == 'annual':
         subject = QSUBJECT.objects.filter(tutor__subject__exact=tutor.subject, tutor__Class__exact=tutor.Class, tutor__term__exact='3rd Term')
         student_name_ids = [list(i[:]) for i in list(subject.values_list('student_name_id'))]
         for i in range(0, len(student_name_ids)):
@@ -154,8 +154,18 @@ def compute_annual(request, pk):
             except ValueError:
                 pass
             sd = [sum(dim), round((sum(dim[:])+0.1)/sum(x > 0 for x in dim[:]), 2)]
-            ANNUAL(subject_by = tutor, student_name=student_name, first = first, second = second, third = third, anual = sd[0], agr = sd[1], subject=tutor.subject).save()
-            term_scores = TERM.objects.create(student_name=student_name, class_in=tutor.Class, terms_by = tutor, subject=tutor.subject.name, first=first, second=second, third=third)
+            if ANNUAL.objects.filter(subject_by__exact = tutor, student_name__exact=student_name, subject__exact=tutor.subject).count() == 0:
+                ANNUAL(subject_by = tutor, student_name=student_name, subject=tutor.subject, first = first, second = second, third = third, anual = sd[0], agr = sd[1]).save()
+            else:
+                get_filt = ANNUAL.objects.get(subject_by = tutor, student_name=student_name, subject=tutor.subject)
+                get_filt.first = first
+                get_filt.second = second
+                get_filt.third = third
+                get_filt.save()
+            if TERM.objects.filter(student_name__exact=student_name, class_in__exact=tutor.Class, terms_by__exact = tutor, subject__exact=tutor.subject.name).count() == 0:
+                term_scores = TERM.objects.create(student_name=student_name, class_in=tutor.Class, terms_by = tutor, subject=tutor.subject.name, first=first, second=second, third=third)
+            else:
+                term_scores = TERM.objects.get(student_name=student_name, class_in=tutor.Class, terms_by = tutor, subject=tutor.subject.name)
             term_scores.save()
             if OVERALL_ANNUAL.objects.filter(student_name__exact=student_name, class_in__exact=tutor.Class, teacher_in__exact=tutor.teacher_in).count() == 0:
                 subj = OVERALL_ANNUAL.objects.create(student_name=student_name, class_in=tutor.Class, teacher_in=tutor.teacher_in, eng = None, mat = None, agr = None, bus = None, bst = None, yor = None, nva = None, irs = None, prv = None, ict = None, acc = None, his = None)
