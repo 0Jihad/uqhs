@@ -133,20 +133,20 @@ def compute_annual(request, pk):
             student_name = CNAME.objects.get(pk=student_name_ids[i][0], Class = tutor.Class)
             sub1 = QSUBJECT.objects.filter(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='1st Term')
             if sub1.count() != 0:
-                first = QSUBJECT.objects.get(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='1st Term')
+                first = QSUBJECT.objects.get(student_name=student_name, tutor__Class__=tutor.Class, tutor__subject__=tutor.subject, tutor__term__='1st Term')
                 f = first.agr
             else:
                 f = None# No first term
                 first = None
             sub2 = QSUBJECT.objects.filter(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='2nd Term')
             if sub2.count() != 0:
-                second = QSUBJECT.objects.get(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='2nd Term')
+                second = QSUBJECT.objects.get(student_name=student_name, tutor__Class__=tutor.Class, tutor__subject__=tutor.subject, tutor__term__='2nd Term')
                 s = second.agr
             else:
                 s = None# No second term
                 second = None
             
-            third = QSUBJECT.objects.get(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='3rd Term')
+            third = QSUBJECT.objects.get(student_name=student_name, tutor__Class__=tutor.Class, tutor__subject__=tutor.subject, tutor__term__='3rd Term')
             dim = [f, s, third.agr]
             try:
                 while True:

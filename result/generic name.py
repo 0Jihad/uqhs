@@ -49,6 +49,7 @@ def student_results(males, females):
     ##########################################
     
 def placing_scores(a, b, males, females, group):
+    global df_all
     cl = group[0]
     su = group[1]
     male_students = [a, student_scores(males)]
@@ -57,6 +58,7 @@ def placing_scores(a, b, males, females, group):
     serial = []
     for x in range(0, len(scores[0][0])):
         serial += [[scores[0][0][x], scores[0][1][0][x], scores[0][1][1][x], scores[0][1][2][x], scores[0][1][3][x]]]
+    #serial += [[]]
     for x in range(0, len(scores[1][0])):
         serial += [[scores[1][0][x], scores[1][1][0][x], scores[1][1][1][x], scores[1][1][2][x], scores[1][1][3][x]]]
     df_all = pd.DataFrame(serial)
@@ -85,4 +87,7 @@ def new_class(m, f, g):
     sub = [g[0], ['ENG3', 'MATH3', 'AGR3', 'CIV3', 'COM3', 'IRS3', 'ARB3', 'YOR3', 'BIO3', 'PHY3', 'CHE3', 'ELE3', 'GRM3', 'CTR3', 'ICT3', 'ECO3', 'LIT3', 'ACC3', 'GEO3', 'GOV3']]
     for i in range(0, len(sub[1])):
         placing_scores(list(M.a), list(F.b), m, f, [sub[0], sub[1][i]])
-    
+new_class(43, 31, ['SSS 2', 'ENG1'])
+#['MATH1', 'AGR1', 'CIV1', 'COM1', 'IRS1', 'ARB1', 'YOR1', 'BIO1', 'PHY1', 'CHE1', 'ELE1', 'GRM1', 'CTR1', 'ICT1', 'ECO1', 'LIT1', 'ACC1', 'GEO1', 'GOV1']
+#['ENG2', 'MATH2', 'AGR2', 'CIV2', 'COM2', 'IRS2', 'ARB2', 'YOR2', 'BIO2', 'PHY2', 'CHE2', 'ELE2', 'GRM2', 'CTR2', 'ICT2', 'ECO2', 'LIT2', 'ACC2', 'GEO2', 'GOV2']
+#['ENG3', 'MATH3', 'AGR3', 'CIV3', 'COM3', 'IRS3', 'ARB3', 'YOR3', 'BIO3', 'PHY3', 'CHE3', 'ELE3', 'GRM3', 'CTR3', 'ICT3', 'ECO3', 'LIT3', 'ACC3', 'GEO3', 'GOV3']

@@ -30,7 +30,7 @@ class student_names(forms.ModelForm):
         fields = ('student_name',)
         
 class login_form(forms.Form):
-    username = forms.CharField(max_length=8)#, help_text="Just type 'renew'")
+    username = forms.CharField(max_length=18)#, help_text="Just type 'renew'")
     password1 = forms.CharField(widget=forms.PasswordInput)#
     
     def clean_data(self):
