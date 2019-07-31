@@ -6,10 +6,10 @@
     {% csrf_token %}
     <div class="row">
       <div class="col-xs-4">
-        {{ form.first_name|as_crispy_field }}
+        {{ form.last_name|as_crispy_field }}
       </div>
       <div class="col-xs-4">
-        {{ form.last_name|as_crispy_field }}
+        {{ form.first_name|as_crispy_field }}
       </div>
       <div class="col-xs-4">
         {{ form.birth_date|as_crispy_field }}

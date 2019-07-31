@@ -4,12 +4,13 @@ Created on Mon Jan 14 01:15:37 2019
 
 @author: AdeolaOlalekan
 """
-#from django.contrib.auth import views as auth_views detailView show_annual
+#from django.contrib.auth import views as auth_views detailView show_annual 
 from django.conf.urls import url
-#, include student_name_edit, subject_per_name annual_agr detailView annual_agr subject_total annual_view annual_sheet
+#, include student_name_edit, subject_per_name annual_agr detailView annual_agr subject_total annual_view annual_sheet edit_user
 from.import result_views, model_loader, loggins, sign_up
 urlpatterns = [
         url(r'home/$', loggins.home, name='home'),
+        url(r'^generate/pdf', loggins.pdf.as_view(), name='broadsheets'),
         url(r'^generate/', loggins.Pdf.as_view(), name='pdf'), 
         url(r'^export_broadsheet/', loggins.export_broadsheet, name='export_broadsheet'),
         url(r'^upload_txt/(?P<pk>\d+)/', model_loader.upload_new_subject_scores, name='upload_txt'),
@@ -17,6 +18,7 @@ urlpatterns = [
         url(r'^export_all/subjects/(?P<pk>\d+)/', loggins.export_all, name='export_all'),
         url(r'^export/scores/subjects/(?P<pk>\d+)/', loggins.export_subject_scores, name='export_users_scores'),
         url('class_record_view', model_loader.broad_sheet, name='class_record_view'),
+        url('pre_broad_sheet', model_loader.pre_broad_sheet, name='pre_broad_sheet'),
         url('broad_sheet_on_page', model_loader.broad_sheet_on_page, name='broad_sheet_on_page'),
         url('samples_down/', loggins.sample_down, name='samples_down'),
         url('samples_disp/', loggins.sample_disply, name='samples_disp'),
@@ -67,7 +69,7 @@ urlpatterns = [
         url('post/(?P<pk>\d+)/', loggins.post_detail, name='post_detail'),
         url('post/new/', loggins.post_new, name='post_new'),
         url('post_edit/(?P<pk>\d+)/', loggins.post_edit.as_view(), name='post_edit'),
-        url('drafts/', loggins.post_draft_list, name='post_draft_list'),#post approvals student_in_none 
+        url('drafts/', loggins.post_draft_list, name='post_draft_list'),#post approvals student_in_none new_student_name
         #url('post/publish/', loggins.post_publish, name='post_publish'),#review post uncomment for no review compute_annual
         url('post_remove/(?P<pk>\d+)/', loggins.delete_post, name='post_remove'),
         url('posts_publishing/(?P<pk>\d+)/publish/', loggins.posts_publishing, name='posts_publishing'),
@@ -87,15 +89,16 @@ urlpatterns = [
         url(r'^create_update_annual_records/(?P<pk>\d+)/$', model_loader.compute_annual, name='compute_annual'),
         url(r'^create_update_show_annual/(?P<pk>\d+)/$', model_loader.show_annual, name='show_annual'),
         url(r'^all_annual_view/(?P<pk>\d+)/$', loggins.all_annual_view, name='all_annual_view'),
+        url(r'^Cname_edit/(?P<pk>\d+)/$', loggins.Cname_edit.as_view(), name='Cname_edit'),##############
         url(r'^annual/(?P<pk>\d+)/$', loggins.annual_view, name='annual_view'),
         url('broad_sheet_views/(?P<pk>\d+)/', model_loader.broad_sheet_views, name='broad_sheet_views'), 
         
         url(r'^search_tutors', loggins.teacher_accounts, name='search_tutors'),
         url(r'^all_terms/(?P<pk>\d+)/$', loggins.three_term_records, name='all_terms'),
         url('a_student_exist/(?P<pk>\d+)/$', model_loader.a_student_exist, name='a_student_exist'),
-        url('new_student_name/', model_loader.new_student_name, name='new_student_name'),
+        url('new_student_name/(?P<pk>\d+)/$', model_loader.new_student_name, name='new_student_name'),
         #
-        #url('warning_delete_anu/(?P<pk>\d+)/$', loggins.confirm_deletion_anu, name='warning_delete_anu'),
+        #url('warning_delete_anu/(?P<pk>\d+)/$', loggins.confirm_deletion_anu, name='warning_delete_anu'), 
         url('signup/', sign_up.Staff_SignUp.as_view(), name='signup'),
         url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         sign_up.activate, name='activate'), 

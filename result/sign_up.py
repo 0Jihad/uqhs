@@ -18,7 +18,7 @@ from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.urls import reverse_lazy
-from django.core.mail import EmailMessage
+#from django.core.mail import EmailMessage
 from django.http import HttpResponse#, HttpResponseRedirect
 #from django.core.mail import send_mail
 #send_mail('noreply', 'body of the message', 'adeolaolalekan1431@yahoo.com', ['adeolaolalekan01831@gmail.com', 'adeolaolalekan1831@outlook.com'])
@@ -47,25 +47,8 @@ class Staff_SignUp(generic.CreateView):
                     userObj.email = fd['email']
                     userObj.save()
                     profile = userObj.profile
-                    profile.bio = 'new!'
                     profile.account = ['', 'Student', 'Staff']
                     profile.save()
-                    current_site = get_current_site(request)
-                    mail_subject = 'This email comfirmed your signup email as connected!'
-                    message = render_to_string('registration/account_activation_email.html', {
-                        'user': User,
-                        'domain': current_site.domain,
-                        'uid': urlsafe_base64_encode(force_bytes(userObj.pk)).decode(),
-                        'token': account_activation_token.make_token(userObj),
-                    })
-                    to_email = form.cleaned_data.get('email')
-                    email = EmailMessage(
-                        mail_subject, message, to=[to_email]
-                    )
-                    email.send()
-                    # user = authenticate(username=username, password=password)
-                    # login(request, user)
-    
                     return render(request, 'registration/account_activation_sent.html')
                 else:
                     return HttpResponse("This Email Already exists, Use another email address please!")

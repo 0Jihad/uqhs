@@ -11,10 +11,13 @@
       <div class="cap_form"><a href="{% url 'home' %}" style="color:white;">Username: </a><pre>{{ user.username }}</pre></div>
         <strong><a href="{% url 'user_update' qry.id %}" style=" color:red;">Edit Profile:</a></strong><a href="{% url 'upload_photo' pk=qry.id %}"><img class="rounded-circle" src="{% static "result/Jagun.jpg"%}" alt="My_pics" style="max-width: 3em; margin-left: 500px;"/></a></em></em>
         <div class="row">
-            <div class="col-xs-6">
+	    <div class="col-xs-4">
+                <em>Title:</em><pre> {{ qry.title }}</pre>
+            </div>
+            <div class="col-xs-4">
                 <em>Surname:</em><pre> {{ qry.last_name }}</pre>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 <em>Other Name:</em><pre> {{ qry.first_name }}</pre>
             </div>
         </div>
@@ -44,8 +47,8 @@
             </div>
 	</div>
         <em>About You:</em></a><pre> {{ qry.bio }}</pre>
-            								
-	<em class="capt">{{ request.user.email|default:"Action required!" }}:</em> <a href="{% url 'password' %}"><strong style="color:purple;">reset password</strong></a>
+            						
+	<em class="capt">{{ request.user.email|default:"Action required!" }}:</em> <a href="{% url 'password' %}"><strong style="color:purple;">reset password</strong></a> <div class="capt">Confermation Status: {{ qry.email_confirmed }}</div>
     </form> 
     {% endblock %}
 </html>

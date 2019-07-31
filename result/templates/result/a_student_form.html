@@ -10,7 +10,7 @@
     {% block content %}
     <form method="post" >
     {% csrf_token %}
-    <div class="cap_form" ><a href="" style="color:palegoldenrod;">Student Name</a><pre>{{ result.student_name }} Click <a href="{% url 'new_student_name' %}" target = _blank> <em style="color:purple;">here</em></a> to add name for new student.</pre></div>
+    <div class="cap_form" ><a href="" style="color:palegoldenrod;">Student Name</a><pre>{{ result.student_name }} Click <a href="{% url 'new_student_name' pk=pk %}"> <em style="color:purple;">here</em></a> to add name for new student.</pre></div>
      <div><em style="color:red;">Note:</em>*<em style="color:white;">This page need to be refreshed to enlist a newly created name.</em></div>
     <div class="cap_form">Scores</div>
     <div class="row">

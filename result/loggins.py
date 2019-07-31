@@ -4,7 +4,7 @@ Created on Mon Jan 28 00:51:16 2019
 
 @author: AdeolaOlalekan
 """
-from .models import QSUBJECT, Edit_User, ASUBJECTS,  ANNUAL, BTUTOR, CNAME, RESULT_GRADE, Post, OVERALL_ANNUAL, TERM
+from .models import QSUBJECT, Edit_User, ASUBJECTS,  ANNUAL, BTUTOR, CNAME, RESULT_GRADE, Post, OVERALL_ANNUAL, TERM, SESSION
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -24,6 +24,7 @@ from django.views.generic.edit import UpdateView
 from django.forms import modelformset_factory
 from django.db.models import Sum, Avg
 import os
+from django.contrib.auth.mixins import LoginRequiredMixin 
 from datetime import datetime
 from wsgiref.util import FileWrapper
 from django.utils import timezone
@@ -38,8 +39,9 @@ def loggin(request):
             password = form.cleaned_data['password1']
             user = auth.authenticate(username=username, password=password)
         if user is not None:
-            # correct username and password login the user
             auth.login(request, user)
+            if user.last_login == None or user.profile.email_confirmed == False:
+                return redirect('edith', pk=user.id)
             return redirect('admin_page')
         else:
             return redirect('home')
@@ -171,7 +173,7 @@ def broad_sheet(request):
             sd += [ds+lss[i]]
     return [sd, dim[:3]+['Agr', 'Avr', 'grade', 'posi']]
 
-def export_broadsheet(request):#result download based on login tutor teacher_accounts
+def export_broadsheet(request):#result download based on login tutor teacher_accounts Subject_model_view
     sd = broad_sheet(request)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="broadsheet.csv"'
@@ -203,7 +205,6 @@ def export_all(request, pk):#result download based on login tutor
     return response   
  
 class Pdf(View):
-
     def get(self, request):
         tutor = get_object_or_404(BTUTOR, pk=request.user.profile.account_id)
         if tutor.term == '3rd Term':
@@ -214,6 +215,7 @@ class Pdf(View):
         params = {
             'count_grade': mains.count(),
             'tutor': tutor,
+            'request': request,
             'mains': mains,
             'today': today,
             'subject_scores': round(mains.aggregate(Sum('agr'))['agr__sum'],2),
@@ -223,7 +225,25 @@ class Pdf(View):
             return Render.render('result/anu_pdf.html', params)
         else:
             return Render.render('result/pdf.html', params)
-###############################################################################
+        
+class pdf(View):
+    def get(self, request):
+        tutor = get_object_or_404(BTUTOR, pk=request.user.profile.account_id)
+        mains = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
+        today = datetime.now()
+        params = {
+            'in_class': mains.count(),
+            'tutor': tutor,
+            'mains': mains,
+            'today': today,
+            'subject_scores': round(mains.aggregate(Sum('Avr'))['Avr__sum'], 2),
+            'subject_pert': round(mains.aggregate(Avg('Avr'))['Avr__avg'],2)
+            }
+        if  tutor.Class == 'SS 1' or tutor.Class == 'SS 2' or tutor.Class == 'SS 3':
+            return Render.render('result/broad_sheet_pdf_s.html', params)
+        else:
+            return Render.render('result/broad_sheet_pdf_j.html', params)
+###############################################################################  
 def create_subjects(request):#New teacher form for every new term, class, subjects
     if request.method == 'POST':
         result = subjectforms(request.POST)
@@ -232,8 +252,7 @@ def create_subjects(request):#New teacher form for every new term, class, subjec
             if len(check) == 0: 
                 new_subject = ASUBJECTS(name=result.cleaned_data['name'])
                 new_subject.save()
-                check = ASUBJECTS.objects.all().order_by('id')
-                return render(request, 'result/created_subject.html', {'check':check})
+                return redirect('teacher_create')
             else:
                 check = ASUBJECTS.objects.all().order_by('id')
                 return render(request, 'result/created_subject.html', {'check' : check})
@@ -241,7 +260,7 @@ def create_subjects(request):#New teacher form for every new term, class, subjec
         result = subjectforms()
     return render(request, 'result/create_new_subject.html', {'result': result})
 #########################################################
-def created_subjects(request, pk):#New teacher form for every new term, class, subjects
+def created_subjects(request, pk):#New teacher form for every new term, class, subjects 
     if pk == '0':
         check = ASUBJECTS.objects.all().order_by('id')
         return render(request, 'result/created_subject.html', {'check':check})
@@ -335,7 +354,7 @@ def student_name_class_filter(request):#New teacher form for every new term, cla
                 anuual = sSum(subjects)
                 return render(request, 'result/single_subject_per_student.html', {'subjects':subjects, 'name': student_class, 'anuual':anuual})
             else:
-                return redirect('student_name_class_filter') 
+                return redirect('teacher_create') 
     else:
         result = name_class_Form()
     return render(request, 'result/name_class_filter.html', {'result': result})  
@@ -613,7 +632,7 @@ def three_term_records(request, pk):
         all_page = paginator.page(paginator.num_pages)
     return render(request, 'result/all_three_term.html', {'all_page': all_page, 'qry' : qry, 'pk': pk})
     
-#################################################################################
+################################################################################# edit_user_form
 def edit_user(request, pk):
     user = User.objects.get(pk=pk)
     user.is_staff = True
@@ -624,6 +643,7 @@ def edit_user(request, pk):
             user.last_name = form.cleaned_data['last_name']
             user.first_name = form.cleaned_data['first_name']
             user.save()
+            profile.title = form.cleaned_data['title']
             profile.last_name = form.cleaned_data['last_name']
             profile.first_name = form.cleaned_data['first_name']
             profile.bio = form.cleaned_data['bio']
@@ -663,13 +683,15 @@ class Teacher_model_view(UpdateView):#New teacher form for every new term, class
     model = BTUTOR
     fields = ['accounts', 'teacher_name', 'subject', 'Class', 'term', 'males', 'females', 'teacher_in', 'session']
     success_url = reverse_lazy('home') 
-    
-class Subject_model_view(UpdateView):#New teacher form for every new term, class, subjects
+   
+class Subject_model_view(LoginRequiredMixin, UpdateView):#New teacher form for every new term, class, subjects
     model = QSUBJECT
     fields = ['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'agr', 'grade', 'posi', 'tutor']
     
-#@login_required
-
+class Cname_edit(LoginRequiredMixin, UpdateView):#New teacher form for every new term, class, subjects
+    model = CNAME
+    fields = ['student_name']
+    
 def manage_subject_updates(request, pk):
     tutor = BTUTOR.objects.get(pk=pk)
     ext = tutor.males+tutor.females - QSUBJECT.objects.filter(tutor__exact=tutor).count()

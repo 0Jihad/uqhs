@@ -91,3 +91,32 @@ new_class(43, 31, ['SSS 2', 'ENG1'])
 #['MATH1', 'AGR1', 'CIV1', 'COM1', 'IRS1', 'ARB1', 'YOR1', 'BIO1', 'PHY1', 'CHE1', 'ELE1', 'GRM1', 'CTR1', 'ICT1', 'ECO1', 'LIT1', 'ACC1', 'GEO1', 'GOV1']
 #['ENG2', 'MATH2', 'AGR2', 'CIV2', 'COM2', 'IRS2', 'ARB2', 'YOR2', 'BIO2', 'PHY2', 'CHE2', 'ELE2', 'GRM2', 'CTR2', 'ICT2', 'ECO2', 'LIT2', 'ACC2', 'GEO2', 'GOV2']
 #['ENG3', 'MATH3', 'AGR3', 'CIV3', 'COM3', 'IRS3', 'ARB3', 'YOR3', 'BIO3', 'PHY3', 'CHE3', 'ELE3', 'GRM3', 'CTR3', 'ICT3', 'ECO3', 'LIT3', 'ACC3', 'GEO3', 'GOV3']
+
+
+words = [
+ 'look' , 'into' , 'my' , 'eyes' , 'look' , 'into' , 'my' , 'eyes' ,
+ 'the' , 'eyes' , 'the' , 'eyes' , 'the' , 'eyes' , 'not' , 'around' , 'the' ,
+ 'eyes' , "don't" , 'look' , 'around' , 'the' , 'eyes' , 'look' , 'into' ,
+ 'my' , 'eyes' , "you're" , 'under']
+from collections import Counter
+word_counts = Counter(words)
+top_three = word_counts.most_common()
+xy = [list(i[:]) for i in top_three]
+sd = []
+for i in range(0, len(xy)):
+    if xy[i][1] > 1:
+        sd += [xy[i]]
+ds = []
+if len(sd) != 0:
+    for i in range(0, len(sd)):  
+        for r in range(0, sd[i][1]):
+            for s in words:
+                if s == sd[i][0]:
+                    words[words.index(sd[i][0])] = words[words.index(sd[i][0])]+str(words.index(sd[i][0]))
+                    
+                    
+                    
+sp = []
+for i in range(1, 31):
+    sp += [tuple([(str(2018+i)), (str(2018+i-1)+'/'+str(2018+i))])]
+    

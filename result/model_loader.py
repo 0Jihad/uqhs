@@ -5,26 +5,28 @@ Created on Tue Dec 18 20:05:17 2018
 @author: AdeolaOlalekan
 """
 from django.contrib.auth.models import User
-from .models import QSUBJECT, CNAME, BTUTOR, ANNUAL, TERM, OVERALL_ANNUAL
+from .models import QSUBJECT, CNAME, BTUTOR, ANNUAL, TERM, OVERALL_ANNUAL, Edit_User, SESSION
 from django.shortcuts import render, redirect, get_object_or_404
 from result.result_views import cader
 from result.grader import grades, don_e
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import teacherform, a_student_form_new, student_name
+from .forms import subject_class_term_Form, a_student_form_new, student_name
 from datetime import datetime
 from .grad_counter import grade_counter
 from django.db.models import Sum, Avg
+from django.http import HttpResponse
+from collections import Counter
 #####################################STAGE 1:::: CREATE_TUTOR ##########################STARTS 
 @login_required
 def create_new_subject_teacher(request):#New teacher form for every new term, class, subjects, subject_per_name
     if request.method == 'POST':
-        result = teacherform(request.POST)
+        result = subject_class_term_Form(request.POST)
         if result.is_valid():
             unique = BTUTOR.objects.filter(accounts__exact=request.user, term__exact=result.cleaned_data['term'], Class__exact=result.cleaned_data['Class'], subject = result.cleaned_data['subject']).count()
             first = BTUTOR.objects.filter(accounts__exact=request.user, term__exact='1st Term', Class__exact=result.cleaned_data['Class'], subject = result.cleaned_data['subject']).count()
             if first != 0 and unique == 0 or result.cleaned_data['term'] == '1st Term' and unique == 0:
-                new_teacher = BTUTOR(accounts=request.user, subject = result.cleaned_data['subject'], Class = result.cleaned_data['Class'], term = result.cleaned_data['term'], teacher_name = result.cleaned_data['teacher_name'], teacher_in = result.cleaned_data['teacher_in'], cader=cader(result.cleaned_data['Class']), session=result.cleaned_data['session'])
+                new_teacher = BTUTOR(accounts=request.user, subject = result.cleaned_data['subject'], Class = result.cleaned_data['Class'], term = result.cleaned_data['term'], cader=cader(result.cleaned_data['Class']), teacher_name = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}')
                 new_teacher.save()
                 return redirect('upload_txt', pk=new_teacher.id)
             else:
@@ -39,7 +41,7 @@ def create_new_subject_teacher(request):#New teacher form for every new term, cl
                     all_page = paginator.page(paginator.num_pages)
                 return render(request, 'result/first_term_record_notify.html', {'all_page':all_page})
     else:
-        result = teacherform()
+        result = subject_class_term_Form()
         return render(request, 'result/create_new_teacher.html', {'result': result})
 
 #####################################STAGE 1:::: TUTOR ##########################ENDS
@@ -85,12 +87,27 @@ def upload_new_subject_scores(request, pk):
         agr = [[i[1:] for i in raw]]
         grade = grades([r[-1] for r in raw][:], x)
         posi = don_e([r[-1] for r in raw][:])
+        #####################REPEATED NAMES######################################
+        word_counts = Counter(named_scores[2])
+        top_three = word_counts.most_common()
+        xy = [list(i[:]) for i in top_three]
+        sd = []
+        for i in range(0, len(xy)):
+            if xy[i][1] > 1:
+                sd += [xy[i]]
+        if len(sd) != 0:
+            for i in range(0, len(sd)):  
+                for r in range(0, sd[i][1]):
+                    for s in named_scores[2]:
+                        if s == sd[i][0]:
+                            named_scores[2][named_scores[2].index(sd[i][0])] = named_scores[2][named_scores[2].index(sd[i][0])]+str(named_scores[2].index(sd[i][0]))
+        #####################REPEATED NAMES######################################
         for i in range(0, len(named_scores[2])):
-            name = CNAME.objects.filter(student_name__exact=named_scores[2][i], Class__exact=tutor.Class).count()#if name exits else create name
+            name = CNAME.objects.filter(student_name__exact=named_scores[2][i]).count()#if name exits else create name
             if name == 0:
-                new_name = CNAME(student_name=named_scores[2][i], Class=tutor.Class)#adding new student_name
+                new_name = CNAME(student_name=named_scores[2][i])#adding new student_name
                 new_name.save()
-            per_student = QSUBJECT(student_name=CNAME.objects.get(student_name__exact=named_scores[2][i], Class__exact=tutor.Class), test=agr[0][i][0], agn=agr[0][i][1], atd=agr[0][i][2], exam=agr[0][i][3], total=agr[0][i][4], agr=agr[0][i][5], posi=posi[i], grade=grade[i], tutor = tutor, cader = x)
+            per_student = QSUBJECT(student_name=CNAME.objects.get(student_name__exact=named_scores[2][i]), test=agr[0][i][0], agn=agr[0][i][1], atd=agr[0][i][2], exam=agr[0][i][3], total=agr[0][i][4], agr=agr[0][i][5], posi=posi[i], grade=grade[i], tutor = tutor, cader = x)
             per_student.save() 
         
     else:#
@@ -104,20 +121,20 @@ def a_student_exist(request, pk):
     if request.method == 'POST':
         result = a_student_form_new(request.POST)
         if result.is_valid():
-            exist_student = QSUBJECT(student_name=CNAME.objects.get(student_name__exact=str(result.cleaned_data['student_name']).split(':')[1]), test=result.cleaned_data['test'], agn=result.cleaned_data['agn'], atd=result.cleaned_data['atd'], exam=result.cleaned_data['exam'], tutor = tutor, session = tutor.session)
+            exist_student = QSUBJECT(student_name=CNAME.objects.get(student_name__exact=result.cleaned_data['student_name']), test=result.cleaned_data['test'], agn=result.cleaned_data['agn'], atd=result.cleaned_data['atd'], exam=result.cleaned_data['exam'], tutor = tutor)
             exist_student.save() 
             return redirect('subject_updates_model', pk=exist_student.id)
     else:
         result = a_student_form_new()
-    return render(request, 'result/a_student_form.html', {'result': result})
+    return render(request, 'result/a_student_form.html', {'result': result, 'pk': pk})
 
-def new_student_name(request):
+def new_student_name(request, pk):
     if request.method == 'POST':
         result = student_name(request.POST)
         if result.is_valid():
-            new_name = CNAME(student_name=result.cleaned_data['student_name'], Class=result.cleaned_data['Class'])#adding new student_name
+            new_name = CNAME(student_name=result.cleaned_data['student_name'])#adding new student_name
             new_name.save() 
-            return redirect('student_names')
+            return redirect('a_student_exist', pk=pk)
     else:
         result = student_name()
     return render(request, 'result/a_student_name.html', {'result': result})
@@ -126,27 +143,35 @@ def new_student_name(request):
 @login_required
 def compute_annual(request, pk):
     tutor = get_object_or_404(BTUTOR, pk=pk)
-    if tutor.model_in == 'qsubject' or tutor.model_in == 'annual':
-        subject = QSUBJECT.objects.filter(tutor__subject__exact=tutor.subject, tutor__Class__exact=tutor.Class, tutor__term__exact='3rd Term')
-        student_name_ids = [list(i[:]) for i in list(subject.values_list('student_name_id'))]
+    if Edit_User.objects.filter(class_in__exact=tutor.Class).count() == 1:
+        tutor.teacher_in=Edit_User.objects.get(class_in=tutor.Class).user
+        tutor.save()
+        subject = QSUBJECT.objects.filter(tutor__subject__exact=tutor.subject, tutor__Class__exact=tutor.Class, tutor__term__exact='3rd Term', tutor__session__exact=tutor.session)
+        student_name_ids = [list(i[:]) for i in list(subject.values_list('student_name_id', 'id'))]
         for i in range(0, len(student_name_ids)):
-            student_name = CNAME.objects.get(pk=student_name_ids[i][0], Class = tutor.Class)
-            sub1 = QSUBJECT.objects.filter(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='1st Term')
-            if sub1.count() != 0:
-                first = QSUBJECT.objects.get(student_name=student_name, tutor__Class=tutor.Class, tutor__subject=tutor.subject, tutor__term='1st Term')
+            student_name = CNAME.objects.get(pk=student_name_ids[i][0])
+            if QSUBJECT.objects.filter(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='1st Term', tutor__session__exact=tutor.session).count() != 0:
+                first = QSUBJECT.objects.get(student_name=student_name, tutor__Class=tutor.Class, tutor__subject=tutor.subject, tutor__term='1st Term', tutor__session=tutor.session)
                 f = first.agr
+                first_g = first.grade
+                first_p= first.posi
             else:
                 f = None# No first term
                 first = None
-            sub2 = QSUBJECT.objects.filter(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='2nd Term')
-            if sub2.count() != 0:
-                second = QSUBJECT.objects.get(student_name=student_name, tutor__Class=tutor.Class, tutor__subject=tutor.subject, tutor__term='2nd Term')
+                first_g = None
+                first_p= None
+            if QSUBJECT.objects.filter(student_name=student_name, tutor__Class__exact=tutor.Class, tutor__subject__exact=tutor.subject, tutor__term__exact='2nd Term', tutor__session__exact=tutor.session).count() != 0:
+                second = QSUBJECT.objects.get(student_name=student_name, tutor__Class=tutor.Class, tutor__subject=tutor.subject, tutor__term='2nd Term', tutor__session=tutor.session)
                 s = second.agr
+                second_g = second.grade
+                second_p= second.posi
             else:
                 s = None# No second term
                 second = None
+                second_g = None
+                second_p= None
             
-            third = QSUBJECT.objects.get(student_name=student_name, tutor__Class=tutor.Class, tutor__subject=tutor.subject, tutor__term='3rd Term')
+            third = QSUBJECT.objects.get(pk=student_name_ids[i][1])
             dim = [f, s, third.agr]
             try:
                 while True:
@@ -167,17 +192,17 @@ def compute_annual(request, pk):
             else:
                 term_scores = TERM.objects.get(student_name=student_name, class_in=tutor.Class, terms_by = tutor, subject=tutor.subject.name)
             term_scores.save()
-            if OVERALL_ANNUAL.objects.filter(student_name__exact=student_name, class_in__exact=tutor.Class, teacher_in__exact=tutor.teacher_in).count() == 0:
-                subj = OVERALL_ANNUAL.objects.create(student_name=student_name, class_in=tutor.Class, teacher_in=tutor.teacher_in, eng = None, mat = None, agr = None, bus = None, bst = None, yor = None, nva = None, irs = None, prv = None, ict = None, acc = None, his = None)
+            if OVERALL_ANNUAL.objects.filter(student_name__exact=student_name, class_in__exact=tutor.Class, teacher_in__exact=Edit_User.objects.get(class_in=tutor.Class).user, session__exact=tutor.session).count() == 0:
+                subj = OVERALL_ANNUAL.objects.create(student_name=student_name, class_in=tutor.Class, teacher_in=Edit_User.objects.get(class_in=tutor.Class).user,  session=tutor.session, eng = None, mat = None, agr = None, bus = None, bst = None, yor = None, nva = None, irs = None, prv = None, ict = None, acc = None, his = None)
             else:
-                subj = get_object_or_404(OVERALL_ANNUAL, student_name=student_name, class_in=tutor.Class, teacher_in=tutor.teacher_in)
+                subj = get_object_or_404(OVERALL_ANNUAL, student_name=student_name, class_in=tutor.Class, teacher_in=Edit_User.objects.get(class_in=tutor.Class).user,  session=tutor.session)
             term_scores.avr = sd[1]
             subj.save()
             term_scores.save()
             class_records(tutor, subj, term_scores)
-            #third.annual_scores = {str(tutor.subject.name)[:3]+':'+str(first.agr)+':'+str(first.grade)+':'+str(first.posi)+':---:'+str(second.agr)+':'+str(second.grade)+':'+str(second.posi)+':---:'+str(third.agr)+':'+str(third.grade)+':'+str(third.posi)}
-            #third.save()
-        anu = ANNUAL.objects.filter(subject_by__Class=tutor.Class, subject__exact=tutor.subject, subject_by__session=tutor.session)
+            third.annual_scores = {str(tutor.subject.name)[:3]+':'+str(first)+':'+str(first_g)+':'+str(first_p)+':---:'+str(second)+':'+str(second_g)+':'+str(second_p)+':---:'+str(third)+':'+str(third.grade)+':'+str(third.posi)}
+            third.save()
+        anu = ANNUAL.objects.filter(subject_by__Class=tutor.Class, subject__exact=tutor.subject, subject_by__session__exact=tutor.session)
         name_ids = [list(i[:]) for i in list(anu.values_list('id', 'agr'))]
         scores = [round(x[1], 0) for x in name_ids]
         posi = don_e(scores[:])
@@ -187,19 +212,20 @@ def compute_annual(request, pk):
             get_student.grade = grd[r]
             get_student.anu_posi = posi[r]
             get_student.save()
-    all_t = TERM.objects.filter(terms_by__exact=tutor, class_in__exact=tutor.Class, subject__exact=tutor.subject.name).order_by('id')
-    tutor.model_in =  'annual'
-    tutor.save()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(all_t, 30)
-    try:
-        all_page = paginator.page(page)
-    except PageNotAnInteger:
-        all_page = paginator.page(1)
-    except EmptyPage:
-        all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/only.html',  {'all_page': all_page, 'in_class': all_t.count(), 'pk':pk, 'tutor':tutor})
-
+        all_t = TERM.objects.filter(terms_by__exact=tutor, class_in__exact=tutor.Class, subject__exact=tutor.subject.name).order_by('id')
+        tutor.model_in =  'annual'
+        tutor.save()
+        page = request.GET.get('page', 1)
+        paginator = Paginator(all_t, 30)
+        try:
+            all_page = paginator.page(page)
+        except PageNotAnInteger:
+            all_page = paginator.page(1)
+        except EmptyPage:
+            all_page = paginator.page(paginator.num_pages)
+        return render(request, 'result/only.html',  {'all_page': all_page, 'in_class': all_t.count(), 'pk':pk, 'tutor':tutor})
+    else:
+        return HttpResponse("Class teacher for this class is yet to be allocated, contact admin.", status=400)
     ######################STAGE 2 ::: UPLOAD SCORES##################ENDS  
 def show_annual(request, pk):
     tutor = get_object_or_404(BTUTOR, pk=pk)
@@ -234,11 +260,14 @@ def class_records(tutor, subj, term_scores):
         subj.acc = term_scores
     elif tutor.subject.name == 'History':
         subj.his = term_scores
-    subj.session = str(datetime.now().year)
     subj.save()
-    
+
+def pre_broad_sheet(request):
+    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
+    return render(request, 'result/pre_broadsheet.html',  {'date': datetime.now(), 'in_class': al, 'last_name':request.user.profile.last_name, 'first_name':request.user.profile.first_name, 'class_in':request.user.profile.class_in })
+   
 def broad_sheet(request):
-    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=str(datetime.now().year))
+    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact = SESSION.objects.get(pk=1).new)
     if al.count() != 0:
         x = list(al.values_list('id', 'eng', 'mat', 'agr', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'acc', 'his'))
         lst = [list(i[:]) for i in x]
@@ -289,7 +318,7 @@ def broad_sheet(request):
         return render(request, 'result/jyearly.html',  {'date': datetime.now(), 'grad':grad, 'total_scores':total_scores, 'avg_pert':avg_pert, 'all_page': all_page, 'in_class': al.count(), 'last_name':request.user.profile.last_name, 'first_name':request.user.profile.first_name, 'class_in':request.user.profile.class_in })
 
 def broad_sheet_on_page(request):
-    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=str(datetime.now().year))
+    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
     if al.count() != 0:
         total_scores = round(al.aggregate(Sum('Avr'))['Avr__sum'], 1)
         avg_pert = round(al.aggregate(Avg('Avr'))['Avr__avg'],2)
@@ -303,7 +332,7 @@ def broad_sheet_on_page(request):
 
 def broad_sheet_views(request, pk):
     user = get_object_or_404(User, pk=get_object_or_404(BTUTOR, pk=pk).class_teacher_id)
-    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=user, class_in__exact=user.profile.class_in, session__exact=datetime.now().year)
+    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=user, class_in__exact=user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
     if al.count() != 0:
         total_scores = round(al.aggregate(Sum('Avr'))['Avr__sum'], 1)
         avg_pert = round(al.aggregate(Avg('Avr'))['Avr__avg'],2)

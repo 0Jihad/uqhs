@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ASUBJECTS, BTUTOR, CNAME, QSUBJECT, ANNUAL, TERM, Edit_User, RESULT_GRADE, OVERALL_ANNUAL
+from .models import ASUBJECTS, BTUTOR, CNAME, QSUBJECT, ANNUAL, TERM, Edit_User, RESULT_GRADE, OVERALL_ANNUAL, SESSION
 
 #admin.site.register(studen_scores)#
 ########################################################
@@ -37,9 +37,9 @@ class model_names(admin.ModelAdmin):
     list_display = ('student_name', 'id', 'created', 'updated')
 @admin.register(Edit_User)
 class model_profile(admin.ModelAdmin):
-    list_display = ('user', 'account_id', 'photo', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department')
-    fields = ['user', 'account_id', 'photo', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department', 'email_confirmed']
-#admin.site.register(RESULT_GRADE)
+    list_display = ('title', 'user', 'account_id', 'photo', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department')
+    fields = ['title', 'user', 'account_id', 'photo', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department', 'email_confirmed']
+admin.site.register(SESSION)
 admin.site.register(ASUBJECTS)
 admin.site.register(QSUBJECT, subject_main)#second_term
 # Register your models here.

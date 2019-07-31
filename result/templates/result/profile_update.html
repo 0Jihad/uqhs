@@ -9,13 +9,16 @@
     {% csrf_token %}
     <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Personal Info:</em>
     <div class="row">
-      <div class="col-xs-4">
-        {{ form.first_name|as_crispy_field }}
+      <div class="col-xs-3">
+        {{ form.title|as_crispy_field }}
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-3">
         {{ form.last_name|as_crispy_field }}
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-3">
+        {{ form.first_name|as_crispy_field }}
+      </div>
+      <div class="col-xs-3">
         {{ form.birth_date|as_crispy_field }}
       </div>
     </div>   

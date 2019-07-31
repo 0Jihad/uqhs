@@ -8,7 +8,6 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 ################################################################################################'18/19'
-
 class ASUBJECTS(models.Model):
     code = tuple([('English', 'English'), ('Mathematics', 'Mathematics'), ('Civic Education', 'Civic Education'), ('Electrical', 'Electrical'), ('Yoruba', 'Yoruba'), ('Agric. Sc.', 'Agric. Sc.'), ('Garment Making', 'Garment Making'), ('Pre-Vocation', 'Pre-Vocation'), ('Information Technology', 'Information Technology'), ('Biology', 'Biology'), ('Chemistry', 'Chemistry'), ('Physics', 'Physics'), ('Geography', 'Geography'), ('Government', 'Government'), ('Account', 'Account'), ('Arabic', 'Arabic'), ('Islamic Studies', 'Islamic Studies'), ('Litrature', 'Litrature'), ('Commerce', 'Commerce'), ('Economics', 'Economics'), ('Business Studies', 'Business Studies'), ('Basic Science and Technology', 'Basic Science and Technology'), ('Catering', 'Catering'), ('National Value', 'National Value'), ('Furthe Mathematics', 'Furthe Mathematics'), ('History', 'History')] )
     name = models.CharField(max_length=30, choices= code, blank=True, null=True, default='English',)
@@ -18,6 +17,19 @@ class ASUBJECTS(models.Model):
     
     def __str__(self):
          return self.name
+
+class SESSION(models.Model):
+    code = tuple([('2019', '2018/2019'), ('2020', '2019/2020'), ('2021', '2020/2021'), ('2022', '2021/2022'), ('2023', '2022/2023'), ('2024', '2023/2024'), ('2025', '2024/2025'), ('2026', '2025/2026'), ('2027', '2026/2027'), ('2028', '2027/2028'), ('2029', '2028/2029'), ('2030', '2029/2030'), ('2031', '2030/2031'), ('2032', '2031/2032'), ('2033', '2032/2033'), ('2034', '2033/2034'), ('2035', '2034/2035'), ('2036', '2035/2036'), ('2037', '2036/2037'), ('2038', '2037/2038'), ('2039', '2038/2039'), ('2040', '2039/2040'), ('2041', '2040/2041'), ('2042', '2041/2042'), ('2043', '2042/2043'), ('2044', '2043/2044'), ('2045', '2044/2045'), ('2046', '2045/2046'), ('2047', '2046/2047'), ('2048', '2047/2048')])
+    new = models.CharField(max_length=30, choices= code, blank=True, null=True, default='2019',)
+    
+    def __str__(self):
+         return self.new
+     
+    class Meta:
+        db_table = "school_session"
+        verbose_name = "session"
+        verbose_name_plural = "sessions"
+
 
 class RESULT_GRADE(models.Model):
    identifier = models.IntegerField(null=True, blank=True, default='0')
@@ -51,7 +63,7 @@ class RESULT_GRADE(models.Model):
      
 class BTUTOR(models.Model):
     accounts = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='loggon-account:move account here', related_name='btutor')
-    teacher_name = models.CharField(max_length=30, blank=True, null=True, help_text='Subject Teacher')
+    teacher_name = models.CharField(max_length=30, blank=True, null=True, help_text='Subject Teacher')###
     subject = models.ForeignKey(ASUBJECTS, on_delete=models.SET_NULL, null=True, blank=True, help_text='Select subject')
     class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
     Class = models.CharField(max_length=30, choices=class_status, blank=True, null=True, help_text='Select subject class')
@@ -63,16 +75,19 @@ class BTUTOR(models.Model):
     males = models.IntegerField(null=True, blank=True, default='0', help_text='Enter number of male in class')
     females = models.IntegerField(null=True, blank=True, default='0', help_text='Enter number of female in class')
     cader = models.CharField(max_length=1, blank=True, null=True, help_text='Senior/Junior')
-    session = models.CharField(max_length=5, blank=True, null=True, help_text='Must be 4 didits {2016}')
+    session = models.CharField(max_length=5, blank=True, null=True, help_text='Must be 4 didits {2016}')###
     teacher_in = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='my_account', help_text= 'Class Teachers')
     class_teacher_id = models.CharField(max_length=200, blank=True, null=True, help_text='Class teacher id')
     class Meta:
           ordering = ('id',) # helps in alphabetical listing. Sould be a tuple
-    #def __str__(self):
-         #return self.model_in+" : "+self.user#+" : "+self.subject_class+" : "+self.subject_term
+    
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.accounts.username}:{self.Class}:{self.subject}:{self.term}'
+    
+    def save(self, *args, **kwargs):
+        self.session = SESSION.objects.get(pk=1).new
+        super(BTUTOR, self).save(*args, **kwargs)
     
 class CNAME(models.Model):
     student_name = models.CharField(max_length=30, blank=True, null=True)
@@ -86,7 +101,7 @@ class CNAME(models.Model):
           ordering = ('student_name',) # helps in alphabetical listing. Sould be a tuple
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id}:{self.student_name}'
+        return f'{self.student_name}'
     def save(self):
         if not self.id:
             self.created = datetime.date.today()
@@ -154,7 +169,7 @@ class ANNUAL(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this student."""
         return reverse('annualmodel-detail', args=[str(self.id)])
-   
+
 
 class Edit_User(models.Model):
    def validate_image(fieldfile_obj):
@@ -163,22 +178,24 @@ class Edit_User(models.Model):
         if filesize > megabyte_limit*459*571:
             raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
    user = models.OneToOneField(User, on_delete=models.CASCADE,  blank=True, null=True, related_name='profile')
-   last_name = models.CharField(max_length=20, blank=True)
-   first_name = models.CharField(max_length=20, blank=True)
+   status = (('Mr.', 'Mr'), ('Mrs.', 'Mrs'), ('Sir.', 'Senior officer'), ('Ma.', 'Madam'), ('Mall.', 'Mallam'), ('Ust.', 'Ustadh'), ('Alh.', 'Alhaj'), ('Dr.', 'Doctor'), ('Engr.', 'Engineer'))
+   title = models.CharField(max_length=15, choices=status, null=True, help_text='Select title to address you.', default= 'Mr.')
+   last_name = models.CharField(max_length=20, null=True, help_text='Surname')
+   first_name = models.CharField(max_length=20, null=True, help_text='Other names')
    photo = models.ImageField(upload_to='static/result/', validators=[validate_image], null=True, blank=True)
-   bio = models.TextField(blank=True)
-   phone = models.CharField(max_length=20, blank=True)
-   city = models.CharField(max_length=15, blank=True)
-   country = models.CharField(max_length=10, blank=True)
-   organization = models.CharField(max_length=10, blank=True)
-   location = models.CharField(max_length=30, blank=True)
+   bio = models.TextField(blank=True, help_text='Your summarised biography',  default= 'I am a professional science teacher, currently working with the aboved named School')
+   phone = models.CharField(max_length=20, blank=True, help_text='Hotline')
+   city = models.CharField(max_length=15, blank=True, help_text='Your town in the state of origin', default= 'Ibadan')
+   country = models.CharField(max_length=10, blank=True, default= 'Nigeria', help_text='Nationality')
+   organization = models.CharField(max_length=10, blank=True, help_text='Oganization affliated with', default= 'IIRO')
+   location = models.CharField(max_length=30, blank=True, help_text='Current location')
    birth_date = models.DateField(null=True, blank=True, help_text='Date format: MM/DD/YYYY')
    section_status = (('Sc', 'Sciences'), ('SSc', 'Social Sciences'), ('Art', 'Arts and Humanities'))
    department = models.CharField(max_length=30, choices=section_status, blank=True, null=True)
    account_id = models.CharField(max_length=30, default = 0, blank=True, null=True)
    email_confirmed = models.BooleanField(default=False, help_text='True/False')
    class_status = (('JSS 1', 'jss_one'), ('JSS 2', 'jss_two'), ('JSS 3', 'jss_three'), ('SS 1', 'sss_one'), ('SS 2', 'sss_two'), ('SS 3', 'sss_three'))
-   class_in = models.CharField(max_length=15, choices=class_status, blank=True, null=True, help_text='Select class in charge')
+   class_in = models.CharField(max_length=15, choices=class_status, blank=True, null=True, help_text='Select class in charge', default= None)
        
    def __str__(self):
         """String for representing the Model object."""

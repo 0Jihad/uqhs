@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New</title>
+</head>
+<body>
+    {% block content %}
+    <form method="post">
+    {% csrf_token %}
+    <em class="capt">EDIT STUDENT NAME</em>
+    {{ form|crispy }}
+    	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Done</span></button>
+  </form>
+   {% endblock %} 
+</body>
+</html>
+

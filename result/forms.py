@@ -52,7 +52,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Edit_User
-        fields = ('first_name', 'last_name', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department', 'photo',)
+        fields = ('title', 'first_name', 'last_name', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department', 'photo',)
         exclude = ['user']
         
 class SignUpForm(UserCreationForm):
