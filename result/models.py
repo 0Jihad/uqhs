@@ -85,9 +85,7 @@ class BTUTOR(models.Model):
         """String for representing the Model object."""
         return f'{self.accounts.username}:{self.Class}:{self.subject}:{self.term}'
     
-    def save(self, *args, **kwargs):
-        self.session = SESSION.objects.get(pk=1).new
-        super(BTUTOR, self).save(*args, **kwargs)
+    
     
 class CNAME(models.Model):
     student_name = models.CharField(max_length=30, blank=True, null=True)
@@ -180,9 +178,10 @@ class Edit_User(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE,  blank=True, null=True, related_name='profile')
    status = (('Mr.', 'Mr'), ('Mrs.', 'Mrs'), ('Sir.', 'Senior officer'), ('Ma.', 'Madam'), ('Mall.', 'Mallam'), ('Ust.', 'Ustadh'), ('Alh.', 'Alhaj'), ('Dr.', 'Doctor'), ('Engr.', 'Engineer'))
    title = models.CharField(max_length=15, choices=status, null=True, help_text='Select title to address you.', default= 'Mr.')
-   last_name = models.CharField(max_length=20, null=True, help_text='Surname')
-   first_name = models.CharField(max_length=20, null=True, help_text='Other names')
-   photo = models.ImageField(upload_to='static/result/', validators=[validate_image], null=True, blank=True)
+   last_name = models.CharField(max_length=20, null=True, help_text='(Surname)-Required')
+   first_name = models.CharField(max_length=20, null=True, help_text='(Other names)-Required')
+   photo = models.ImageField(upload_to='static/result/images/', validators=[validate_image], null=True)
+   image = models.CharField(max_length=30, null=True, blank=True,)
    bio = models.TextField(blank=True, help_text='Your summarised biography',  default= 'I am a professional science teacher, currently working with the aboved named School')
    phone = models.CharField(max_length=20, blank=True, help_text='Hotline')
    city = models.CharField(max_length=15, blank=True, help_text='Your town in the state of origin', default= 'Ibadan')
@@ -204,7 +203,17 @@ class Edit_User(models.Model):
           ordering = ('account_id',)
    def get_absolute_url(self):
         return reverse('pro_detail', args=[str(self.id)])
+   
+   def save(self, *args, **kwargs):
+        self.image = 'result/images/'+str(self.user.username)+'.jpg'
+        self.photo.name = self.user.username + '.jpg'
+        self.last_name = self.user.last_name
+        self.first_name = self.user.first_name
+        if self.user.email != None and self.user.last_name != None or self.user.first_name != None:
+            self.email_confirmed = True
+        super(Edit_User, self).save(*args, **kwargs)
 
+    
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:

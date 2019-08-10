@@ -4,11 +4,6 @@ Created on Tue Mar  5 05:10:08 2019
 
 @author: AdeolaOlalekan
 """
-
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.template.loader import render_to_string
 from .forms import SignUpForm
 from django.shortcuts import render, redirect
 from .tokens import account_activation_token
@@ -18,10 +13,7 @@ from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.urls import reverse_lazy
-#from django.core.mail import EmailMessage
-from django.http import HttpResponse#, HttpResponseRedirect
-#from django.core.mail import send_mail
-#send_mail('noreply', 'body of the message', 'adeolaolalekan1431@yahoo.com', ['adeolaolalekan01831@gmail.com', 'adeolaolalekan1831@outlook.com'])
+from django.http import HttpResponse
 class Staff_SignUp(generic.CreateView):
     form_class = SignUpForm
     template_name = 'registration/signup.html'

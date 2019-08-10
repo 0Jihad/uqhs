@@ -37,8 +37,8 @@ class model_names(admin.ModelAdmin):
     list_display = ('student_name', 'id', 'created', 'updated')
 @admin.register(Edit_User)
 class model_profile(admin.ModelAdmin):
-    list_display = ('title', 'user', 'account_id', 'photo', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department')
-    fields = ['title', 'user', 'account_id', 'photo', 'bio', 'phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department', 'email_confirmed']
+    list_display = ('title', 'user', 'account_id', 'photo','phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department')
+    fields = [('title', 'user', 'account_id'), ('photo', 'image'), 'bio', ('phone', 'city', 'country', 'organization', 'location', 'birth_date', 'department'), 'email_confirmed']
 admin.site.register(SESSION)
 admin.site.register(ASUBJECTS)
 admin.site.register(QSUBJECT, subject_main)#second_term

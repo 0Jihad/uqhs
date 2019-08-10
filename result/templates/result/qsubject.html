@@ -9,7 +9,7 @@
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-            <td><a href="{% url 'Cname_edit' pk=scr.student_name.id %}">{{ scr.student_name }}</a></td><td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="color:sienna;">{{ scr.id }}</a></td><td style="color:sienna;">{{ scr.test }}</a></td><td><em style="color:sienna;">{{ scr.agn }}</td><td><em style="color:sienna;">{{ scr.atd }}</a></td><td><em style="color:sienna;">{{ scr.total }}</a></td><td><em style="color:sienna;">{{ scr.exam }}</a></td><td><em style="color:sienna;">{{ scr.agr }}</a></td><td><em style="color:green;">{{ scr.grade }}</a></td><td><em style="color:red;">{{ scr.posi }}</a></td>
+            <td><a href="{% url 'search_lists' pk=scr.id %}">{{ scr.student_name }}</a></td><td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="color:sienna;">{{ scr.id }}</a></td><td style="color:sienna;">{{ scr.test }}</a></td><td><em style="color:sienna;">{{ scr.agn }}</td><td><em style="color:sienna;">{{ scr.atd }}</a></td><td><em style="color:sienna;">{{ scr.total }}</a></td><td><em style="color:sienna;">{{ scr.exam }}</a></td><td><em style="color:sienna;">{{ scr.agr }}</a></td><td><em style="color:green;">{{ scr.grade }}</a></td><td><em style="color:red;">{{ scr.posi }}</a></td>
           </tr>
           {% endfor %}
           {% else %}

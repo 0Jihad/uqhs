@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 {% block content %}
-
+	<title>{% block title %} admin {% endblock %}</title>
     <form class="content">
         <div class="section-inner clearfix">
 
@@ -10,9 +10,9 @@
 	
         <em style="width:89%;margin-left:59px; font-size:12">Account Details:</em>
         {% if user.is_authenticated %}
-        {% if request.user.is_superuser == True  and user.is_staff == True %}<em class="grd_count"><div style="font-family:Helvetica; color:red; font-size: 12px;"> Logged-in as Admin</div></em>{% endif %}
-        {% if request.user.is_superuser == False and user.is_staff == True %}<em class="grd_count"><div style="font-family:Helvetica; color:red; font-size: 12px;"> Logged-in as Staff</div></em>{% endif %}
-        {% if request.user.is_staff == False and user.is_staff == False %}<em class="grd_count"><div style="font-family:Helvetica; color:red; font-size: 12px;"> Logged-in as Non-Staff</div><em></em></em>{% endif %}
+        {% if request.user.is_superuser == True  and user.is_staff == True %}<em class="grd_count"><div style="font-family:Helvetica; color:red; font-size: 12px;">You are logged-in as Admin</div></em>{% endif %}
+        {% if request.user.is_superuser == False and user.is_staff == True %}<em class="grd_count"><div style="font-family:Helvetica; color:red; font-size: 12px;"> You are logged-in as Staff</div></em>{% endif %}
+        {% if request.user.is_staff == False and user.is_staff == False %}<em class="grd_count"><div style="font-family:Helvetica; color:red; font-size: 12px;"> You are logged-in as Non-Staff</div><em></em></em>{% endif %}
         {% endif %}
         <ul style="width:89%;margin-left:59px; font-size:12">
             <a href="{% url 'edith' request.user.id %}" style="font-family:Helvetica; color:purple; font-size: 12px;">Edit Profile</span></a>
@@ -24,7 +24,7 @@
 	    <li>You have visited this page <em style="font-family:Helvetica; color:red; font-size: 12px;">{{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}</em>.</li>
 	    
         </ul>
-        <em><a href="{% url 'home' %}"><em class="capt"><em style="font-family:Helvetica; font-size:9px;">Continue</em></a></em><em>--OR--</em><a href="{% url 'log_out' %}" style="margin-left:76%;"><em class="capt"><em style="font-family:Helvetica; font-size:9px;">Logout</em></em></a>
+        <em><a href="{% url 'home' %}"><em class="capt"><em style="font-family:Helvetica; font-size:19px; margin-left:36%;"><span class="glyphicon glyphicon-chevron-right"></span></em></a><a href="{% url 'log_out' %}"><em class="capt"><em style="font-family:Helvetica; font-size:19px;"><span class="glyphicon glyphicon-chevron-left"></span></em></a></em></em>
         </div>
     </form>
 

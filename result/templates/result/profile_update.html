@@ -7,7 +7,7 @@
     <form method="post" novalidate  enctype="multipart/form-data">
 	<div class="capt" style="color:white;">Staff Details</div>
     {% csrf_token %}
-    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Personal Info:</em>
+    <div class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Personal Info:</div>
     <div class="row">
       <div class="col-xs-3">
         {{ form.title|as_crispy_field }}
@@ -23,7 +23,7 @@
       </div>
     </div>   
     {{ form.bio|as_crispy_field }}
-    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Contact Info:</em>
+    <div class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Contact Info:</div>
     <div class="row">
       <div class="col-xs-3">
         {{ form.phone|as_crispy_field }}
@@ -38,7 +38,7 @@
         {{ form.location|as_crispy_field }}
       </div>
     </div>
-    <em class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Profile Info:</em>
+    <div class="capt" style="font-family:Helvetica; color:white; font-size: 10px;">Profile Info:</div>
     <div class="row">
       <div class="col-xs-3">
         {{ form.organization|as_crispy_field }}
@@ -55,5 +55,5 @@
     </div> 
     
   </form>
-	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}

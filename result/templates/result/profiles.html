@@ -8,47 +8,47 @@
     </head>
     {% block content %}
     <form>
-      <div class="cap_form"><a href="{% url 'home' %}" style="color:white;">Username: </a><pre>{{ user.username }}</pre></div>
-        <strong><a href="{% url 'user_update' qry.id %}" style=" color:red;">Edit Profile:</a></strong><a href="{% url 'upload_photo' pk=qry.id %}"><img class="rounded-circle" src="{% static "result/Jagun.jpg"%}" alt="My_pics" style="max-width: 3em; margin-left: 500px;"/></a></em></em>
+      <div class="cap_form"><a href="{% url 'home' %}" style="color:white;">Username </a><pre>{{ user.username }}</pre></div>
+        <div class="capt" style="width:23%;"><a href="{% url 'user_update' qry.id %}" style="color:white; font-size:10px;"><span class="glyphicon glyphicon-edit">Profile</span></a></div><a href="{% url 'upload_photo' pk=pk %}"><img class="rounded-circle" src="{% static request.user.profile.image %}" alt="My_pics" style="max-width: 3em; margin-left: 500px;"/></a></em></em>
         <div class="row">
 	    <div class="col-xs-4">
-                <em>Title:</em><pre> {{ qry.title }}</pre>
+                <em>Title:</em><pre style="line-height:5px;"> {{ qry.title }}</pre>
             </div>
             <div class="col-xs-4">
-                <em>Surname:</em><pre> {{ qry.last_name }}</pre>
+                <em>Surname:</em><pre style="line-height:5px;"> {{ qry.last_name }}</pre>
             </div>
             <div class="col-xs-4">
-                <em>Other Name:</em><pre> {{ qry.first_name }}</pre>
+                <em>Other Name:</em><pre style="line-height:5px;"> {{ qry.first_name }}</pre>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-4">
-                <em>Birth:</em></a><pre> {{ qry.birth_date }}</pre>
+                <em>Birth:</em><pre style="line-height:5px;"> {{ qry.birth_date }}</pre>
             </div>
             <div class="col-xs-4">
-                <em>City:</strong></a><pre> {{ qry.city }}</pre>
+                <em>City:</em><pre style="line-height:5px;"> {{ qry.city }}</pre>
             </div>
             <div class="col-xs-4">
-                <em>Nationality:</strong></a><pre> {{ qry.country }}</pre>
+                <em>Nationality:</em><pre style="line-height:5px;"> {{ qry.country }}</pre>
             </div>
         </div>
 	<div class="row">
             <div class="col-xs-3">
-                <em>Department:</<pre></a><pre> {{ qry.department }}</pre>
+                <em>Department:</<em><pre style="line-height:5px;"> {{ qry.department }}</pre>
             </div>
             <div class="col-xs-3">
-                <em>Organization:</em></a><pre> {{ qry.organization }}</pre>
+                <em>Organization:</em><pre style="line-height:5px;"> {{ qry.organization }}</pre>
             </div>
             <div class="col-xs-3">
-                <em>Current Location:</em></a><pre> {{ qry.location }}</pre>
+                <em>Location:</em><pre style="line-height:5px;"> {{ qry.location }}</pre>
             </div>
 	    <div class="col-xs-3">
-                <em>Class in Charge:</em></a><pre> {{ qry.class_in }}</pre>
+                <em>Class in Charge:</em><pre style="line-height:5px;"> {{ qry.class_in }}</pre>
             </div>
 	</div>
-        <em>About You:</em></a><pre> {{ qry.bio }}</pre>
+        <em>About You:</em><p style="width:100%;"> {{ qry.bio }}</p>
             						
-	<em class="capt">{{ request.user.email|default:"Action required!" }}:</em> <a href="{% url 'password' %}"><strong style="color:purple;">reset password</strong></a> <div class="capt">Confermation Status: {{ qry.email_confirmed }}</div>
+	<div class="capt" style="width:25%;font-size:10px;">Status: <strong>{{ qry.email_confirmed }}</strong></div>
     </form> 
     {% endblock %}
 </html>

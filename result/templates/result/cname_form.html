@@ -10,7 +10,7 @@
     {% block content %}
     <form method="post">
     {% csrf_token %}
-    <em class="capt">EDIT STUDENT NAME</em>
+    <div class="capt">EDIT STUDENT NAME</div>
     {{ form|crispy }}
     	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Done</span></button>
   </form>
