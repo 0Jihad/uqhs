@@ -22,6 +22,10 @@ def check(inp):
 
 @login_required
 def upload_new_subject_scores(request, pk):
+    import time
+    from datetime import timedelta
+    from django.contrib import messages
+    start_time = time.time()
     tutor = get_object_or_404(BTUTOR, pk=pk) 
     if request.method == "POST":
         my_file = request.FILES['files'] # get the uploaded file
@@ -86,6 +90,10 @@ def upload_new_subject_scores(request, pk):
                 new_name.save()
             per_student = QSUBJECT(student_name=CNAME.objects.get(student_name__exact=named_scores[2][i]), test=agr[0][i][0], agn=agr[0][i][1], atd=agr[0][i][2], exam=agr[0][i][3], total=agr[0][i][4], agr=agr[0][i][5], posi=posi[i], grade=grade[i], tutor = tutor, cader = x)
             per_student.save() 
+        elapsed_time_secs = time.time() - start_time
+        msg = "Execution took: %s secs (Wall clock time)" % timedelta(seconds=round(elapsed_time_secs))
+        print(msg)
+        messages.success(request, msg)
         
     else:#
         return render(request, 'result/loader.html', {'pk':pk, 'qry':tutor})

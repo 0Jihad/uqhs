@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% block content %}
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+	<head>
+		 <title> {% block title %} {% endblock %} </title>
+	</head>
+	{% block content %}
+	<body>
+
   <div>
         <table>
 		<div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Class_Teacher:</a> {{last_name}} {{first_name}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ class_in }} </div>

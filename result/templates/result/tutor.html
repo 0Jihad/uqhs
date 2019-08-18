@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-
-<html>
-    {% block content %}
-	<div>
+<html lang="en">
     <head>
-	{% block title %} home {% endblock %}
+        <meta charset="UTF-8">
+        <title>{% block title %} Tutor's account: {{ request.user.username }} {% endblock %}</title>
     </head>
+    {% block content %}
     <body>
-            <table>
-		<div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="color:blue;">Subjects:</a> Records</div>
+        <table>
+    		<div class="capt" style="font-size:13px;text-align: center;"><a href="{% url 'created_subject_list' pk=0 %}" style="color:blue;">This subjects:</a> appeared more than once, delete or edit one now!</div>
                 <thead>
                     <tr><th>Teacher</th><th>Subject</th><th>Names</th><th>Review</th><th>Annual</th><th>Scores</th><th>Delete</th></tr>      
                 </thead>
@@ -22,8 +21,7 @@
                         <pre style="width:70%;text-align: center;">There are no records in your account yet.</pre>
                     {% endif %}       
                 </tbody>
-            </table>
+        </table>
     </body>
-</div>
     {% endblock %}
 </html>

@@ -320,7 +320,7 @@ p{ margin: 0px;
 
 .gr_as{   
         
-        background-color: red;
+        background-color: white;
         margin: 0px;
         width: 90px;
         height: 90%;
@@ -590,13 +590,13 @@ p{ margin: 0px;
     margin-right: 0px;
   }
   
-.capt { margin-left: -3px;
+.capt { margin-left: -13px;
          width: 40%;
          font-size: 8px;
   }
   
   
-  form { margin-left: 40px;
+  form { margin-left: -13px;
          width: 100%;
   }
   .sidenav {

@@ -15,14 +15,14 @@ urlpatterns = [
             url(r'^extract_name/subjects/(?P<pk>\d+)/', exports.export_name_text, name='extract_name'),
             url(r'^export_all/subjects/(?P<pk>\d+)/', exports.export_third_scores, name='export_all'),
             url(r'^export/scores/subjects/(?P<pk>\d+)/', exports.export_subject_scores, name='export_users_scores'),
-             #####EXPLORER BSHEET############
+             #####EXPLORER BSHEET############ 
             	####UTILS#####AND SIGNUP
             url('signup/', sign_up.Staff_SignUp.as_view(), name='signup'),
             url('tutor_summary/utils/(?P<pk>\d+)/', utils.tutor_model_summary, name='tutor_summary'),
             url('tutor_summary/(?P<pk>\d+)/', utils.tutor_model_summary, name='tutor_summary'),
-         			 #####CREATES##### annual_view
+         			 #####VIEWS##### annual_view
             url(r'searchs', views.searchs, name='searchs'),
-            url(r'search_lists/(?P<pk>\d+)/', views.search_lists, name='search_lists'),
+            url(r'uniqueness/(?P<pk>\d+)/', views.uniqueness, name='uniqueness'),
             url(r'all_search_lists/(?P<pk>\d+)/', views.all_search_lists, name='all_search_lists'),
             url('subject_home/(?P<pk_code>[\w\-]+)/', views.subject_home, name='subject_home'),
             url('student_in_none/', views.student_in_None, name='student_in_none'),  
@@ -64,7 +64,7 @@ urlpatterns = [
             url(r'^create_update_annual_records/ explorer/ (?P<pk>\d+)/$', explorer.explor_annual, name='compute_annual'),
             url('class_record_view/ explorer/ ', explorer.broad_sheet, name='class_record_view'),
             url('pre_broad_sheet/ explorer/ ', explorer.pre_broad_sheet, name='pre_broad_sheet'), 
-              #####POSTS%######
+              #####POSTS%###### 
             url('my_post/post_list', posts.my_post, name='my_post_list'),
             url('post/post_list', posts.post_list, name='post_list'),
             url('post/(?P<pk>\d+)/', posts.post_detail, name='post_detail'),
@@ -73,7 +73,7 @@ urlpatterns = [
             url('drafts/', posts.post_draft_list, name='post_draft_list'),#post approvals student_in_none new_student_name
             #url('post_remove/(?P<pk>\d+)/', posts.delete_post, name='post_remove'),
             url('posts_publishing/(?P<pk>\d+)/publish/', posts.posts_publishing, name='posts_publishing'),
-              ####DELETE%######
+              ####DELETE%###### 
             url('delete_warning/ deletions/ (?P<pk>\d+)/', deletions.confirm_deletion, name='delete_warning'),
             url(r'^delete_a_student/ deletions/ (?P<pk>\d+)/', deletions.confirmed_delete, name='delete'),
             url('yes_no/ deletions/ (?P<pk>\d+)/', deletions.yes_no, name='yes_no'),
@@ -84,8 +84,7 @@ urlpatterns = [
             url('post_remove/ deletions/ (?P<pk>\d+)/', deletions.delete_post, name='post_remove'),
             			 #####UPDATES%######
             url('edit_accounts/ updates/ (?P<pk>\d+)/', updates.Users_update.as_view(), name='edit_accounts'),
-            url(r'^student_name_edit/ updates/ (?P<pk>\d+)/', updates.student_name_edit, name='student_name_edit'), 
-            url('tutor/ updates/ (?P<pk>\d+)/', updates.Teacher_model_view.as_view(), name='tutor_update'),
+            url('tutor/updates/(?P<pk>\d+)/', updates.Teacher_model_view.as_view(), name='tutor_update'),
             url('subject_updates_model/ updates/ (?P<pk>\d+)/', updates.Subject_model_view.as_view(), name='subject_updates_model'),
             url('ques_subject_updates/ updates/ (?P<pk>\d+)/', updates.manage_subject_updates, name='ques_subject_updates'),
             url('many_subject_updates/ updates/ (?P<pk>\d+)/', updates.many_student_updates, name='many_subject_updates'),

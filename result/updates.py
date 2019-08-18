@@ -6,53 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView
 from django.forms import modelformset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin 
-from .forms import ProfileForm, student_names
+#from .forms import student_names
 from result.utils import do_grades, do_positions, cader
-
-def edit_user(request, pk):##mark for remove
-    user = User.objects.get(pk=pk)
-    user.is_staff = True
-    if request.method == "POST":
-        profile = Edit_User.objects.get(user = user)
-        form = ProfileForm(request.POST, request.FILES, instance=user.profile)
-        if form.is_valid():
-            user.last_name = form.cleaned_data['last_name']
-            user.first_name = form.cleaned_data['first_name']
-            user.save()
-            profile.title = form.cleaned_data['title']
-            profile.last_name = form.cleaned_data['last_name']
-            profile.first_name = form.cleaned_data['first_name']
-            profile.bio = form.cleaned_data['bio']
-            profile.phone = form.cleaned_data['phone']
-            profile.city = form.cleaned_data['city']
-            profile.country = form.cleaned_data['country']
-            profile.organization = form.cleaned_data['organization']
-            profile.location = form.cleaned_data['location']
-            profile.birth_date = form.cleaned_data['birth_date']
-            profile.department = form.cleaned_data['department']
-            if 'photo' in request.FILES:
-                profile.photo = request.FILES['photo']
-            profile.save()
-            if request.user.is_authenticated:
-                return redirect('home')
-            return redirect('logins')                
-    else:
-        form = ProfileForm(instance=user.profile)
-    return render(request, 'result/profile_update.html', {'form': form}) 
-
-@login_required   
-def student_name_edit(request, pk):#editing student_name /every tutor home detail views<a href="{% url 'edit_annual' pk=scr.id %}">
-    qrn = get_object_or_404(QSUBJECT, pk=pk)
-    if request.method == 'POST':
-        result = student_names(request.POST)
-        if result.is_valid():
-            qry = get_object_or_404(CNAME, student_name=qrn.student_name)
-            qry.student_name = result.cleaned_data['student_name']
-            qry.save()
-            return redirect('home')
-    else:
-        result = student_names()
-    return render(request, 'result/edit_student_name.html', {'result': result, 'qrn':qrn})
 
 class Teacher_model_view(UpdateView):#New teacher form for every new term, class, subjects
     model = BTUTOR
@@ -92,8 +47,8 @@ def profiles(request, pk):#show single candidate profile
 #@login_required
 class ProfileUpdate(UpdateView):
     model = Edit_User
-    fields = ['first_name', 'last_name', 'bio', 'phone', 'city', 'department', 'location', 'birth_date', 'country', 'organization', 'class_in', 'photo']
-    success_url = reverse_lazy('home')
+    fields = ['title', 'first_name', 'last_name', 'bio', 'phone', 'city', 'department', 'location', 'birth_date', 'country', 'organization', 'class_in', 'photo']
+    
 
 @login_required
 def profile_picture(request, pk):
@@ -103,8 +58,10 @@ def profile_picture(request, pk):
         if profile.photo.name:#if there is file name entry, delete it
             import os
             from django.conf import settings
-                       #we delete the previous image
-            os.remove(os.path.join(settings.MEDIA_ROOT,str(profile.photo.name)))
+            if os.path.isfile(os.path.join(settings.MEDIA_ROOT, str(profile.photo.name))):
+                os.remove(os.path.join(settings.MEDIA_ROOT, str(profile.photo.name)))
+            else:
+                print(f'Error: {os.path.join(settings.MEDIA_ROOT, str(profile.photo.name))} not a valid filename')                
         profile.photo = request.FILES['myfile']
         profile.save()
         return redirect('pro_detail', pk=pk)

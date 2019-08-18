@@ -2,15 +2,8 @@
 {% load static %}
 {% block content %}
   <form method="post" enctype="multipart/form-data">
-    <div class="capt" style="width:30%;font-family:Helvetica; color:white; font-size: 10px;">Profile Picture</div>
     {% csrf_token %}
-    <div class="row">
-      <div class="col-xs-6">
-        <input type="file" name="myfile"><em style="font-family:Helvetica; color:white; font-size: 10px;">Select file location and click upload</em>
-      </div>
-      <div class="col-xs-6">
-        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-upload">Upload</span></button>
-      </div>
-     </div>
+    <input type="file" name="myfile">
+    <button type="submit">Upload</button>
   </form>
 {% endblock %}

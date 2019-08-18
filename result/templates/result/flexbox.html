@@ -3,10 +3,11 @@
 {% block content %}
   <html>
     <head>
-        <title>FlexBox</title>
+        <title>{% block title %}Welcome Page icon {% endblock %}</title>
+        <link rel = 'icon' "href=https://www.geeksforgeeks.org/wp-content/uploads/gfg_200X200.png" type='image/x-icon'>
     </head>
     <form class="fcs">
-          <em class="capt">User's Guides</em>
+          <div class="capt">User's Guides</div>
           <p class="first">Step 1: Use Notepad or any other text editor to prepare a file containing student names, test scores, attendance scores, asignment scores and exam scores e.g (TUNDE OLUMO, 20, 10, 10, 60) in a new line for each students. Then save it with a file name e.g my_file.txt. When there are two gender classes, just separate the class A from class B by leaving an empty line. Click <a href="{% url 'samples_disp' %}">here </a>for sample display, then <a href="{% url 'samples_down' %}" download>download</a> sample and reset it in line by line as in the sample displayed.</p>
           <p class="second">Step 2: Login <span class="glyphicon glyphicon-log-in"></span> or Sing-up (new users) <span class="glyphicon glyphicon-user"></span> into your account. Click on the START butten in the left navigation bar. Complete the form approprately (class, term and subject from the dropdown lists; If your subject not listed, create it and refresh the page to reflect newly created subject.) and the subject teacher name, submit the form. 
           <p class="third">Step 3: Then, choose your prepared txt file. Provide correct file name here for attachement. Upload it by simply click <a href="" class="#">upload!</a>. You will be redirected to your <a href="{% url 'home' %}" >DASHBOARD</a></p>

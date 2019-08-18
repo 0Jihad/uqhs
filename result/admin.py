@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ASUBJECTS, BTUTOR, CNAME, QSUBJECT, ANNUAL, TERM, Edit_User, RESULT_GRADE, OVERALL_ANNUAL, SESSION
+from .models import ASUBJECTS, BTUTOR, CNAME, QSUBJECT, ANNUAL, Edit_User, RESULT_GRADE, OVERALL_ANNUAL, SESSION
 
 #admin.site.register(studen_scores)#
 ########################################################
@@ -13,15 +13,12 @@ class model_teacher(admin.ModelAdmin):
     list_display = ('model_in','accounts', 'cader', 'teacher_name', 'subject', 'Class', 'term', 'model_summary', 'session')
     fields = ['cader', 'model_in','accounts', 'teacher_name', 'subject', 'Class', 'term', 'graded', 'model_summary', 'session']
 
-@admin.register(TERM)
-class model_term(admin.ModelAdmin):
-    list_display = ('student_name', 'class_in', 'subject', 'first', 'second', 'third')
-    fields = ['student_name', 'class_in', 'subject', 'first', 'second', 'third']
+
 
 @admin.register(OVERALL_ANNUAL)
 class model_qsubject(admin.ModelAdmin):
-    list_display = ('student_name','class_in', 'eng', 'mat', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'agr', 'his', 'Agr', 'Avr', 'grade', 'posi')
-    fields = [('student_name','class_in'), ('eng', 'mat', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'agr', 'his'), ('Agr', 'Avr', 'grade', 'posi')]
+    list_display = ('student_name','class_in', 'eng', 'mat', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'agr', 'his', 'AGR', 'AVR', 'GRD', 'POS')
+    fields = [('student_name','class_in'), ('eng', 'mat', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'agr', 'his'), ('AGR', 'AVR', 'GRD', 'POS')]
 
 @admin.register(RESULT_GRADE)
 class model_Graded(admin.ModelAdmin):
@@ -30,8 +27,8 @@ class model_Graded(admin.ModelAdmin):
 
 @admin.register(ANNUAL)
 class model_annual(admin.ModelAdmin):
-    list_display = ('id', 'student_name', 'first', 'second', 'third', 'anual', 'agr', 'grade', 'anu_posi', 'subject_by', 'subject')
-    fields = ['student_name', ('first', 'second', 'third', 'anual'), ('agr', 'grade', 'anu_posi'), ('subject_by', 'subject')]
+    list_display = ('id', 'student_name', 'first', 'second', 'third', 'anual', 'Agr', 'Grade', 'Posi', 'subject_by', 'subject')
+    fields = ['student_name', ('first', 'second', 'third', 'summary', 'anual'), ('Agr', 'Grade', 'Posi'), ('subject_by', 'subject')]
 @admin.register(CNAME)
 class model_names(admin.ModelAdmin):
     list_display = ('student_name', 'id', 'created', 'updated')

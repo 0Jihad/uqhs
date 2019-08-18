@@ -14,13 +14,13 @@
           </tr>
           {% endfor %}
           {% else %}
-              <p>All records margged to first term of respective students.</p>
+              <pre style="width:70%;" >There are no records.</pre>
           {% endif %}
         </table>
         
     </div> 
     {% if all_page.has_other_pages %}
-      <ul class="pagination">
+      <ul class="pagination" style="width:80%;margin-left:-50px;">
         {% if all_page.has_previous %}
           <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
         {% else %}

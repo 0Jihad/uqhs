@@ -1,17 +1,21 @@
+<!doctype html>
 {% extends "base_generic.html" %}
-
-{% block content %}
-
-<form>
-<div class="cap_form">Action:<pre style="line-height: 1px;">Delete!</pre></div>
-{% if qery %}
-{% for scr in qery %} 
-
-<li class="cap_form" style="color: white; font-size: 10px;">{{ scr.student_name }}</li>
-
-{% endfor %}
-{% endif %}
-Are you sure you want to delete the listed names from this subject completely ? <a href="{% url 'deletes' pk=pk %}" style="font-family:Helvetica; color:red; font-size: 12px;">Yes</a>/<a href="{% url 'home' %}" style="font-family:Helvetica; color:purple; font-size: 12px;">No</a>
-</form>
-{% endblock %}
-
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %} deleting {{ qery.count }} students {% endblock %}</title>
+	</head>
+	{% block content %}
+	<body>
+		<table>
+			 <div class="capt">Action:<pre style="line-height: 1px;">Delete!</pre></div>
+			 {% if qery %}
+			 {% for scr in qery %} 
+			 	<tr><td>{{ scr.id }}</td><td class="capt"  style="width: 40%; font-size: 10px;"> {{ scr.student_name }}</td><td>{{ scr.tutor.Class }}</td><td>{{ scr.tutor.subject.name }}</td></tr>
+			 {% endfor %}
+			 {% endif %}
+		</table>
+        Are you sure you want to delete all the {{ qery.count }} listed names from this subject completely ? <a href="{% url 'deletes' pk=pk %}" style="font-family:Helvetica; color:red; font-size: 12px;">Yes</a>/<a href="{% url 'home' %}" style="font-family:Helvetica; color:purple; font-size: 12px;">No</a>
+	</body>
+	{% endblock %}
+</html>

@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New</title>
+    <title>{% block title %} Update Subject Details {% endblock %} </title>
 </head>
 <body>
     {% block content %}
@@ -48,7 +48,7 @@
       </div>
     </div>
     	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Done</span></button>
-	Create new subject <a href="{% url 'create_subject' %}" target = _blank> <em style="font-family:Helvetica; color:purple; font-size: 10px;">here.</em></a>
+	Create new subject <a href="{% url 'create_subject' %}"> <em style="font-family:Helvetica; color:purple; font-size: 10px;">here.</em></a>
   </form>
    {% endblock %} 
 </body>

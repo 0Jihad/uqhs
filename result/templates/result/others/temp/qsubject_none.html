@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% block content %}
+<div class="capt"><a href="" style="color:blue;"> Subject:</a> {{qry.subject}} <a href=""style="color:blue;"> Class: </a> {{ qry.Class }} <a href=""style="color:blue;"> Term: </a> {{ qry.term }} </div>
+
+  <div>
+        <table>
+          <tr>
+            <tr><th>STUDENT NAME ({{ count_grade }})</th>{% if user.is_staff == True %}<th>No.</th>{% endif %}<th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Del</th></tr> 
+          </tr>
+          {% if all_page %}
+          {% for scr in all_page %} 
+          <tr>
+            <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="color:red;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="color:sienna;">{{ scr.id }}</a></td>{% endif %}<td style="color:sienna;">{{ scr.test }}</a></td><td><em style="color:sienna;">{{ scr.agn }}</td><td><em style="color:sienna;">{{ scr.atd }}</a></td><td><em style="color:sienna;">{{ scr.total }}</a></td><td><em style="color:sienna;">{{ scr.exam }}</a></td><td><em style="color:sienna;">{{ scr.agr }}</a></td><td><em style="color:green;">{{ scr.grade }}</a></td><td><em style="color:red;">{{ scr.posi }}</a></td><td><a href="{% url 'delete_warning' pk=scr.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+          </tr>
+          {% endfor %}
+          {% else %}
+              <p>There are no deleted records in the bin.</p>
+          {% endif %}
+        </table>
+       
+  </div>
+  {% if all_page.has_other_pages %}
+      <ul class="pagination">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+     <div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+{% endblock %}
+
+

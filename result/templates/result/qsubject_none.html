@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% block content %}
-<div class="capt"><a href="" style="color:blue;"> Subject:</a> {{qry.subject}} <a href=""style="color:blue;"> Class: </a> {{ qry.Class }} <a href=""style="color:blue;"> Term: </a> {{ qry.term }} </div>
-
-  <div>
-        <table>
+<html lang="en">
+	<head>
+		 <title> {% block title %} Recycle Bin {% endblock %} </title>
+	</head>
+	{% block content %}
+	<body>
+		<div class="capt"><a href="" style="color:blue;"> Subject:</a> {{qry.subject}} <a href=""style="color:blue;"> Class: </a> {{ qry.Class }} <a href=""style="color:blue;"> Term: </a> {{ qry.term }} </div>
+		<table>
           <tr>
-            <tr><th>STUDENT NAME ({{ count_grade }})</th>{% if user.is_staff == True %}<th>No.</th>{% endif %}<th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Del</th></tr> 
+            <tr><th>STUDENT NAME ({{ count_grade }})</th><th>No.</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Del</th></tr> 
           </tr>
           {% if all_page %}
           {% for scr in all_page %} 
@@ -15,11 +18,10 @@
           </tr>
           {% endfor %}
           {% else %}
-              <p>There are no deleted records in the bin.</p>
+              <pre style="width:70%;">There are no deleted records in the bin.</pre>
           {% endif %}
-        </table>
-       
-  </div>
+     </table>
+   </body>
   {% if all_page.has_other_pages %}
       <ul class="pagination">
         {% if all_page.has_previous %}

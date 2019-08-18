@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-
-<html>
-    {% block content %}
-    <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">Subjects:</a></strong> Records</div>
-    <div>
-            <table>
-                <thead>
-                    <tr><th>Move Account</th><th>Subject</th><th>Names</th><th>Review</th><th>Males</th><th>Females</th><th>Accounts</th>{% if request.user.is_superuser == True  and user.is_staff == True %}<th>Delete</th>{% endif %}</tr>      
-                </thead>
-                <tbody>
-                    {% if tutors %}
-                    {% for sub in tutors %}
-                        <tr><td style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;"><a href="{% url 'tutor_update' sub.id %}">{{ sub.teacher_name }}</a></td><td>{{ sub.subject }}</td><td><a href="{% url 'extract_name' pk=sub.id %}">{{ sub.Class }}</a></td><td><a href="{% url 'subject_view' pk=sub.id %}">{{ sub.term }}</a></td><td>{{ sub.males }}</td><td>{{ sub.females }}</td><td>{{ sub.user }}</td>{% if request.user.is_superuser == True  and user.is_staff == True %}<td><a href="{% url 'warning_delete' pk=sub.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>{% endif %}</tr>
-                    {% endfor %}
-                    {% else %}
-                        <p>There are no teacher account yet.</p>
-                    {% endif %}       
-                </tbody>
-            </table>
-    	</div>
- <div><a href="{% url 'all_teachers' %}" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>    
-
-    {% endblock %}
+<html lang="en">
+	<head>
+		<title> {% block title %}{{ request.user.username }}|Subject Transfer {% endblock %}</title>
+	</head>
+	<body>
+	{% block content %}
+       <table>
+				 <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">Subjects:</a></strong> Records</div>          <tr>
+            <tr><th>Move Account</th><th>Subject</th><th>Names</th><th>Review</th><th>Created</th><th>Updated</th><th>Accounts</th>{% if request.user.is_superuser == True  and user.is_staff == True %}<th>Delete</th>{% endif %}</tr>      
+          {% if tutors %}
+          {% for sub in tutors %}
+          <tr><td style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;"><a href="{% url 'tutor_update' sub.id %}">{{ sub.teacher_name }}</a></td><td>{{ sub.subject }}</td><td><a href="{% url 'extract_name' pk=sub.id %}">{{ sub.Class }}</a></td><td><a href="{% url 'subject_view' pk=sub.id %}">{{ sub.term }}</a></td><td>{{ sub.created }}</td><td>{{ sub.updated }}</td><td>{{ sub.accounts }}</td>{% if request.user.is_superuser == True  and user.is_staff == True %}<td><a href="{% url 'warning_delete' pk=sub.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>{% endif %}</tr>
+          {% endfor %}
+          {% else %}
+              <pre style="width:70%;">There are no records.</pre>
+          {% endif %}  
+       </table>
+       <div><a href="{% url 'search_tutors' %}" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+   </body> 
+	 {% endblock %}
 </html>
+
+ 
+

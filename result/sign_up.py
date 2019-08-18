@@ -5,12 +5,8 @@ Created on Tue Mar  5 05:10:08 2019
 @author: AdeolaOlalekan
 """
 from .forms import SignUpForm
-from django.shortcuts import render, redirect
-from .tokens import account_activation_token
-from django.contrib.auth import login
+from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.utils.encoding import force_text
-from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.urls import reverse_lazy
 from django.http import HttpResponse
@@ -49,34 +45,6 @@ class Staff_SignUp(generic.CreateView):
             form = SignUpForm()
         return render(request, 'registration/signup.html', {'form': form})
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        return redirect('new', pk=user.id)
-        #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-    else:
-        return HttpResponse('Activation link is invalid!')
-    
-def reset(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        return redirect('passwords')
-        #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-    else:
-        return HttpResponse('Activation link is invalid!')
     
 
 ###############################################################################

@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from django.db.models import Sum, Avg
 from datetime import datetime
 from wsgiref.util import FileWrapper
-from .models import QSUBJECT, ANNUAL, BTUTOR, CNAME, OVERALL_ANNUAL, TERM, SESSION
+from .models import QSUBJECT, ANNUAL, BTUTOR, CNAME, OVERALL_ANNUAL, SESSION
 
 module_dir = os.path.dirname(__file__)  # get current directory
 file_path = os.path.join(module_dir, 'test1.txt')
@@ -76,7 +76,7 @@ def extract_broad_sheet(request):
                 pass         
             for r in range(1, len(lst[i])):
                 if lst[i][r] != 0:
-                    ds += [TERM.objects.get(pk=lst[i][r]).avr]
+                    ds += [ANNUAL.objects.get(pk=lst[i][r]).Agr]
                     dim += [mid[r-1]]
             sd += [ds+lss[i]]
     return [sd, dim[:3]+['Agr', 'Avr', 'grade', 'posi']]
@@ -96,29 +96,57 @@ def export_third_scores(request, pk):#result download based on login tutor
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="annua_score.csv"'
     writer = csv.writer(response)
-    writer.writerow(['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'third', 'second', 'first', 'anual', 'agr', 'grade', 'anu_posi'])
+    writer.writerow(['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'third', 'second', 'first', 'anual', 'Agr', 'Grade', 'Posi'])
     tutor = get_object_or_404(BTUTOR, pk=pk)
-    subjects = QSUBJECT.objects.filter(tutor__exact=tutor).values_list('student_name', 'test', 'agn', 'atd', 'total', 'exam')
-    scores = [list(x) for x in subjects]
-    subject = ANNUAL.objects.filter(subject__exact=tutor.subject, subject_by__Class__exact=tutor.Class, term__exact='3rd Term', session__exact= SESSION.objects.get(pk=1).new )
-    sets = [x[:] for x in list(subject.values_list('third', 'second', 'first', 'anual', 'agr', 'grade', 'anu_posi')) if x[3] != None]
-    annual = [list(x) for x in sets]
-    sd = []
-    for i in range(0, len(annual)):
-        sd += [scores[i]+annual[i]]
-    for i in range(0, len(sd)):
-    	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).student_name
-    for each in sd:
+    previous = BTUTOR.objects.filter(Class__exact = tutor.Class, subject__exact = tutor.subject, session__exact=tutor.session).exclude(term__exact='3rd Term')
+    
+    previous_id = sorted([i[0] for i in list(previous.values_list('id'))])
+    
+    third = [list(x[:]) for x in QSUBJECT.objects.filter(tutor__exact=tutor).values_list('student_name', 'test', 'agn', 'atd', 'total', 'exam', 'agr')]
+    second = [list(i[:]) for i in QSUBJECT.objects.filter(tutor__exact=get_object_or_404(BTUTOR, pk=previous_id[1])).values_list('student_name', 'agr') if i[0] in [i[0] for i in third]]
+    first = [list(i[:]) for i in QSUBJECT.objects.filter(tutor__exact=get_object_or_404(BTUTOR, pk=previous_id[0])).values_list('student_name', 'agr') if i[0] in [i[0] for i in third]]
+    annual = [list(x[:]) for x in list(ANNUAL.objects.filter(subject_by__exact=tutor).values_list('student_name', 'anual', 'Agr', 'Grade', 'Posi'))]
+    
+    first = [x for x in first if x[0] in [i[0] for i in third]]
+    second = [x for x in second if x[0] in [i[0] for i in third]]
+    annual = [x for x in annual if x[0] in [i[0] for i in third]]
+    
+    names_in_three_terms = [x for x in [i[0] for i in third] if x in [i[0] for i in second] and x in [i[0] for i in first]]
+    second_third_only = list(set([i[0] for i in third]) - set(names_in_three_terms))
+    
+    scores_in_three_terms = [x for x in third if x[0] in names_in_three_terms]
+    second_third_only_r = [x for x in third if x[0] in second_third_only]
+    
+    scores_in_annual = [x for x in annual if x[0] in names_in_three_terms]
+    scores_in_annual_r = [x for x in annual if x[0] in second_third_only]
+    
+    list_com = [t + [s[1]] + [f[1]] + a[1:] for t,s,f,a in zip(scores_in_three_terms, second, first, scores_in_annual)]
+    
+    second = [x for x in second if x[0] in second_third_only]
+    if len(second) != 0:
+        list_com_r = [t + [s[1]] + [f[1]] + a[1:] for t,s,f,a in zip(second_third_only_r, second, [[None, None]]*len(second_third_only), scores_in_annual_r)]
+    else:
+        list_com_r = [t + [s[1]] + [f[1]] + a[1:] for t,s,f,a in zip(second_third_only_r, [[None, None]]*len(second_third_only), [[None, None]]*len(second_third_only), scores_in_annual_r)]
+    
+    union = sorted([x for x in list_com + list_com_r if x[0] in [i[0] for i in third]])
+    
+    for each in union:
+        each[0] = CNAME.objects.get(pk=each[0]).student_name
         writer.writerow(each)
     return response   
- 
+        
+    
 class terms_in_pdf(View):
     def get(self, request):
         tutor = get_object_or_404(BTUTOR, pk=request.user.profile.account_id)
         if tutor.term == '3rd Term':
-            mains = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject, session__exact= SESSION.objects.get(pk=1).new ).order_by('id')
+            mains = ANNUAL.objects.filter(subject_by__exact=tutor).order_by('id')
+            x = round(mains.aggregate(Sum('Agr'))['Agr__sum'],2)
+            y = round(mains.aggregate(Avg('Agr'))['Agr__avg'],2)
         else:
             mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')
+            x = round(mains.aggregate(Sum('agr'))['agr__sum'],2)
+            y = round(mains.aggregate(Avg('agr'))['agr__avg'],2)
         today = datetime.now()
         params = {
             'count_grade': mains.count(),
@@ -126,8 +154,8 @@ class terms_in_pdf(View):
             'request': request,
             'mains': mains,
             'today': today,
-            'subject_scores': round(mains.aggregate(Sum('agr'))['agr__sum'],2),
-            'subject_pert': round(mains.aggregate(Avg('agr'))['agr__avg'],2)
+            'subject_scores': x,
+            'subject_pert': y
         }
         if tutor.term == '3rd Term':
             return Render.render('result/anu_pdf.html', params)

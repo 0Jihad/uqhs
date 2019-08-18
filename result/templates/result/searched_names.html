@@ -3,7 +3,7 @@
 {% block content %}
 <div>
 	
-   <div class="capt" style="color:white;">[{{ names }}] Search results: Click the <a href="" style="color:blue;">hyper-link</a> on the names for subjects and scores detail</div>	   
+   <div class="capt" style="color:white;">[{{ names }}] Search results: Click the <a href="" style="color:blue;">hyper-link</a> on the names for subjects and scores details</div>	   
   
         <table>
 	          <tr>
@@ -12,16 +12,16 @@
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-            <td><a href="{% url 'search_lists' pk=scr.id %}">{{ scr.student_name }}</a></td><td>{{ scr.id }}</td><td>{{ scr.created }}</td><td>{{ scr.updated }}</td>
+            <td><a href="{% url 'student_subject_list' pk=scr.id %}">{{ scr.student_name }}</a></td><td>{{ scr.id }}</td><td>{{ scr.created }}</td><td>{{ scr.updated }}</td>
           </tr> 
           {% endfor %}
           {% else %}
-              <pre>record is empty.</pre>
+              <pre style="width:70%;" >There are no records.</pre>
           {% endif %}
         </table>
   </div>
      {% if all_page.has_other_pages %}
-      <ul class="pagination">
+      <ul class="pagination" style="width:80%;margin-left:-50px;">
         {% if all_page.has_previous %}
           <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
         {% else %}

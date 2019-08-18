@@ -13,7 +13,7 @@
           {% if all_page %}
           {% for scr in all_page %}
           <tr>
-                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}">{{ scr.student_name }}</a></td><td style="color:sienna;">{{ scr.id }}</td><td style="color:sienna;">{{ scr.first.agr }}</a></td><td><em style="color:sienna;">{{ scr.second.agr }}</td><td><em style="color:sienna;">{{ scr.third.agr }}</a></td><td><em style="color:sienna;">{{ scr.avr }}</a></td>
+                <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}">{{ scr.student_name }}</a></td><td style="color:sienna;">{{ scr.id }}</td><td style="color:sienna;">{{ scr.first.agr }}</a></td><td><em style="color:sienna;">{{ scr.second.agr }}</td><td><em style="color:sienna;">{{ scr.third.agr }}</a></td><td><em style="color:sienna;">{{ scr.Agr }}</a></td>
           </tr>
           {% endfor %}
           {% else %}

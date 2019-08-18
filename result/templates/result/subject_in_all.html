@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% block content %}
-  <div class="fc">
-      <em class="capt"><h5>{{ sub }}</h5></em>
-  </div>
-  <ul>
-        <table>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %} Subject: {{SUB_NAME}}{% endblock %}</title>
+    </head>
+    {% block content %}
+    <body>
+      <div class="capt"> {{ count_grade }} students registered in {{SUB_NAME}} </div>
+      <table>
           <tr>
-            <tr><th>STUDENT NAME ({{ count_grade }})</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Class</th><th>Term</th></tr> 
+            <th>STUDENT NAME ({{ count_grade }})</th><th>No.</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Class</th><th>Term</th> 
           </tr>
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-            <td><h6><a href="{% url 'student_names'%}">{{ scr.student_name }}</a></h6></td><td>{{ scr.test }}</td><td>{{ scr.agn }}</td><td>{{ scr.atd }}</td><td>{{ scr.total }}</td><td>{{ scr.exam }}</td><td>{{ scr.agr }}</td><td>{{ scr.grade }}</td><td>{{ scr.posi }}</td><td>{{ scr.tutor.Class }}</td><td>{{ scr.tutor.term }}</td>
+            <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}">{{ scr.student_name }}</a></td><td>{{ scr.id }}</td><td>{{ scr.test }}</td><td>{{ scr.agn }}</td><td>{{ scr.atd }}</td><td>{{ scr.total }}</td><td>{{ scr.exam }}</td><td>{{ scr.agr }}</td><td>{{ scr.grade }}</td><td>{{ scr.posi }}</td><td>{{ scr.tutor.Class }}</td><td>{{ scr.tutor.term }}</td>
           </tr>
           {% endfor %}
           {% else %}
-              <p>There are no records.</p>
+              <pre style="width:70%;">There are no records.</pre>
           {% endif %}                                                                                                                                        
-        </table>
-  </ul>
-  {% if all_page.has_other_pages %}
-      <ul class="pagination">
+      </table>
+    </body>
+    <div>
+    {% if all_page.has_other_pages %}
+      <div class="pagination"  style="width:80%;margin-left:-50px;">
         {% if all_page.has_previous %}
           <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
         {% else %}
@@ -39,9 +43,15 @@
         {% else %}
           <li class="disabled"><span>&raquo;</span></li>
         {% endif %}
-      </ul>
+      </div>
     {% endif %}
-     <div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+    <a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
 {% endblock %}
+</html>
+  
+    
+      
+
+  
 
 

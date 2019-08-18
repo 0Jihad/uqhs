@@ -4,12 +4,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>subject per Student</title>
+        <title>{% block title %}{{ qry.last_name }}:{{ qry.first_name }}'s profile {% endblock %}</title>
     </head>
     {% block content %}
     <form>
       <div class="cap_form"><a href="{% url 'home' %}" style="color:white;">Username </a><pre>{{ user.username }}</pre></div>
-        <div class="capt" style="width:23%;"><a href="{% url 'user_update' qry.id %}" style="color:white; font-size:10px;"><span class="glyphicon glyphicon-edit">Profile</span></a></div><a href="{% url 'upload_photo' pk=pk %}"><img class="rounded-circle" src="{% static request.user.profile.image %}" alt="My_pics" style="max-width: 3em; margin-left: 500px;"/></a></em></em>
+        <div class="capt" style="width:23%;"><a href="{% url 'user_update' qry.id %}" style="color:white; font-size:10px;"><span class="glyphicon glyphicon-edit">Profile</span></a></div><a href="{% url 'upload_photo' pk=request.user.id %}"><img class="rounded-circle" src="{% static request.user.profile.image %}" alt="My_pics" style="max-width: 3em; margin-left: 500px;"/></a></em></em>
         <div class="row">
 	    <div class="col-xs-4">
                 <em>Title:</em><pre style="line-height:5px;"> {{ qry.title }}</pre>

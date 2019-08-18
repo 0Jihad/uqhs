@@ -1,4 +1,4 @@
-from .models import QSUBJECT, Edit_User, TERM, ANNUAL, BTUTOR, CNAME, RESULT_GRADE, OVERALL_ANNUAL, SESSION, ASUBJECTS
+from .models import QSUBJECT, Edit_User, ANNUAL, BTUTOR, CNAME, RESULT_GRADE, OVERALL_ANNUAL, SESSION, ASUBJECTS
 from result.utils import grade_counter
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -13,7 +13,6 @@ def home(request):#Step 1:: list of tutor's subjects with class, term
     # If a tutor is authenticated then redirect them to the tutor's page
     if request.user.is_authenticated:#a tutor page
         tutor = BTUTOR.objects.filter(accounts=request.user).order_by('Class')
-        #mains = QSUBJECT.objects.filter(term__term__exact=qry.term, term__Class__exact=qry.Class, term__teacher_name__exact=qry.teacher_name).order_by('grade')
         return render(request, 'result/tutor.html', {'tutor':tutor})
     else:#general login page
         return redirect('logins') 
@@ -33,6 +32,27 @@ def subject_home(request, pk_code):#Step 1:: list of tutor's subjects with class
         return render(request, 'result/tutor_class_filter.html', {'tutors':tutor})
     else:
         return redirect('home') 
+
+
+def uniqueness(request, pk):
+    tutor = BTUTOR.objects.get(pk=pk)
+    unique = BTUTOR.objects.filter(accounts__exact=tutor.accounts, term__exact=tutor.term, Class__exact=tutor.Class, subject__exact = tutor.subject, teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session__exact = tutor.session)
+    first = BTUTOR.objects.filter(accounts__exact=tutor.accounts, term__exact='1st Term', Class__exact=tutor.Class, subject__exact = tutor.subject, teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session__exact = tutor.session)
+    if unique.count()!=1:
+        return render(request, 'result/tutor_unique.html', {'tutor':unique, 'ids':tutor})
+    elif first.count()== 0:
+        others = BTUTOR.objects.filter(accounts__exact=request.user, subject__exact = tutor.subject).order_by('id')
+        page = request.GET.get('page', 1)
+        paginator = Paginator(others, 30)
+        try:
+            all_page = paginator.page(page)
+        except PageNotAnInteger:
+            all_page = paginator.page(1)
+        except EmptyPage:
+            all_page = paginator.page(paginator.num_pages)
+        return render(request, 'result/first_term_record_notify.html', {'all_page':all_page, 'tutor':tutor.subject})
+    else:
+        return redirect('home')  
     
 def subject_class_term_filter(request):#New teacher form for every new term, class, subjects
     if request.method == 'POST':
@@ -126,7 +146,7 @@ def detail_all(request, pk):##Step 2::  every tutor home detail views
 
 def annual_view(request, pk):##Step 2::  every tutor home detail views 
     tutor = get_object_or_404(BTUTOR, pk=pk)
-    mains = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject, session__exact=SESSION.objects.get(pk=1).new ).order_by('id')#request.user
+    mains = ANNUAL.objects.filter(subject_by__exact=tutor).order_by('id')#request.user
     page = request.GET.get('page', 1)
     paginator = Paginator(mains, 30)
     grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
@@ -140,7 +160,7 @@ def annual_view(request, pk):##Step 2::  every tutor home detail views
 
 def all_annual_view(request, pk):##Step 2::  every tutor home detail views
     tutor = get_object_or_404(BTUTOR, pk=pk)
-    mains = ANNUAL.objects.filter(subject_by__Class__exact=tutor.Class, subject__exact=tutor.subject, session__exact=SESSION.objects.get(pk=1).new ).order_by('id')#request.user
+    mains = ANNUAL.objects.filter(subject_by__exact=tutor).order_by('id')#request.user
     grad = get_object_or_404(RESULT_GRADE, identifier = tutor.id, subject = tutor.subject.name)
     return render(request, 'result/all_annual_all.html',  {'subject_scores':sum_avg(mains)[0], 'subject_pert':sum_avg(mains)[1], 'count_grade' : mains.count(), 'mains': mains, 'qry' : tutor, 'pk': pk, 'grad': grad})
 
@@ -235,7 +255,10 @@ def student_on_all_subjects_list(request, pk):##Step 2::  every tutor home detai
 def student_subject_list(request, pk):##Step 2::  every tutor home detail views
     name = CNAME.objects.get(pk=pk)
     mains = QSUBJECT.objects.filter(student_name_id=name.id)
-    ids = list(mains.values_list('id'))
+    if len(list(mains.values_list('id'))) != 0:
+        ids = list(mains.values_list('id'))[0][0]
+    else:
+        ids = 0
     counts = mains
     page = request.GET.get('page', 1)
 
@@ -246,7 +269,7 @@ def student_subject_list(request, pk):##Step 2::  every tutor home detail views
         all_page = paginator.page(1)
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/student_subject_list.html',  {'all_page': all_page, 'counts': counts, 'name': name, 'pk': ids[0][0], 'cnt': pk})
+    return render(request, 'result/student_subject_list.html',  {'all_page': all_page, 'counts': counts, 'name': name, 'pk': ids, 'cnt': pk})
 
 
 def all_student_subject_list(request, pk):##Step 2::  every tutor home detail views
@@ -279,8 +302,11 @@ def all_teachers(request):
 def results_junior_senior(request, pk):
     cls = ['JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3']
     tutors = BTUTOR.objects.filter(Class__exact=cls[int(pk)]).order_by('Class')
-    return render(request, 'result/results_junior_senior.html', {'tutor': tutors})
-   
+    return render(request, 'result/results_junior_senior.html', {'tutor': tutors, 'cls':cls[int(pk)]})
+
+def all_users(request):#show single candidate profile
+    qry = User.objects.all()
+    return render(request, 'result/all_users.html', {'qry' : qry})
 
 def student_subject_detail_one_subject(request, pk):#student subject detail(single term)
     many = get_object_or_404(QSUBJECT, pk=pk)
@@ -305,21 +331,7 @@ def searchs(request):
         all_page = paginator.page(1)
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/searched_names.html',  {'all_page' : all_page, 'names': names.count()})
-
-
-def search_lists(request, pk):
-    query = get_object_or_404(QSUBJECT, pk=pk)
-    results = QSUBJECT.objects.filter(student_name__exact = query.student_name, tutor__Class__exact = query.tutor.Class)
-    page = request.GET.get('page', 1)
-    paginator = Paginator(results , 30)
-    try:
-       all_page = paginator.page(page)
-    except PageNotAnInteger:
-       all_page = paginator.page(1)
-    except EmptyPage:
-       all_page = paginator.page(paginator.num_pages)
-    return render(request, 'result/searched_lists.html',  {'all_page' : all_page, "query": query, 'results':results.count(), 'pk':query.id}) 	
+    return render(request, 'result/searched_names.html',  {'all_page' : all_page, 'names': names.count()}) 	
 
 def all_search_lists(request, pk):
 	query = QSUBJECT.objects.get(pk=pk)
@@ -352,11 +364,17 @@ def broad_sheet_views(request, pk):
         return render(request, 'result/syearly_apage.html',  {'date': datetime.now(), 'grad':grad, 'total_scores':total_scores, 'avg_pert':avg_pert, 'all_page': al, 'in_class': al.count(), 'last_name':user.profile.last_name, 'first_name':user.profile.first_name, 'class_in':user.profile.class_in })
     else:
         return render(request, 'result/jyearly_apage.html',  {'date': datetime.now(), 'grad':grad, 'total_scores':total_scores, 'avg_pert':avg_pert, 'all_page': al, 'in_class': al.count(), 'last_name':user.profile.last_name, 'first_name':user.profile.first_name, 'class_in':user.profile.class_in })
-#© 2019 GitHub, Inc.
+
 def show_annual(request, pk):
+    import time
+    from datetime import timedelta
+    start_time = time.time()    
     tutor = get_object_or_404(BTUTOR, pk=pk)
-    all_t = TERM.objects.filter(terms_by__exact=tutor, class_in__exact=tutor.Class, subject__exact=tutor.subject.name).order_by('id')
+    all_t = ANNUAL.objects.filter(subject_by__exact=tutor).order_by('id')
     tutor.model_in =  'annual'
     tutor.save()
-    return render(request, 'result/all_only.html',  {'all_page': all_t, 'in_class': all_t.count(), 'pk':pk, 'tutor':tutor})
+    elapsed_time_secs = time.time() - start_time
+    msg = "Execution took: %s secs (Wall clock time)" % timedelta(seconds=round(elapsed_time_secs))
+    print(msg)    
+    return render(request, 'result/all_first_second_third.html',  {'all_page': all_t, 'in_class': all_t.count(), 'pk':pk, 'tutor':tutor, 'msg':msg})
 	

@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>subject per Student</title>
+        <title>{% block title %} {{ name.student_name }}/{{ name.tutor.Class }} {% endblock %}</title>
     </head>
     {% block content %}
     <table>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Print results</title>
+    <title> {% block title %} downloading;{{tutor.subject}}/{{ tutor.Class }}/{{ tutor.term }} in PDF format {% endblock %} </title>
     <style type="text/css">
         @page {
             size: A4;
@@ -42,7 +42,7 @@
         
         pre{
         text-align: center;
-        font-size: 31px; 
+        font-size: 13px; 
         }
             .thr{
             text-align: center;
@@ -90,7 +90,7 @@
     </div>
 </div>
 <div class="list-group">
-    <p> <strong>Approved By:</strong>  __________________________________________________  <strong>Sign:</strong>  _________________  <strong>Date:</strong>  _________________________</p>
+    <pre> <strong>Approved By:</strong>  __________________________________________________  <strong>Sign:</strong>  _________________  <strong>Date:</strong>  _________________________</pre>
 </div>
 </body>
 </html>

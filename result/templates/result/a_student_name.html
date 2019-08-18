@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New</title>
+    <title> {% block title %} creating a new name {% endblock %} </title>
 </head>
 <body>
     {% block content %}
@@ -23,8 +23,6 @@
      <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Save</span></button>
   </form>
    {% endblock %}
- 
- 
 </body>
 </html>
 

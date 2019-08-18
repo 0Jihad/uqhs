@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
-{% block content %}
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+	<head>
+		 <title> {% block title %} {% endblock %} </title>
+	</head>
+	{% block content %}
+	<body>
+
   <div>
         <table>
 	   <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:white; font-size: 10px;"> Subject:</a> {{ tutors }}, <a href="{% url 'student_on_all_subjects_list' '1' %}" style="font-family:Helvetica; color:white; font-size: 20px;"> viwe detail </a></div>

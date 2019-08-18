@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 {% extends "base_generic.html" %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>New</title>
+<head> 
+    <meta charset="UTF-8"> 
+    <title>{% block title %} List of Created Subjected {% endblock %}</title>
 </head>
 <body>
     {% block content %}
-<div><strong>Subject List</strong>: All valid Subjects. </div>
+<div><strong>Subject List</strong>: All created Subjects. </div>
     <ul>
         <table>
           <tr>
@@ -16,11 +16,11 @@
           {% if check %}
           {% for scr in check %} 
           <tr>
-            <td>{{ scr.id }}</td><td><em> <a href="{% url 'created_subject_list' pk=scr.id %}" target = _blank>{{ scr.name }}</a></td>
+            <td>{{ scr.id }}</td><td><em> <a href="{% url 'created_subject_list' pk=scr.id %}">{{ scr.name }}</a></td>
           </tr>
           {% endfor %}
           {% else %}
-              <p>There are no records.</p>
+              <pre>There are no records.</pre>
           {% endif %}
         </table>
         <em><a href="{% url 'teacher_create' %}"> Next</a></em>  

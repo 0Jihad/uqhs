@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class='signup' >
+<form action="" method="post">
+   <div class="capt"><a href="{% url 'subject_view' pk=pk %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{tutor.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class: </a> {{ tutor.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term: </a> {{ tutor.term }} </div>
+    {% csrf_token %}
+    <div>
+    {{ formset.management_form }}
+    {% for form in formset %}
+     {% csrf_token %}
+    {{ form|crispy }}
+    {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-success" style="margin-left:2%;"><em style="font-family:Helvetica; color:white; font-size: 10px;">Save</em></button>
+  </form>
+</div>
+
+{% endblock %}
+
