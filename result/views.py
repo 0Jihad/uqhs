@@ -38,7 +38,7 @@ def uniqueness(request, pk):
     tutor = BTUTOR.objects.get(pk=pk)
     unique = BTUTOR.objects.filter(accounts__exact=tutor.accounts, term__exact=tutor.term, Class__exact=tutor.Class, subject__exact = tutor.subject, teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session__exact = tutor.session)
     first = BTUTOR.objects.filter(accounts__exact=tutor.accounts, term__exact='1st Term', Class__exact=tutor.Class, subject__exact = tutor.subject, teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session__exact = tutor.session)
-    if unique.count()!=1:
+    if unique.count() > 1:
         return render(request, 'result/tutor_unique.html', {'tutor':unique, 'ids':tutor})
     elif first.count()== 0:
         others = BTUTOR.objects.filter(accounts__exact=request.user, subject__exact = tutor.subject).order_by('id')
