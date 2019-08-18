@@ -283,7 +283,7 @@
             {% if user.is_authenticated%}
              <div class="ft" style="font-family:Helvetica; color:red; font-size: 10px;">logged in as {{ user.username }} <small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span></a></small></div>
                  {% if request.user.profile.email_confirmed == False %}
-                 <div class="ft"><a href="{% url 'edith' request.user.id %}"><small><span class="glyphicon glyphicon-flag" style="color:white;"></small></span><h6>{{ request.user.profile.bio|default:"Action required!" }}</h6></a></div>
+                 <div class="ft"><a href="{% url 'pro_detail' request.user.id %}"><small><span class="glyphicon glyphicon-flag" style="color:white;"></small></span><h6>{{ request.user.profile.bio|default:"Action required!" }}</h6></a></div>
                  {% endif %}
             {% endif %}
         <div  style="font-family:Helvetica; color:white; font-size: 10px;"><strong style="font-family:Blackadder ITC; color:red; font-size: 10px;">Contact: </strong>Arowona Bus-Stop, Akanran Road, Ibadan-Oyo state.</div>
