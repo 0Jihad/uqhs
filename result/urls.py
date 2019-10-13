@@ -2,7 +2,7 @@ from django.conf.urls import url
 #, include student_name_edit, subject_per_name annual_agr detailView annual_agr subject_total annual_view annual_sheet edit_user
 from.import views, imports, loggins, posts, sign_up, explorer, creates, exports, utils, deletions, updates#, pdfs
 urlpatterns = [
-            #####EXPORTS #######IMPORTS#####                      
+            #####EXPORTS #######IMPORTS#####      past_csvs                
             url('home_page/(?P<pk>\d+)/$', views.home_page, name='home_page'),
             url(r'home/$', views.home, name='home'),
             url(r'home_page_return/(?P<pk>\d+)/$', views.home_page_return, name='home_page_return'),
@@ -21,7 +21,7 @@ urlpatterns = [
             url('tutor_summary/utils/(?P<pk>\d+)/', utils.tutor_model_summary, name='tutor_summary'),
             url('tutor_model_redirected/(?P<pk>\d+)/', utils.tutor_model_redirected, name='tutor_model_redirected'),
             url('broad/sheete/scores/(?P<pk>\d+)/(?P<ty>\d+)/', exports.broadscores, name='broadscores'),
-            url('past_csvs/(?P<Class>\d+)/(?P<subject>\d+)/(?P<term>\d+)/(?P<session>\d+)/(?P<formats>\d+)/', exports.past_csvs, name='past_csvs'),
+            #url('past_csvs/(?P<Class>\d+)/(?P<subject>\d+)/(?P<term>\d+)/(?P<session>\d+)/(?P<formats>\d+)/', exports.past_csvs, name='past_csvs'),
          			 #####VIEWS##### annual_view student_subject_list student_in_none 
             url(r'searchs', views.searchs, name='searchs'),
             url(r'uniqueness/(?P<pk>\d+)/', views.uniqueness, name='uniqueness'),
