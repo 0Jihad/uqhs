@@ -12,7 +12,7 @@ from django.db.models import Sum, Avg
 
 #########################################################################################################################
 start_time = time.time()
-from result.creates import session
+from result.utils import session
 session = session()
 def home_page(request, pk):#Step 1:: list of tutor's subjects with class, term
     """

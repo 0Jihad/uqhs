@@ -14,7 +14,7 @@ import os
 import shutil
 
 
-from result.creates import session
+from result.utils import session
 session = session()
 
 def bst1_plus_bst2(dim):

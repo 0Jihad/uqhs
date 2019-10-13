@@ -18,7 +18,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from result.flowerable import building
 
-from result.creates import session
+from result.utils import session
 session = session()
 
 module_dir = os.path.dirname(__file__)  # get current directory

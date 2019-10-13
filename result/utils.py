@@ -1,4 +1,4 @@
-from .models import QSUBJECT, BTUTOR, TUTOR_HOME#, SESSION#, OVERALL_ANNUAL, ANNUAL
+from .models import QSUBJECT, BTUTOR, TUTOR_HOME, SESSION#, OVERALL_ANNUAL, ANNUAL
 from django.shortcuts import render#, redirect#, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect
@@ -11,8 +11,11 @@ from datetime import timedelta
 from django.contrib import messages
 from django.db.models import Avg
 
-from result.creates import session
-session = session()
+def session():
+    if SESSION.objects.all().count() == 0:
+        return '2024'
+    else:
+        return SESSION.objects.get(pk=1).new
 
 def tutor_model_summary(request, pk):
     start_time = time.time()

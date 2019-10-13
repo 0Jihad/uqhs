@@ -15,7 +15,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from django.conf import settings
 import io
 from django.http import FileResponse
-from result.creates import session
+from result.utils import session
 session = session()
 
 

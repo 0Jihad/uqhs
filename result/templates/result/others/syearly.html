@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+	<head>
+		 <title> {% block title %} {{ class_in }} broadsheet  {% endblock %} </title>
+	</head>
+	{% block content %}
+	<body>
+        <table>
+        <div class="capt"><pre>BROADSHEET {{ msg }}</pre><a href="{% url 'pdf_creator' %}" title="Download {{ class_in }} broadsheet." style="color:white;"><span class="glyphicon glyphicon-export"><em style="color:white;"></em></span></a><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Class_Teacher:</a> {{last_name}} {{first_name}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ class_in }} <a href="{% url 'refreshe' %}" style="color:white;margin-left:60%;" title="Do you whant to reload {{ class_in }} broadsheet?"><span class="glyphicon glyphicon-refresh"></span></a></div>
+        <thead>
+            <tr>
+               <th>STUDENT NAME ({{ counts }})</th><th>Acc</th><th>Ict</th><th>Bio</th><th>Plc</th><th>Yor</th><th>Ent</th><th>Mat</th><th>Eng</th><th>Irs</th><th>Civ</th><th>AGR</th><th>AVR</th><th>GRD</th><th>POS</th> 
+            </tr>
+        </thead>
+        {% if all_page %}
+        {% for scr in all_page %}
+        
+        <tr>
+        	<td><a href="{% url 'student_subject_list' pk=scr.eng.third.id %}" title="{{ scr.eng.third.student_id }}">{{ scr.student_name }}</a></td><td style="color:sienna;" title="{{ scr.acc.third.tutor.subject }}: {{ scr.acc.first.agr }}+{{ scr.acc.second.agr }}+{{ scr.acc.third.agr }}">{{ scr.acc.Agr }}</td><td style="color:sienna;" title="{{ scr.ict.third.tutor.subject }}: {{ scr.ict.first.agr }}+{{ scr.ict.second.agr }}+{{ scr.ict.third.agr }}">{{ scr.ict.Agr }}</td><td style="color:sienna;" title="{{ scr.bst.third.tutor.subject }}: {{ scr.bst.first.agr }}+{{ scr.bst.second.agr }}+{{ scr.bst.third.agr }}">{{ scr.bst.Agr }}</td><td style="color:sienna;" title="{{ scr.bus.third.tutor.subject }}: {{ scr.bus.first.agr }}+{{ scr.bus.second.agr }}+{{ scr.bus.third.agr }}">{{ scr.bus.Agr }}</td><td style="color:sienna;" title="{{ scr.yor.third.tutor.subject }}: {{ scr.yor.first.agr }}+{{ scr.yor.second.agr }}+{{ scr.yor.third.agr }}">{{ scr.yor.Agr }}</td><td style="color:sienna;" title="{{ scr.prv.third.tutor.subject }}: {{ scr.prv.first.agr }}+{{ scr.prv.second.agr }}+{{ scr.prv.third.agr }}">{{ scr.prv.Agr }}</td><td style="color:sienna;" title="{{ scr.mat.third.tutor.subject }}: {{ scr.mat.first.agr }}+{{ scr.mat.second.agr }}+{{ scr.mat.third.agr }}">{{ scr.mat.Agr }}</td><td style="color:sienna;" title="{{ scr.eng.third.tutor.subject }}: {{ scr.eng.first.agr }}+{{ scr.eng.second.agr }}+{{ scr.eng.third.agr }}">{{ scr.eng.Agr }}</td><td style="color:sienna;" title="{{ scr.irs.third.tutor.subject }}: {{ scr.irs.first.agr }}+{{ scr.irs.second.agr }}+{{ scr.irs.third.agr }}">{{ scr.irs.Agr }}</td><td style="color:sienna;" title="{{ scr.nva.third.tutor.subject }}: {{ scr.nva.first.agr }}+{{ scr.nva.second.agr }}+{{ scr.nva.third.agr }}">{{ scr.nva.Agr }}</td><td  style="color:green;" title="{{scr.student_name}}">{{ scr.AGR }}</td><td  style="color:green;" title="{{scr.student_name}}">{{ scr.AVR }}</td><td style="color:red;" title="{{scr.student_name}}">{{ scr.GRD }}<td style="color:red;" title="{{scr.student_name}}">{{ scr.POS }}</td>
+        </tr>
+        
+        {% endfor %}
+        {% else %}
+              <pre style="width:70%;">There are no records.</pre>
+        {% endif %}
+        <tfoot>
+            <tr><th colspan="11" style="color:white; font-family:Verdana;">{{ sct }}</th><th colspan="4"> {{ overall }}|{{ per }}%</th></tr>
+        </tfoot>
+        </table>
+	 </body>
+     {% if all_page.has_other_pages %}
+      <em class="pagination" style="width:80%;margin-left:-50px;">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </em>
+    {% endif %}
+	{% endblock %}
+ 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+	<head>
+		<title> {% block title %}filtering by grades {% endblock %}</title>
+	</head>
+	<body>
+	{% block content %}
+       <table>
+				 <div class="capt"><a href="{% url 'created_subject_list' pk=0 %}" style="font-family:Helvetica; color:blue; font-size: 10px;"> Subject:</a> {{qry.subject}} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Class:</a> {{ qry.Class }} <a href="#"style="font-family:Helvetica; color:blue; font-size: 10px;"> Term:</a> {{ qry.term }}</div>
+          <tr>
+            <th>STUDENT NAME ({{ count_grade }})</th><th>1st</th><th>2nd</th><th>3rd</th><th>Agr</th><th>Avg</th><th>Grd</th><th>Pos/th></tr> 
+          </tr>
+          {% if all_page %}
+          {% for scr in all_page %}
+          <tr>
+                       </tr>
+          {% endfor %}
+          {% else %}
+              <pre style="width:70%;" >There are no records.</pre>
+          {% endif %}
+          <tr class="capt"><td colspan="4"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:green; font-size: 10px;">Subject_by:</a>|{{ qry.teacher_name }}|</td><td> <strong>AGR:</strong></td><td style="font-family:Helvetica; color:white; font-size: 10px;">{{ subject_scores }}</td><td><strong>PER:</strong></td><td style="font-family:Helvetica; color:white; font-size: 10px;">{{ subject_pert }}%</td></tr>
+	  	   <tr class="capt"><td class="capt" style="color:white; width: 200px;">Grades Summary: <a href="{% url 'annual_view' pk=pk %}"><pre style="line-height: 3px;">Click on {{qry.subject.name}}</pre></a></td><td colspan="6" >{{ grad }}</td><td>{% if user.is_authenticated %}<a href="{% url 'pdf' %}">Print PDF</a>{% endif %}</td><td>{% if qry.term == '3rd Term' %}<a href="{% url 'compute_annual' pk=qry.id %}">Annual</a>{% endif %}</td><td><a href="{% url 'home' %}">Download</a></td></tr>                                                                                                                              
+
+       </table>
+   </body> 
+  {% if all_page.has_other_pages %}
+      <em class="pagination" style="font-family:Helvetica; margin-left:0px; color:green; font-size: 9px;">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </em>
+    {% endif %}
+ <div><a href="{% url 'all_annual_view' pk=pk %}" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+    {% endblock %}
+
+</html>
+
+ 
+
+    

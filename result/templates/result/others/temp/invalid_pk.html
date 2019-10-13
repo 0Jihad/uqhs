@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html>
+    {% block content %}
+    <head>
+
+    </head>
+    <body>
+            <table>
+		<div class="capt" style="width:80%;margin:1px; font-size:13"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">Required:</a></strong> No record for this tutor exit yet! Create tutor account<a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:white; font-size: 15px;"> now!!</a></div>
+
+                <thead>
+                          
+                </thead>
+                <tbody>
+                    {% if all_page %}
+                    {% for sub in all_page %}
+                        <tr><td>{{ sub.teacher_name }}</td><td>{{ sub.subject }}</td><td>{{ sub.Class }}</td><td>{{ sub.term }}</td><td><a href="{% url 'subject_view' pk=sub.id %}">view</a></td>{% if request.user.is_staff %}<td><a href="{% url 'warning_delete' pk=sub.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>{% endif %}</tr>
+                    {% endfor %}
+   
+                    {% endif %}       
+                </tbody>
+            </table>
+            {% if all_page.has_other_pages %}
+      <ul class="pagination">
+        {% if all_page.has_previous %}
+          <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in all_page.paginator.page_range %}
+          {% if all_page.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if all_page.has_next %}
+          <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+    </body>
+	<div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
+    {% endblock %}
+</html>

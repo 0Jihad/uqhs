@@ -1,15 +1,11 @@
-from .models import QSUBJECT, ASUBJECTS, BTUTOR, TUTOR_HOME, SESSION
+from .models import QSUBJECT, ASUBJECTS, BTUTOR, TUTOR_HOME#, SESSION
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import subjectforms, subject_class_term_Form, sessions, FORMARTS
 from django.contrib.auth.decorators import login_required
-from result.utils import cader
+from result.utils import cader, session
 
-def session():
-    if SESSION.objects.all().count() == 0:
-        return '2024'
-    else:
-        return SESSION.objects.get(pk=1).new
+
 
 session = session()
 

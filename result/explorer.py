@@ -1,6 +1,6 @@
 from .models import ANNUAL, OVERALL_ANNUAL#, SESSION#, ASUBJECTS
 from django.shortcuts import render, redirect, get_object_or_404
-from result.utils import do_grades, do_positions, cader
+from result.utils import do_grades, do_positions, cader, session
 from datetime import datetime
 from django.db.models import Sum, Avg
 from datetime import timedelta
@@ -10,7 +10,7 @@ from statistics import mean
 from django.contrib.auth.decorators import login_required
 #from django.http import HttpResponse
  #return HttpResponse(student_name_id_third, content_type='text/plain')#
-from result.creates import session
+
 session = session()
 
 dim = []                        

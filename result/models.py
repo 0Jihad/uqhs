@@ -159,8 +159,6 @@ class REGISTERED_ID(models.Model):
         """String for representing the Model object."""
         return f'{self.student_id}'
  
-from result.creates import session
-session = session()
        
 class QSUBJECT(models.Model):#step5-subject 
      student_name = models.ForeignKey(CNAME, on_delete=models.CASCADE, null=True)#
@@ -193,6 +191,8 @@ class QSUBJECT(models.Model):#step5-subject
         return f'{self.id}:{self.student_name}:{str(self.tutor.subject)[:3]}:{self.tutor.Class}:{self.tutor.term}'
      
      def save(self):
+         from result.utils import session
+         session = session()
          if self.tutor != None:
             if REGISTERED_ID.objects.filter(student_name__exact=self.student_name, student_class__exact=self.tutor.Class, session__exact=session).count() == 0:
                 new = REGISTERED_ID(student_name=self.student_name, student_class=self.tutor.Class, session=session)

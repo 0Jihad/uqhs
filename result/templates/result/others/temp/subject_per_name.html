@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% extends "base_generic.html" %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>subject per Student</title>
+    </head>
+    {% block content %}
+    <table>
+        <tr>
+            <th>STUDENT NAME:</th>
+            <td><a href="">{{ qry.student_name }}</a></td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:orange;">Term:</th>
+            <td style="font-family:Helvetica; color:green;">{{ qry.tutor.term }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:orange;">Subject Serial No.:</th>
+            <td style="font-family:Helvetica; color:pink;">{{ qry.id }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:purple;">Test:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.test }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:purple;">Asgn:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.agn }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:purple;">Atd:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.atd }}</td>
+        </tr>
+        <tr>    								
+            <th style="font-family:Helvetica; color:purple;">Total:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.total }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:purple;">Exam:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.exam }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:purple;">Sum:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.agr }}</td>
+        </tr>
+        <tr>
+            <th style="font-family:Helvetica; color:purple;">Grade:</th>
+            <td style="font-family:Helvetica; color:blue;">{{ qry.grade }}</td>
+        </tr>
+        <tr>
+            <th>Pos:</th>
+            <td>{{ qry.posi }}</td>
+        </tr> 
+    </table> 
+           {% if many %}
+           {% for scr in many %}
+	   <em style="width:47%;margin-left:87px; font-size:11">|<a href="{% url 'one_subject_detail' pk=scr.id %}" target=_blank>{{ scr.tutor.term }}</a>|</em>
+           {% endfor %}
+           {% endif %}    
+{% endblock %}
+</html>
