@@ -1,5 +1,6 @@
 {% extends "base_generic.html" %}
 {% block content %}
+<title>{% block title %} Sign_up {% endblock %}</title>
     {% if form.errors %}
         {{ form.errors }}
     {% endif %}

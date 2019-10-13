@@ -55,9 +55,6 @@ def test_file(request, pk):
         for i in range(0, len(new[1])):
             sd += [[i+1]+new[1][i]+[sum(new[1][i][:3])]+[sum([new[1][i][3]+sum(new[1][i][:3])])]]
         dhead = pd.DataFrame(sd)
-        #dhead.columns = ['serial_no', 'test', 'agn', 'atd', 'exam', 'total', 'agr']
-        ########################positioning results###################################
-        #df = don_e(dhead)
         for r in range(0, len(new[2])):
             cheack = CNAME.objects.filter(student_name=new[2][r], Class__exact=tutor.Class)#if name exits else create name
             if len(cheack) == 0:

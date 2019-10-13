@@ -10,12 +10,12 @@
 		<div class="capt" style="font-size:11px;"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">Warning:</a></strong> Ensure <em style="font-family:Helvetica; color:white; font-size: 10px;">1st term</em> of any record exists before loading other terms!</div>
 
                 <thead>
-                    <tr><th>Subject Teacher</th><th>No.</th> <th>Subject</th> <th>Class</th><th>Term</th><th>Detail</th><th>Delete</th></tr>      
+                    <tr><th>Subject Teacher</th><th>No.</th> <th>Subject</th><th>Term</th><th>Detail</th><th>session</th><th>Delete</th></tr>      
                 </thead>
                 <tbody>
                     {% if all_page %}
                     {% for sub in all_page %}
-                        <tr><td>{{ sub.teacher_name }}</td><td>{{ sub.id }}</td><td>{{ sub.subject }}</td><td>{{ sub.Class }}</td><td>{{ sub.term }}</td><td><a href="{% url 'subject_view' pk=sub.id %}">view</a></td>{% if request.user.is_staff %}<td><a href="{% url 'warning_delete' pk=sub.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>{% endif %}</tr>
+                        <tr><td>{{ sub.teacher_name }}</td><td>{{ sub.id }}</td><td>{{ sub.subject }}</td><td>{{ sub.term }}</td><td><a href="{% url 'subject_view' pk=sub.id %}">{{ sub.Class }}</a></td><td>{{ sub.session }}</td>{% if request.user.is_staff %}<td><a href="{% url 'tutor_update' sub.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>{% endif %}</tr>
                     {% endfor %}
                     {% else %}
                         <pre style="width:85%;margin:1px; font-size:12">There are no first records created in your account yet.</pre>

@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+<!doctype html>
+{% block content %}
+<html>
+<body>
+    <table class="table">
+             <tr>
+               <th>STUDENT NAME</th><th>1st</th><th>2nd</th><th>3rd</th><th>Ent</th><th>1st</th><th>2nd</th><th>3rd</th><th>Mat</th><th>1st</th><th>2nd</th><th>3rd</th><th>Eng</th><th>AGR</th><th>AVR</th><th>GRD</th><th>POS</th> 
+            </tr>         
+          </thead>
+          {% if mains %}
+          {% for scr in mains %} 
+          <tr>
+        	<td class="name">{{ scr.student_name }}</td><td class="ent1">{{ scr.prv.first.agr }}</td><td class="ent2">{{ scr.prv.second.agr }}</td><td class="ent3">{{ scr.prv.third.agr }}</td><td class="ent">{{ scr.prv.Agr }}</td><td class="mat1">{{ scr.mat.first.agr }}</td><td class="mat2">{{ scr.mat.second.agr }}</td><td class="mat3">{{ scr.mat.third.agr }}</td><td class="mat">{{ scr.mat.Agr }}</td><td class="eng1">{{ scr.eng.first.agr }}</td><td class="eng2">{{ scr.eng.second.agr }}</td><td class="eng3">{{ scr.eng.third.agr }}</td><td class="eng">{{ scr.eng.Agr }}</td><td  class="agr">{{ scr.AGR }}</td><td class="avr">{{ scr.AVR }}</td><td class="grd">{{ scr.GRD }}<td class="pos">{{ scr.POS }}</td>
+          </tr>           
+          {% endfor %}
+          {% endif %}
+        </table>
+    </div>
+</div>
+
+</html>
+{% endblock %}
+

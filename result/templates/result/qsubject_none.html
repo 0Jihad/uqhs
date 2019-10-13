@@ -6,20 +6,23 @@
 	</head>
 	{% block content %}
 	<body>
-		<div class="capt"><a href="" style="color:blue;"> Subject:</a> {{qry.subject}} <a href=""style="color:blue;"> Class: </a> {{ qry.Class }} <a href=""style="color:blue;"> Term: </a> {{ qry.term }} </div>
+		<div class="capt">TRASH</div>
 		<table>
-          <tr>
-            <tr><th>STUDENT NAME ({{ count_grade }})</th><th>No.</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th><th>Del</th></tr> 
-          </tr>
+         <thead>
+            <tr><th>STUDENT NAME ({{ count_grade }})</th><th>No.</th><th>Test</th><th>Asgn</th><th>Atd</th><th>Total</th><th>Exam</th><th>Sum</th><th>Grade</th><th>Pos</th></tr> 
+         </thead>
           {% if all_page %}
           {% for scr in all_page %} 
           <tr>
-            <td><a href="{% url 'student_subject_list' pk=scr.student_name.id %}" style="color:red;">{{ scr.student_name }}</a></td>{% if user.is_staff == True %}<td><a href="{% url 'subject_updates_model' pk=scr.id %}" style="color:sienna;">{{ scr.id }}</a></td>{% endif %}<td style="color:sienna;">{{ scr.test }}</a></td><td><em style="color:sienna;">{{ scr.agn }}</td><td><em style="color:sienna;">{{ scr.atd }}</a></td><td><em style="color:sienna;">{{ scr.total }}</a></td><td><em style="color:sienna;">{{ scr.exam }}</a></td><td><em style="color:sienna;">{{ scr.agr }}</a></td><td><em style="color:green;">{{ scr.grade }}</a></td><td><em style="color:red;">{{ scr.posi }}</a></td><td><a href="{% url 'delete_warning' pk=scr.id %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+            <td>{{ scr.student_name }}</td><td><a href="{% url 'subject_updates_model' pk=scr.id %}" title="{{ scr.student_name }}">{{ scr.id }}</a></td><td style="color:sienna;">{{ scr.test }}</td><td><em style="color:sienna;">{{ scr.agn }}</td><td><em style="color:sienna;">{{ scr.atd }}</a></td><td><em style="color:sienna;">{{ scr.total }}</td><td><em style="color:sienna;">{{ scr.exam }}</td><td><em style="color:sienna;">{{ scr.agr }}</td><td><em style="color:green;">{{ scr.grade }}</td><td>{{ scr.posi }}</td>
           </tr>
           {% endfor %}
           {% else %}
               <pre style="width:70%;">There are no deleted records in the bin.</pre>
           {% endif %}
+         <tfoot>
+          <tr><th colspan="10"><a href="{% url 'deletes' %}" title='Do you want to remove all?'><span class="glyphicon glyphicon-trash"></span></a><a href="{% url 'home' %}" title="home_page"><span class="glyphicon glyphicon-home"></span></a></th></tr>
+         </tfoot>
      </table>
    </body>
   {% if all_page.has_other_pages %}
@@ -43,7 +46,6 @@
         {% endif %}
       </ul>
     {% endif %}
-     <div><a href="" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;" target = _blank><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
-{% endblock %}
+     {% endblock %}
 
 

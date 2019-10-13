@@ -5,7 +5,7 @@
         <div id="head">
             <meta charset="UTF-8">
             <title>
-                {% block title %} uqhs {% endblock %}
+                uqhs |{% block title %} uqhs {% endblock %}
              </title>
              <link rel="icon" type="image/png" href="http://example.com/myicon.png">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,7 @@
                     <a href="{% url 'results_junior_senior' pk=3 %}"><h6>SSS 1</h6></a>
                     <a href="{% url 'results_junior_senior' pk=4 %}"><h6>SSS 2</h6></a>
                     <a href="{% url 'results_junior_senior' pk=5 %}"><h6>SSS 3</h6></a>
-                    <a href="#"><h6>Info</h6></a>
+                    <a href="{% url 'flexing' %}"><h6>Info</h6></a>
                   </div>
                 </div>
                 
@@ -51,8 +51,8 @@
                   <span class="dropbtn">Portal</span>
                   <div class="dropdown-content">
                     <a class="active" href="{% url 'tutor_summary' pk=1 %}"><h6>Staff</h6></a>
-                    <a href="{% url 'student_names' %}"><h6>Students</h6></a>
-                    <a href="{% url 'flexing' %}"><h6>How</h6></a>
+                    <a href="{% url 'student_names' pk=1 %}"><h6>Male Students</h6></a>
+                    <a href="{% url 'student_names' pk=2 %}"><h6>Female Students</h6></a>
                   </div>
                 </div>
                 <div class="navbar-header">
@@ -72,30 +72,33 @@
                 <span><em style="margin-left:250px; color: white;">Welcom to UMMUL_QURA RESULT PORTAL </em></span>
             </navz>
             <div id="mySidebar" class="sidebar">
-            {% if user.is_authenticated and user.is_staff %}
-            {% if request.user.profile.bio != 'new!' %}
+            {% if request.user.is_authenticated %}
             <div class="dropdowns">
                 <span class="dropbtns"><img class="rounded-circle" src="{% static request.user.profile.image %}" alt="My_pics" style="max-width: 35px; margin: auto 0px;"/></span>
                 <div class="dropdown-contents">
-                <a href="{% url 'pro_detail' request.user.id %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Profile</a>{% endif %}
-                <a href="{% url 'teacher_create' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Load Scores</a>
-                <a href="{% url 'search_tutors' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Transfer Subjects</a>
-                <a href="{% url 'student_in_none' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Recycle Bin</a>
-                {% if request.user.profile.class_in == 'JSS 1' or request.user.profile.class_in == 'JSS 2' or request.user.profile.class_in == 'JSS 3' or request.user.profile.class_in == 'SS 1' or request.user.profile.class_in == 'SS 2' or request.user.profile.class_in == 'SS 3' %}
-                <a href="{% url 'pre_broad_sheet' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">{{ request.user.profile.class_in }}</a>
-                {% endif %}
+                <a href="{% url 'pro_detail' request.user.id %}" class="top-menu" title="Edit personal information"><span class="glyphicon glyphicon-edit"></a>
+                <a href="{% url 'teacher_create' %}" title="1st term file upload"><span class="glyphicon glyphicon-tasks"></a>
+                <a href="{% url 'transfers' %}" title="Move a class subject to another teacher"><span class="glyphicon glyphicon-transfer"></a>
+                <a href="{% url 'student_in_none' %}" title="Deleted/Canceled scores"><span class="glyphicon glyphicon-trash"></a>
+                <a href="{% url 'search_pdf' %}" title="Search past results "><span style="font-size:1.4em; border-radius: 10px;" class="glyphicon glyphicon-search"></span></a>
+
                 {% if perms.catalog.can_mark_returned %}
-                <a href="{% url 'all_accounts' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Accounts</a>
-                <a href="{% url 'author_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Authors</a>
-                <a href="{% url 'book_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Books</a>
-                <a href="{% url 'genre_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Genre</a>
-                <a href="{% url 'language_create'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Create Language</a>
-                <a href="{% url 'books' %}" class="top-menu" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Stores</a>
-                <a href="{% url 'br-books' %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Manage Loans</a>
-                <a href="{% url 'renew_approval'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Renew Books</a>
-                <a href="{% url 'qeuing'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Grant Requests</a>
-                <a href="{% url 'post_draft_list'  %}" style="font-family:Helvetica; color:skyblue; font-size: 9px;">Posts</a>
+                <a href="{% url 'admin:index' %}" title='adimin'><span class="glyphicon glyphicon-globe"></span></a>
+                <a href="{% url 'mass_upload'  %}" title="folder uploads"><span class="glyphicon glyphicon-book"></a>
+                <a href="{% url 'post_draft_list'  %}">Posts</a>
+                <a href="{% url 'all_accounts' %}" title='List of accounts'><span class="glyphicon glyphicon-user"></a>
+                <a href="{% url 'author_create'  %}">Authors</a>
+                <a href="{% url 'book_create'  %}">Books</a>
+                <a href="{% url 'genre_create'  %}">Genres</a>
+                <a href="{% url 'language_create'  %}">Languages</a>
+                <a href="{% url 'books' %}" class="top-menu">Manage Stores</a>
+                <a href="{% url 'br-books' %}">Manage Loans</a>
+                <a href="{% url 'renew_approval'  %}">Renew Books</a>
+                <a href="{% url 'qeuing'  %}">Grant Requests</a>
                 {% endif %}
+                {% if request.user.profile.class_in != None %}
+                <a href="{% url 'broadsheet_last_stage' %}" title="Compute {{ request.user.profile.class_in }}'s Broadsheet "><span class="glyphicon glyphicon-list-alt"></a>
+                                {% endif %}
             </div>
             <a href="{% url 'log_out' %}" style="font-family:Helvetica; color:red; font-size: 9px;"><span class="glyphicon glyphicon-log-out"></span><em class=""><em style="font-family:Helvetica; font-size:9px;">Logout</em></em></a>                                              
             {% endif %} 
@@ -280,8 +283,8 @@
     <div class="footer">
         <div style="font-family:Helvetica; color:palegoldenrod; font-size: 10px;">©Copyright 2019 examing body. All rights reversed.</div>
         <div class="footer-left">
-            {% if user.is_authenticated%}
-             <div class="ft" style="font-family:Helvetica; color:red; font-size: 10px;">logged in as {{ user.username }} <small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span></a></small></div>
+            {% if user.is_authenticated %}
+             <div class="ft" style="font-family:Helvetica; color:red; font-size: 10px;"> {{ user.username }}|logged as {% if user.is_staff == True and user.is_superuser == False %} Staff {% else %} Admin {% endif %}<small><a href="{% url 'log_out' %}"><span class="glyphicon glyphicon-log-out"></span></a></small></div>
                  {% if request.user.profile.email_confirmed == False %}
                  <div class="ft"><a href="{% url 'pro_detail' request.user.id %}"><small><span class="glyphicon glyphicon-flag" style="color:white;"></small></span><h6>{{ request.user.profile.bio|default:"Action required!" }}</h6></a></div>
                  {% endif %}

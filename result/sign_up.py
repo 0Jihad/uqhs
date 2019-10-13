@@ -35,7 +35,7 @@ class Staff_SignUp(generic.CreateView):
                     userObj.email = fd['email']
                     userObj.save()
                     profile = userObj.profile
-                    profile.account = ['', 'Student', 'Staff']
+                    #profile.account = ['', 'Student', 'Staff']
                     profile.save()
                     return render(request, 'registration/account_activation_sent.html')
                 else:

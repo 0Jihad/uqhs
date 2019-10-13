@@ -5,15 +5,18 @@ Created on Thu Apr 18 18:54:06 2019
 @author: AdeolaOlalekan
 """
 import os
-from django.views.generic import View
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404#, redirect
 import csv
-from .utils import Render
-from django.http import HttpResponse
-from django.db.models import Sum, Avg
-from datetime import datetime
 from wsgiref.util import FileWrapper
-from .models import QSUBJECT, ANNUAL, BTUTOR, CNAME, OVERALL_ANNUAL, SESSION
+from .models import QSUBJECT, BTUTOR, CNAME, SESSION
+import pandas as pd
+from django.conf import settings
+import requests
+from bs4 import BeautifulSoup
+from statistics import mean
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from result.flowerable import building
 
 module_dir = os.path.dirname(__file__)  # get current directory
 file_path = os.path.join(module_dir, 'test1.txt')
@@ -30,152 +33,116 @@ def sample_down(request):
     return response 
 
 def export_name_text(request, pk):#result download based on login tutor
-    response = HttpResponse(content_type='text')
-    response['Content-Disposition'] = 'attachment; filename="student_names.txt"'
-    writer = csv.writer(response)
-    #writer.writerow(['student_name'])
     tutor = get_object_or_404(BTUTOR, pk=pk)
+    response = HttpResponse(content_type='text')
+    response['Content-Disposition'] = "attachment; filename={Class}-names.txt".format(Class=tutor.Class)
+    writer = csv.writer(response)
     subject = QSUBJECT.objects.filter(tutor__exact=tutor).values_list('student_name')
     sd = [list(x) for x in subject]
     for i in range(0, len(sd)):
-    	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).student_name
+    	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).last_name +' '+ CNAME.objects.get(pk=sd[i][0]).first_name
     for each in sd:
         writer.writerow(each)
     return response  
-
-def export_subject_scores(request, pk):#result download based on login tutor
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="scores.csv"'
-    writer = csv.writer(response)
-    writer.writerow(['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'agr', 'grade', 'posi'])
-    tutor = get_object_or_404(BTUTOR, pk=pk)
-    subject = QSUBJECT.objects.filter(tutor__exact=tutor).values_list('student_name', 'test', 'agn', 'atd', 'total', 'exam', 'agr', 'grade', 'posi')
-    sd = [list(x) for x in subject]
-    for i in range(0, len(sd)):
-    	sd[i][0] = CNAME.objects.get(pk=sd[i][0]).student_name
-    for each in sd:
-        writer.writerow(each)
-    return response 
-
-def extract_broad_sheet(request):
-    sd = []
-    dim = ['student_name']
-    mid = ['eng', 'mat', 'agr', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'acc', 'his', 'Agr', 'Avr', 'grade', 'posi']
-    al = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact= SESSION.objects.get(pk=1).new)
-    if al.count() != 0:
-        sd = []
-        x = list(al.values_list('student_name', 'eng', 'mat', 'agr', 'bus', 'bst', 'yor', 'nva', 'irs', 'prv', 'ict', 'acc', 'his', 'Agr', 'Avr', 'grade', 'posi'))
-        lst = [list(i[:13]) for i in x]
-        lss = [list(i[13:]) for i in x]
-        for i in range(0, len(lst)):
-            ds = [CNAME.objects.get(pk=x[i][0]).student_name]
-            try:
-                while True:
-                    lst[i][lst[i].index(None)] = 0
-            except ValueError:
-                pass         
-            for r in range(1, len(lst[i])):
-                if lst[i][r] != 0:
-                    ds += [ANNUAL.objects.get(pk=lst[i][r]).Agr]
-                    dim += [mid[r-1]]
-            sd += [ds+lss[i]]
-    return [sd, dim[:3]+['Agr', 'Avr', 'grade', 'posi']]
-
-def export_broadsheet(request):#result download based on login tutor teacher_accounts Subject_model_view
-    sd = extract_broad_sheet(request)
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="broadsheet.csv"'
-    writer = csv.writer(response)
-    writer.writerow(sd[1])
-    for each in sd[0]:
-        writer.writerow(each)
-    return response 
-
-
-def export_third_scores(request, pk):#result download based on login tutor 
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="annua_score.csv"'
-    writer = csv.writer(response)
-    writer.writerow(['student_name', 'test', 'agn', 'atd', 'total', 'exam', 'third', 'second', 'first', 'anual', 'Agr', 'Grade', 'Posi'])
-    tutor = get_object_or_404(BTUTOR, pk=pk)
-    previous = BTUTOR.objects.filter(Class__exact = tutor.Class, subject__exact = tutor.subject, session__exact=tutor.session).exclude(term__exact='3rd Term')
-    
-    previous_id = sorted([i[0] for i in list(previous.values_list('id'))])
-    
-    third = [list(x[:]) for x in QSUBJECT.objects.filter(tutor__exact=tutor).values_list('student_name', 'test', 'agn', 'atd', 'total', 'exam', 'agr')]
-    second = [list(i[:]) for i in QSUBJECT.objects.filter(tutor__exact=get_object_or_404(BTUTOR, pk=previous_id[1])).values_list('student_name', 'agr') if i[0] in [i[0] for i in third]]
-    first = [list(i[:]) for i in QSUBJECT.objects.filter(tutor__exact=get_object_or_404(BTUTOR, pk=previous_id[0])).values_list('student_name', 'agr') if i[0] in [i[0] for i in third]]
-    annual = [list(x[:]) for x in list(ANNUAL.objects.filter(subject_by__exact=tutor).values_list('student_name', 'anual', 'Agr', 'Grade', 'Posi'))]
-    
-    first = [x for x in first if x[0] in [i[0] for i in third]]
-    second = [x for x in second if x[0] in [i[0] for i in third]]
-    annual = [x for x in annual if x[0] in [i[0] for i in third]]
-    
-    names_in_three_terms = [x for x in [i[0] for i in third] if x in [i[0] for i in second] and x in [i[0] for i in first]]
-    second_third_only = list(set([i[0] for i in third]) - set(names_in_three_terms))
-    
-    scores_in_three_terms = [x for x in third if x[0] in names_in_three_terms]
-    second_third_only_r = [x for x in third if x[0] in second_third_only]
-    
-    scores_in_annual = [x for x in annual if x[0] in names_in_three_terms]
-    scores_in_annual_r = [x for x in annual if x[0] in second_third_only]
-    
-    list_com = [t + [s[1]] + [f[1]] + a[1:] for t,s,f,a in zip(scores_in_three_terms, second, first, scores_in_annual)]
-    
-    second = [x for x in second if x[0] in second_third_only]
-    if len(second) != 0:
-        list_com_r = [t + [s[1]] + [f[1]] + a[1:] for t,s,f,a in zip(second_third_only_r, second, [[None, None]]*len(second_third_only), scores_in_annual_r)]
+#https://uqhs.herokuapp.com
+def scores(request, pk, ty):
+    tutor = BTUTOR.objects.get(pk=pk)
+    xr = [['table.qsubject', "table.annual"], [['name', 'test', 'agn', 'atd', 'tot', 'exam', 'agr', 'grd', 'pos'],['name', 't_test', 't_agn', 't_atd', 't_tot', 'exam', 't_agr', 's_agr', 'f_agr', 'annual', 'Agr', 'Grd', 'pos']], ['7', '8']]                 
+    response = requests.get('http://127.0.0.1:8838/result/_all/'+str(pk)+'/'+xr[-1][['qsubject', 'annual'].index(tutor.model_in)]+'/')#url 
+    soup = BeautifulSoup(response.text, 'html.parser')
+    table = soup.select_one(xr[0][['qsubject', 'annual'].index(tutor.model_in)])#tb
+    headers = [th.get_text(",") for th in table.select("th")]
+    headers[0] = tutor.teacher_name.upper()
+    table_rows = soup.findAll('tr')
+    lists = [[data.find(class_=x).get_text(',') for x in xr[1][['qsubject', 'annual'].index(tutor.model_in)]] for data in table_rows]
+    if int(ty) == 1:
+        df = pd.DataFrame(lists)
+        df.index = [x+1 for x in range(len(df))]
+        df.columns = headers
+        df.to_csv(os.path.join(settings.MEDIA_ROOT, 'csvs/'+tutor.Class+'_'+tutor.subject.name+'_'+tutor.term+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), encoding='ISO-8859-1')
+        os.chdir(settings.MEDIA_ROOT)
+        with open(os.path.join(settings.MEDIA_ROOT, 'csvs/'+tutor.Class+'_'+tutor.subject.name+'_'+tutor.term+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), "r") as csvfile:
+            data = list(csv.reader(csvfile)) 
+            data[0][1] = 'STUDENT NAME'
+        if tutor.model_in == 'annual':                                                                                                                                   #[sum, avg, count, class, sheet]
+            return building(request, [data, [sum([int(float(df.Avg[i+1])) for i in range(len(df))]), round(mean([int(float(df.Avg[i+1])) for i in range(len(df))]), 2), len(df), tutor.Class, tutor.term+' MarkSheet', headers, tutor.term+'/'+tutor.subject.name, tutor.teacher_name]])
+        else:
+            return building(request, [data, [sum([int(float(df.Sum[i+1])) for i in range(len(df))]), round(mean([int(float(df.Sum[i+1])) for i in range(len(df))]), 2), len(df), tutor.Class, tutor.term+' MarkSheet', headers, tutor.term+'/'+tutor.subject.name, tutor.teacher_name]])
     else:
-        list_com_r = [t + [s[1]] + [f[1]] + a[1:] for t,s,f,a in zip(second_third_only_r, [[None, None]]*len(second_third_only), [[None, None]]*len(second_third_only), scores_in_annual_r)]
+        return export_csv_scores([tutor.Class, headers], lists)
     
-    union = sorted([x for x in list_com + list_com_r if x[0] in [i[0] for i in third]])
     
-    for each in union:
-        each[0] = CNAME.objects.get(pk=each[0]).student_name
+def broadscores(request, pk, ty):
+    classes = [['name', 'acc1', 'acc2', 'acc3', 'acc', 'ict1', 'ict2', 'ict3', 'ict', 'bio1', 'bio2', 'bio3', 'bio', 'agr', 'avr', 'grd', 'pos'], ['name', 'ent1', 'ent2', 'ent3', 'ent', 'mat1', 'mat2', 'mat3', 'mat', 'eng1', 'eng2', 'eng3', 'eng', 'agr', 'avr', 'grd', 'pos'], ['name', 'bus1', 'bus2', 'bus3', 'bus', 'yor1', 'yor2', 'yor3', 'yor',  'irs1', 'irs2', 'irs3', 'irs','agr', 'avr', 'grd', 'pos'], ['name', 'nva1', 'nva2', 'nva3', 'nva', 'non1', 'non2', 'non3', 'non', 'nil1', 'nil2', 'nil3', 'nil','agr', 'avr', 'grd', 'pos']]
+    headers = [[['STUDENT NAME', '1st', '2nd', '3rd', 'Acc', '1st', '2nd', '3rd', 'Ict', '1st', '2nd', '3rd', 'Bio', 'AGR', 'AVR', 'GRD', 'POS'], ['STUDENT NAME', '1st', '2nd', '3rd', 'Ent', '1st', '2nd', '3rd', 'Mat', '1st', '2nd', '3rd', 'Eng', 'AGR', 'AVR', 'GRD', 'POS'], ['STUDENT NAME', '1st', '2nd', '3rd', 'Plc', '1st', '2nd', '3rd', 'Yor', '1st', '2nd', '3rd', 'Irs', 'AGR', 'AVR', 'GRD', 'POS'], ['STUDENT NAME', '1st', '2nd', '3rd', 'Civ', '1st', '2nd', '3rd', 'None', '1st', '2nd', '3rd', 'None', 'AGR', 'AVR', 'GRD', 'POS']], [['STUDENT NAME', '1st', '2nd', '3rd', 'Arb', '1st', '2nd', '3rd', 'His', '1st', '2nd', '3rd', 'Bst', 'AGR', 'AVR', 'GRD', 'POS'], ['STUDENT NAME', '1st', '2nd', '3rd', 'Prv', '1st', '2nd', '3rd', 'Mat', '1st', '2nd', '3rd', 'Eng', 'AGR', 'AVR', 'GRD', 'POS'], ['STUDENT NAME', '1st', '2nd', '3rd', 'Bus', '1st', '2nd', '3rd', 'Yor', '1st', '2nd', '3rd', 'Irs', 'AGR', 'AVR', 'GRD', 'POS'], ['STUDENT NAME', '1st', '2nd', '3rd', 'Nav', '1st', '2nd', '3rd', 'Agr', '1st', '2nd', '3rd', 'None', 'AGR', 'AVR', 'GRD', 'POS']]]
+    response = requests.get('http://127.0.0.1:8838/result/create_update_annual_records/explorer/'+str(pk)+'/')
+    soup = BeautifulSoup(response.text, 'html.parser')
+    table_rows = soup.select_one("table.broadsheet")
+    table_rows = soup.findAll('tr')
+    lists = [[[data.find(class_=x).get_text(',') for x in classes[i]] for data in table_rows] for i in range(4)]
+    dg = lists[0]+[headers[1][1]]+lists[1]+[headers[1][2]]+lists[2]+[headers[1][3]]+lists[3]
+    if int(ty) == 1:
+        df = pd.DataFrame(dg)
+        sd = []
+        for i in range(4):
+            if i!=0:
+                sd+=[None]
+            sd = sd+[i+1 for i in range(len(lists[0]))]
+        df.index = sd
+        df.columns = headers[1][0]
+        df.to_csv(os.path.join(settings.MEDIA_ROOT, 'csvs/'+request.user.profile.class_in+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), encoding='ISO-8859-1')
+        os.chdir(settings.MEDIA_ROOT)
+        with open(os.path.join(settings.MEDIA_ROOT, 'csvs/'+request.user.profile.class_in+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), "r") as csvfile:
+            data = list(csv.reader(csvfile)) 
+        return building(request, [data, [sum([int(float(x[-3])) for x in lists[0]]), round(mean([int(float(x[-3])) for x in lists[0]]), 2), len(lists[0]), request.user.profile.class_in, 'BROADSHEET', headers[1][0], 'BROADSHEET', 'account: {}'.format(str(request.user.profile.last_name)+'  '+str(request.user.profile.first_name))]])
+    else:
+        return export_csv_scores([request.user.profile.class_in, headers[1][0]], dg)
+
+
+def export_csv_scores(details, lists):#result download based on login tutor
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = "attachment; filename={Class}.csv".format(Class=details[0])
+    writer = csv.writer(response)
+    writer.writerow(details[1])
+    for each in lists:
         writer.writerow(each)
-    return response   
-        
-    
-class terms_in_pdf(View):
-    def get(self, request):
-        tutor = get_object_or_404(BTUTOR, pk=request.user.profile.account_id)
-        if tutor.term == '3rd Term':
-            mains = ANNUAL.objects.filter(subject_by__exact=tutor).order_by('id')
-            x = round(mains.aggregate(Sum('Agr'))['Agr__sum'],2)
-            y = round(mains.aggregate(Avg('Agr'))['Agr__avg'],2)
+    return response 
+
+
+def past_csvs(request, Class, subject, term, session, formats):
+    os.chdir(settings.MEDIA_ROOT)
+    #from django.http import HttpResponse
+    xv = [['JSS 1', 'JSS 2', 'JSS 3', 'SSS 1', 'SSS 2', 'SSS 3'], ['ACC', 'AGR', 'ARB', 'BST', 'BIO', 'BUS', 'CTR', 'CHE', 'CIV', 'COM', 'ECO', 'ELE', 'ENG', 'FUR', 'GRM', 'GEO', 'GOV', 'HIS', 'ICT', 'IRS', 'LIT', 'MAT', 'NAV', 'PHY', 'PRV', 'YOR', None], ['1st Term', '2nd Term', '3rd Term', None]]
+    if xv[1][int(subject)] != None and xv[2][int(term)] != None:
+        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(xv[1][int(subject)])+'_'+str(xv[2][int(term)])+'_'+str(session)+'.csv')):
+             xx = os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(xv[1][int(subject)])+'_'+str(xv[2][int(term)])+'_'+str(session)+'.csv')
+             df = pd.read_csv(xx, index_col = 0)
         else:
-            mains = QSUBJECT.objects.filter(tutor__exact=tutor).order_by('id')
-            x = round(mains.aggregate(Sum('agr'))['agr__sum'],2)
-            y = round(mains.aggregate(Avg('agr'))['agr__avg'],2)
-        today = datetime.now()
-        params = {
-            'count_grade': mains.count(),
-            'tutor': tutor,
-            'request': request,
-            'mains': mains,
-            'today': today,
-            'subject_scores': x,
-            'subject_pert': y
-        }
-        if tutor.term == '3rd Term':
-            return Render.render('result/anu_pdf.html', params)
+            return redirect('home')
+    else:
+        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(session)+'.csv')):
+            xx = os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(session)+'.csv')
+            df = pd.read_csv(xx, index_col = 0)
         else:
-            return Render.render('result/pdf.html', params)
-        
-class broadsheet_in_pdf(View):
-    def get(self, request):
-        tutor = get_object_or_404(BTUTOR, pk=request.user.profile.account_id)
-        mains = OVERALL_ANNUAL.objects.filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
-        today = datetime.now()
-        params = {
-            'in_class': mains.count(),
-            'tutor': tutor,
-            'mains': mains,
-            'today': today,
-            'subject_scores': round(mains.aggregate(Sum('Avr'))['Avr__sum'], 2),
-            'subject_pert': round(mains.aggregate(Avg('Avr'))['Avr__avg'],2)
-            }
-        if  tutor.Class == 'SS 1' or tutor.Class == 'SS 2' or tutor.Class == 'SS 3':
-            return Render.render('result/broad_sheet_pdf_s.html', params)
+            return redirect('home')
+    headers = df.columns
+    if len(df) != 0:
+        with open(xx, "r") as csvfile:
+            data = list(csv.reader(csvfile))
+            TUTOR_NAME = data[0][1]
+            data[0][1] = 'STUDENT NAME'
+        if int(formats) == 1:
+            return export_csv_scores([str(xv[0][int(Class)]), headers[1][0]], data)
         else:
-            return Render.render('result/broad_sheet_pdf_j.html', params)
+            if 'AVG' in df.columns:#broadsheets
+                x = df.iloc[0:int(df.iloc[-1:].index[0])]                                                                                                                                   #[sum, avg, count, class, sheet]
+                return building(request, [data, [sum([int(float(x.AVG[i+1])) for i in range(len(x))]), round(mean([int(float(x.AVG[i+1])) for i in range(len(x))]), 2), len(x), str(xv[0][int(Class)]), 'BROADSHEET', headers, 'BROADSHEET', str(request.user.profile.last_name.upper())+'  '+str(request.user.profile.first_name.upper())]])
+            elif 'Sum' in df.columns and xv[2][int(term)] != None and xv[1][int(subject)] != None:#1st and 2nd terms
+                return building(request, [data, [sum([int(float(df.Sum[i+1])) for i in range(len(df))]), round(mean([int(float(df.Sum[i+1])) for i in range(len(df))]), 2), len(df), str(xv[0][int(Class)]), str(xv[2][int(term)])+' MarkSheet', headers, str(xv[2][int(term)])+'/'+str(xv[1][int(subject)]), TUTOR_NAME]])
+            elif 'Avg' in df.columns and xv[2][int(term)] != None and xv[1][int(subject)] != None:#third terms
+                return building(request, [data, [sum([int(float(df.Avg[i+1])) for i in range(len(df))]), round(mean([int(float(df.Avg[i+1])) for i in range(len(df))]), 2), len(df), str(xv[0][int(Class)]), str(xv[2][int(term)])+' MarkSheet', headers, str(xv[2][int(term)])+'/'+str(xv[1][int(subject)]), TUTOR_NAME]])
+            else:
+                return redirect('home')
+    else:
+        return redirect('home')
+

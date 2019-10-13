@@ -20,7 +20,7 @@
           {% else %}
               <pre style="width:70%;" >There are no records.</pre>
           {% endif %}
-          <tr class="capt"><td colspan="7"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:white; font-size: 10px;">RunTime: </a><pre style="line-height: 3px;">{{msg}}</pre></td></tr>
+          <tr class="capt"><td colspan="7"><a href="{% url 'admin_page' %}" style="font-family:Helvetica; color:white; font-size: 10px;">RunTime: </a><pre style="line-height: 3px;">{{msg}} Click <a href="{% url 'annual_view' pk=tutor.id %}" style="color:green; font-size: 11px;">Next</a></pre></td></tr>
        </table>
        <div><a href="{% url 'compute_annual' pk=pk %}" style="font-family:Helvetica; margin-left:36%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-list-alt"></span></a><a href="{% url 'home' %}" style="font-family:Helvetica; margin-left:0%; color:green; font-size: 20px;"><span class="glyphicon glyphicon-home"></span></a></div>
    </body> 

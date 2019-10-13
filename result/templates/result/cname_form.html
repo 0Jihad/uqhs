@@ -11,8 +11,15 @@
     <form method="post">
     {% csrf_token %}
     <div class="capt">EDIT STUDENT NAME</div>
-    {{ form|crispy }}
-    	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Done</span></button>
+    <div class="row">
+      <div class="col-xs-10">
+        {{ form.full_name|as_crispy_field }}
+      </div>
+      <div class="col-xs-2">
+        {{ form.gender|as_crispy_field }}
+      </div>
+    </div>
+    	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-check">Save</span></button>
   </form>
    {% endblock %} 
 </body>

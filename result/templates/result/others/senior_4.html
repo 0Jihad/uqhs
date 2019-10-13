@@ -1,0 +1,23 @@
+
+
+
+<!doctype html>
+<html>
+<body>
+    <table class="table">
+             <tr>
+               <th>STUDENT NAME</th><th>1st</th><th>2nd</th><th>3rd</th><th>Civ</th><th>1st</th><th>2nd</th><th>3rd</th><th>None</th><th>1st</th><th>2nd</th><th>3rd</th><th>None</th><th>AGR</th><th>AVR</th><th>GRD</th><th>POS</th> 
+            </tr>         
+          </thead>
+          {% if mains %}
+          {% for scr in mains %} 
+          <tr>
+        	<td class="name">{{ scr.student_name }}</td><td class="nva1">{{ scr.nva.first.agr }}</td><td class="nva2">{{ scr.nva.second.agr }}</td><td class="nva3">{{ scr.nva.third.agr }}</td><td class="nva">{{ scr.nva.Agr }}</td><td class="non1">{{  }}</td><td class="non2">{{  }}</td><td class="non3">{{  }}</td><td class="non">{{  }}</td><td class="nil1">{{  }}</td><td class="nil2">{{  }}</td><td class="nil3">{{  }}</td><td class="nil">{{  }}</td><td  class="agr">{{ scr.AGR }}</td><td class="avr">{{ scr.AVR }}</td><td class="grd">{{ scr.GRD }}<td class="pos">{{ scr.POS }}</td>
+          </tr>           
+          {% endfor %}
+          {% endif %}
+        </table>
+    </div>
+</div>
+
+</html>

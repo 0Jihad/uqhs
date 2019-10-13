@@ -1,27 +1,38 @@
-from .models import QSUBJECT, BTUTOR, RESULT_GRADE#, CNAME
+from .models import QSUBJECT, BTUTOR, TUTOR_HOME, SESSION#, OVERALL_ANNUAL, ANNUAL
 from django.shortcuts import render#, redirect#, redirect
-from django.db.models import Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
 import xhtml2pdf.pisa as pisa
-
+import time
+from datetime import timedelta
+from django.contrib import messages
+from django.db.models import Avg
 
 def tutor_model_summary(request, pk):
-    mains = QSUBJECT.objects.all()
-    count_s = mains.count()
+    start_time = time.time()
+    mains = QSUBJECT.objects.filter(tutor__session__exact=SESSION.objects.get(pk=1).new)
     tutors = [i[0] for i in list(set(list(mains.values_list('tutor')))) if i[0] != None]
     for i in range(0, len(tutors)):#
         t = BTUTOR.objects.get(pk=tutors[i])
         avg = round(QSUBJECT.objects.filter(tutor__subject__exact=t.subject, tutor__Class__exact=t.Class, tutor__term__exact=t.term).aggregate(Avg('agr'))['agr__avg'],2)
         count = QSUBJECT.objects.filter(tutor__subject__exact=t.subject, tutor__Class__exact=t.Class, tutor__term__exact=t.term).count()
-        t.model_summary = {str(t.teacher_name)+':'+str(t.subject.name)[:3]+':'+str(t.Class)+':'+str(t.term)+':'+str(count)+':'+str(avg)+'%'}
+        t.model_summary = {str(t.teacher_name)+':'+str(t.subject)[:3]+':'+str(t.Class)+':'+str(t.term)+':'+str(count)+':'+str(avg)+'%'}
         t.save()
-    count_t = BTUTOR.objects.all().count()
+    elapsed_time_secs = time.time() - start_time
+    msg = "Execution took: %s secs (Wall clock time)" % timedelta(seconds=round(elapsed_time_secs))
+    messages.success(request, msg)
+    print(msg)
+    return redirect('tutor_model_redirected', pk=pk)
+    
+    
+def tutor_model_redirected(request, pk):
+    count_s = QSUBJECT.objects.filter(tutor__session__exact=SESSION.objects.get(pk=1).new).count()
+    count_t = BTUTOR.objects.filter(session__exact=SESSION.objects.get(pk=1).new).count()
     page = request.GET.get('page', 1)
-    paginator = Paginator(BTUTOR.objects.all(), 30)
+    paginator = Paginator(BTUTOR.objects.filter(session__exact=SESSION.objects.get(pk=1).new), 30)
     try:
         all_page = paginator.page(page)
     except PageNotAnInteger:
@@ -30,37 +41,10 @@ def tutor_model_summary(request, pk):
         all_page = paginator.page(paginator.num_pages)
     return render(request, 'result/student_on_all_subjects_detail.html',  {'all_page': all_page, 'count_t': count_t, 'count_s':count_s, 'pk':pk})
 
-def grade_counter(mains, tur_id, tur_subject):
-    if RESULT_GRADE.objects.filter(subject__exact = tur_subject, identifier__exact = tur_id).count() == 0:
-        grd = RESULT_GRADE(subject = tur_subject, identifier = tur_id)
-        grd.save()
-    else:
-        grd = get_object_or_404(RESULT_GRADE, subject = tur_subject, identifier = tur_id)
-    grades = list(mains.values_list('grade'))
-    grade_list = [n[0] for n in [list(x) for x in grades]]
-    set_uni = list(set(grade_list))
-    grd_lst = [['A', 'C', 'P', 'F', 'A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9'], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    for i in range(0, len(set_uni)):
-        if set_uni[i] in grd_lst[0]:
-            grd_lst[1][grd_lst[0].index(set_uni[i])] = len([x for x in grade_list if x == set_uni[i]])
-    grd.grade_A = grd_lst[1][0]
-    grd.grade_C = grd_lst[1][1]
-    grd.grade_P = grd_lst[1][2]
-    grd.grade_F = grd_lst[1][3]
-    grd.grade_A1 = grd_lst[1][4]
-    grd.grade_B2 = grd_lst[1][5]
-    grd.grade_B3 = grd_lst[1][6]
-    grd.grade_C4 = grd_lst[1][7]
-    grd.grade_C5 = grd_lst[1][8]
-    grd.grade_C6 = grd_lst[1][9]
-    grd.grade_D7 = grd_lst[1][10]
-    grd.grade_E8 = grd_lst[1][11]
-    grd.grade_F9 = grd_lst[1][12]
-    grd.save()
-    return grd
+
 
 def cader(qry):
-    clas = [['', 'JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3'], ['', 'jss_one', 'jss_two', 'jss_three', 'sss_one', 'sss_two', 'sss_three']]
+    clas = [['', 'JSS 1', 'JSS 2', 'JSS 3', 'SSS 1', 'SSS 2', 'SSS 3'], ['', 'jss_one', 'jss_two', 'jss_three', 'sss_one', 'sss_two', 'sss_three']]
     x = clas[0].index(qry)
     if x <= 3:
         cader = 'j'
@@ -160,3 +144,25 @@ class Render:
             return HttpResponse(response.getvalue(), content_type='application/pdf')
         else:
             return HttpResponse("Error Rendering PDF", status=400)
+
+
+
+    
+def parent_id(tutor):
+    tutor_id = [x[0] for x in [list(TUTOR_HOME.objects.filter(tutor__exact=tutor.accounts, teacher_name__exact=tutor.teacher_name).values_list('first_term', 'second_term', 'third_term'))]]
+    if tutor.term == '1st Term':
+        tutors = TUTOR_HOME.objects.get(first_term = tutor)
+        tutors.first_term = None
+        tutors.save()
+    elif tutor.term == '2nd Term':
+        tutors = TUTOR_HOME.objects.get(second_term = tutor)
+        tutors.second_term = None
+        tutors.save()
+    elif tutor.term == '3rd Term':
+        tutors = TUTOR_HOME.objects.get(third_term = tutor)
+        tutors.third_term = None
+        tutors.save()
+    return tutor_id[0]
+
+
+

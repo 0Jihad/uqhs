@@ -1,4 +1,4 @@
-from .models import QSUBJECT, BTUTOR, Post#, OVERALL_ANNUAL, TERM, SESSION
+from .models import QSUBJECT, Post#, OVERALL_ANNUAL, TERM, SESSION
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required#, @permission_required
@@ -26,15 +26,8 @@ def confirmed_delete(request, pk):#Yes delete
     return redirect('student_in_none')
 
 @login_required
-def confirm_deletions(request, pk):#sort for many deletions confirmations
-    qry = get_object_or_404(BTUTOR, pk=pk)
-    qery =  QSUBJECT.objects.filter(tutor__term__exact=qry.term, tutor__Class__exact=qry.Class, tutor__subject__exact=qry.subject, tutor__exact = qry)
-    return render(request, 'result/confirm_deletes_a_class.html', {'qery' : qery, 'pk': pk, 'qry' : qry})
-@login_required
-def delete_all(request, pk):#Yes deletes
-    qry = get_object_or_404(BTUTOR, pk=pk)
-    QSUBJECT.objects.filter(tutor__term__exact=qry.term, tutor__Class__exact=qry.Class, tutor__subject__exact=qry.subject, tutor__exact = qry).delete()
-    qry.delete()
+def delete_all(request):#Yes deletes
+    QSUBJECT.objects.filter(tutor__accounts__exact=None, qteacher__exact=f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}').delete()
     return redirect('home')
 
 @login_required

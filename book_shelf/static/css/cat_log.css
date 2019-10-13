@@ -2,6 +2,7 @@
 /* Style the header with a grey background and some padding */
 body {
   font-family: Bodoni MT, Helvetica, sans-serif;
+  width:90%;margin:auto;min-width:600px;max-width:2000px
    
 }
 
