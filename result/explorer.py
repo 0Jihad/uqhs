@@ -10,7 +10,8 @@ from statistics import mean
 from django.contrib.auth.decorators import login_required
 #from django.http import HttpResponse
  #return HttpResponse(student_name_id_third, content_type='text/plain')#
-new = SESSION(new='2024').save()
+new = SESSION(new='2024')
+new.save()
 session = new.new
 dim = []                        
 def return_value_or_None(request, pk, x):
