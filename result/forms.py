@@ -66,12 +66,6 @@ class FORMARTS(forms.ModelForm):
         model = DOWNLOADFORMAT
         fields = ('formats',)
         
-class name_class_Form(forms.ModelForm):
-    class Meta:
-        model = QSUBJECT
-        fields = ('student_name','Class',)
-        
-        
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post

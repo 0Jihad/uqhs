@@ -112,5 +112,40 @@ def export_csv_scores(details, lists):#result download based on login tutor
     return response 
 
 
-
+def past_csvs(request, Class, subject, term, session, formats):
+    os.chdir(settings.MEDIA_ROOT)
+    #from django.http import HttpResponse
+    xv = [['JSS 1', 'JSS 2', 'JSS 3', 'SSS 1', 'SSS 2', 'SSS 3'], ['ACC', 'AGR', 'ARB', 'BST', 'BIO', 'BUS', 'CTR', 'CHE', 'CIV', 'COM', 'ECO', 'ELE', 'ENG', 'FUR', 'GRM', 'GEO', 'GOV', 'HIS', 'ICT', 'IRS', 'LIT', 'MAT', 'NAV', 'PHY', 'PRV', 'YOR', None], ['1st Term', '2nd Term', '3rd Term', None]]
+    if xv[1][int(subject)] != None and xv[2][int(term)] != None:
+        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(xv[1][int(subject)])+'_'+str(xv[2][int(term)])+'_'+str(session)+'.csv')):
+             xx = os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(xv[1][int(subject)])+'_'+str(xv[2][int(term)])+'_'+str(session)+'.csv')
+             df = pd.read_csv(xx, index_col = 0)
+        else:
+            return redirect('home')
+    else:
+        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(session)+'.csv')):
+            xx = os.path.join(settings.MEDIA_ROOT, 'csvs/'+str(xv[0][int(Class)])+'_'+str(session)+'.csv')
+            df = pd.read_csv(xx, index_col = 0)
+        else:
+            return redirect('home')
+    headers = df.columns
+    if len(df) != 0:
+        with open(xx, "r") as csvfile:
+            data = list(csv.reader(csvfile))
+            TUTOR_NAME = data[0][1]
+            data[0][1] = 'STUDENT NAME'
+        if int(formats) == 1:
+            return export_csv_scores([str(xv[0][int(Class)]), headers[1][0]], data)
+        else:
+            if 'AVG' in df.columns:#broadsheets
+                x = df.iloc[0:int(df.iloc[-1:].index[0])]                                                                                                                                   #[sum, avg, count, class, sheet]
+                return building(request, [data, [sum([int(float(x.AVG[i+1])) for i in range(len(x))]), round(mean([int(float(x.AVG[i+1])) for i in range(len(x))]), 2), len(x), str(xv[0][int(Class)]), 'BROADSHEET', headers, 'BROADSHEET', str(request.user.profile.last_name.upper())+'  '+str(request.user.profile.first_name.upper())]])
+            elif 'Sum' in df.columns and xv[2][int(term)] != None and xv[1][int(subject)] != None:#1st and 2nd terms
+                return building(request, [data, [sum([int(float(df.Sum[i+1])) for i in range(len(df))]), round(mean([int(float(df.Sum[i+1])) for i in range(len(df))]), 2), len(df), str(xv[0][int(Class)]), str(xv[2][int(term)])+' MarkSheet', headers, str(xv[2][int(term)])+'/'+str(xv[1][int(subject)]), TUTOR_NAME]])
+            elif 'Avg' in df.columns and xv[2][int(term)] != None and xv[1][int(subject)] != None:#third terms
+                return building(request, [data, [sum([int(float(df.Avg[i+1])) for i in range(len(df))]), round(mean([int(float(df.Avg[i+1])) for i in range(len(df))]), 2), len(df), str(xv[0][int(Class)]), str(xv[2][int(term)])+' MarkSheet', headers, str(xv[2][int(term)])+'/'+str(xv[1][int(subject)]), TUTOR_NAME]])
+            else:
+                return redirect('home')
+    else:
+        return redirect('home')
 

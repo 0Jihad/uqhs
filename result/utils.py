@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.db.models import Avg
 
 def session():
-    return '2024'
+    return 2024
 
 def tutor_model_summary(request, pk):
     start_time = time.time()

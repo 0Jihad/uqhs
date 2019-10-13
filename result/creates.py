@@ -43,6 +43,8 @@ def created_subjects(request, pk):#New teacher form for every new term, class, s
     except EmptyPage:
         all_page = paginator.page(paginator.num_pages)
     return render(request, 'result/subject_in_all.html',  {'count_grade' : count_grade, 'all_page': all_page, 'pk' : pk, 'SUB_NAME':SUB_NAME})
+
+
 @login_required
 def create_new_subject_teacher(request):# teacher form for every new term, class, subjects, subject_per_name
     if request.method == 'POST':
@@ -94,7 +96,7 @@ def search_pdf(request):
         frmt = FORMARTS(request.POST)
         if form.is_valid() and new.is_valid() and subject.is_valid() and frmt.is_valid():
             xv = [['JSS 1', 'JSS 2', 'JSS 3', 'SSS 1', 'SSS 2', 'SSS 3'], ['ACC', 'AGR', 'ARB', 'BST', 'BIO', 'BUS', 'CTR', 'CHE', 'CIV', 'COM', 'ECO', 'ELE', 'ENG', 'FUR', 'GRM', 'GEO', 'GOV', 'HIS', 'ICT', 'IRS', 'LIT', 'MAT', 'NAV', 'PHY', 'PRV', 'YOR', None], ['1st Term', '2nd Term', '3rd Term', None]]
-            return redirect('past_csvs', Class=xv[0].index(form.cleaned_data['Class']), subject=xv[1].index(subject.cleaned_data['name']), term=xv[2].index(form.cleaned_data['term']), session=int(new.cleaned_data['new']), formats=int(frmt.cleaned_data['formats']))
+            return redirect('past_csvs', Class=xv[0].index(form.cleaned_data['Class']), subject=xv[1].index(subject.cleaned_data['name']), term=xv[2].index(form.cleaned_data['term']), session=new.cleaned_data['new'], formats=frmt.cleaned_data['formats'])
     else:
         form = subject_class_term_Form()
         subject = subjectforms()

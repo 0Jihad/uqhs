@@ -1,7 +1,6 @@
 from .models import QSUBJECT, Edit_User, ANNUAL, BTUTOR, CNAME, OVERALL_ANNUAL, TUTOR_HOME, REGISTERED_ID, ASUBJECTS
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import name_class_Form
 import time
 from django.contrib.auth.decorators import login_required
 #from result.utils import parent_id
@@ -86,23 +85,7 @@ def subject_home(request, pk, cl):#Step 1:: list of tutor's subjects with class,
         return render(request, 'result/tutor_class_filter.html', {'tutors':tutor, 'detail' : detail, 'counts':tutor.count()})
     else:
         return redirect('home') 
-    
-    
-
-def student_name_class_filter(request):#New teacher form for every new term, class, subjects Student_names_list 
-    if request.method == 'POST':
-        result = name_class_Form(request.POST)
-        if result.is_valid():
-            student_class = CNAME.objects.get(pk=int(int(str(result.cleaned_data['student_name']).split(':')[0])))
-            if student_class.Class == result.cleaned_data['Class']:
-                subjects = QSUBJECT.objects.filter(student_name_id__exact=int(str(result.cleaned_data['student_name']).split(':')[0]))
-                anuual = subjects.aggregate(Sum('agr'))['agr__sum']
-                return render(request, 'result/single_subject_per_student.html', {'subjects':subjects, 'name': student_class, 'anuual':anuual})
-            else:
-                return redirect('teacher_create') 
-    else:
-        result = name_class_Form()
-    return render(request, 'result/name_class_filter.html', {'result': result})  
+     
 
 def subject_grade_counter(pk, md):
     from collections import Counter
