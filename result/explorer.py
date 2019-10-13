@@ -1,4 +1,4 @@
-from .models import ANNUAL, OVERALL_ANNUAL, SESSION#, ASUBJECTS
+from .models import ANNUAL, OVERALL_ANNUAL#, SESSION#, ASUBJECTS
 from django.shortcuts import render, redirect, get_object_or_404
 from result.utils import do_grades, do_positions, cader
 from datetime import datetime
@@ -10,9 +10,9 @@ from statistics import mean
 from django.contrib.auth.decorators import login_required
 #from django.http import HttpResponse
  #return HttpResponse(student_name_id_third, content_type='text/plain')#
-new = SESSION(new='2024')
-new.save()
-session = new.new
+from result.creates import session
+session = session()
+
 dim = []                        
 def return_value_or_None(request, pk, x):
     name = ANNUAL.objects.get(id=pk)
@@ -92,7 +92,7 @@ def broad_sheet(request):
             return redirect('home')
     
     else:
-        al = OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
+        al = OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=session)
         elapsed_time_secs = time.time() - start_time
         msg = "Execution took: %s secs (Wall clock time)" % timedelta(seconds=round(elapsed_time_secs))
         messages.success(request, msg)
@@ -106,7 +106,7 @@ def broad_sheet(request):
 @login_required
 def reload(request):
     if request.user.profile.class_in != None:
-        sd = OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new).delete()
+        sd = OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=session).delete()
         print('previouse' +str(sd)+ 'records deleted.')
         return redirect('broadsheet_last_stage')
     else:
@@ -115,6 +115,6 @@ def reload(request):
     
 def broadsheet_pdf(request, pk):
     from django.contrib.auth.models import User
-    al = OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=User.objects.get(pk=pk), class_in__exact=User.objects.get(pk=pk).profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
+    al = OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=User.objects.get(pk=pk), class_in__exact=User.objects.get(pk=pk).profile.class_in, session__exact=session)
     return render(request, 'result/broadsheet_pdf.html',  {'mains': al.order_by('order')})
   

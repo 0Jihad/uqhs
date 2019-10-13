@@ -1,4 +1,4 @@
-from .models import QSUBJECT, BTUTOR, TUTOR_HOME, SESSION#, OVERALL_ANNUAL, ANNUAL
+from .models import QSUBJECT, BTUTOR, TUTOR_HOME#, SESSION#, OVERALL_ANNUAL, ANNUAL
 from django.shortcuts import render#, redirect#, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import redirect
@@ -11,9 +11,12 @@ from datetime import timedelta
 from django.contrib import messages
 from django.db.models import Avg
 
+from result.creates import session
+session = session()
+
 def tutor_model_summary(request, pk):
     start_time = time.time()
-    mains = QSUBJECT.objects.filter(tutor__session__exact=SESSION.objects.get(pk=1).new)
+    mains = QSUBJECT.objects.filter(tutor__session__exact=session)
     tutors = [i[0] for i in list(set(list(mains.values_list('tutor')))) if i[0] != None]
     for i in range(0, len(tutors)):#
         t = BTUTOR.objects.get(pk=tutors[i])
@@ -29,10 +32,10 @@ def tutor_model_summary(request, pk):
     
     
 def tutor_model_redirected(request, pk):
-    count_s = QSUBJECT.objects.filter(tutor__session__exact=SESSION.objects.get(pk=1).new).count()
-    count_t = BTUTOR.objects.filter(session__exact=SESSION.objects.get(pk=1).new).count()
+    count_s = QSUBJECT.objects.filter(tutor__session__exact=session).count()
+    count_t = BTUTOR.objects.filter(session__exact=session).count()
     page = request.GET.get('page', 1)
-    paginator = Paginator(BTUTOR.objects.filter(session__exact=SESSION.objects.get(pk=1).new), 30)
+    paginator = Paginator(BTUTOR.objects.filter(session__exact=session), 30)
     try:
         all_page = paginator.page(page)
     except PageNotAnInteger:

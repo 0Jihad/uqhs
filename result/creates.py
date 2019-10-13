@@ -1,9 +1,17 @@
-from .models import QSUBJECT, ASUBJECTS, BTUTOR, SESSION, TUTOR_HOME
+from .models import QSUBJECT, ASUBJECTS, BTUTOR, TUTOR_HOME, SESSION
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import subjectforms, subject_class_term_Form, sessions, FORMARTS
 from django.contrib.auth.decorators import login_required
 from result.utils import cader
+
+def session():
+    if SESSION.objects.all().count() == 0:
+        return '2024'
+    else:
+        return SESSION.objects.get(pk=1).new
+
+session = session()
 
 def create_subjects(request):#New teacher form for every new term, class, subjects
     if request.method == 'POST':
@@ -44,9 +52,9 @@ def create_new_subject_teacher(request):# teacher form for every new term, class
     if request.method == 'POST':
         result = subject_class_term_Form(request.POST)
         if result.is_valid():
-            unique = BTUTOR.objects.filter(accounts__exact=request.user, term__exact='1st Term', Class__exact=result.cleaned_data['Class'], subject__exact = result.cleaned_data['subject'], teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session__exact = SESSION.objects.get(pk=1).new).count()
+            unique = BTUTOR.objects.filter(accounts__exact=request.user, term__exact='1st Term', Class__exact=result.cleaned_data['Class'], subject__exact = result.cleaned_data['subject'], teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session__exact = session).count()
             if unique == 0:
-                new_teacher = BTUTOR(accounts=request.user, subject = result.cleaned_data['subject'], Class = result.cleaned_data['Class'], term = '1st Term', cader=cader(result.cleaned_data['Class']), teacher_name = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = SESSION.objects.get(pk=1).new)
+                new_teacher = BTUTOR(accounts=request.user, subject = result.cleaned_data['subject'], Class = result.cleaned_data['Class'], term = '1st Term', cader=cader(result.cleaned_data['Class']), teacher_name = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = session)
                 new_teacher.save()
                 TUTOR_HOME(tutor=request.user, teacher_name = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', first_term = new_teacher).save()
                 return redirect('upload_txt', pk=new_teacher.id)
@@ -68,8 +76,8 @@ def create_new_subject_teacher(request):# teacher form for every new term, class
 def update_teacher_class(request, pk, tr):
     previous = TUTOR_HOME.objects.get(first_term=BTUTOR.objects.get(pk=pk))
     term = ['1st Term', '2nd Term', '3rd Term'][int(tr)]
-    if BTUTOR.objects.filter(accounts__exact=request.user, subject__exact = previous.first_term.subject, Class__exact = previous.first_term.Class, term__exact = term, cader__exact=cader(previous.first_term.Class), teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = SESSION.objects.get(pk=1).new).count() == 0:
-        new_term = BTUTOR(accounts=request.user, subject = previous.first_term.subject, Class = previous.first_term.Class, term = term, cader=cader(previous.first_term.Class), teacher_name = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = SESSION.objects.get(pk=1).new)
+    if BTUTOR.objects.filter(accounts__exact=request.user, subject__exact = previous.first_term.subject, Class__exact = previous.first_term.Class, term__exact = term, cader__exact=cader(previous.first_term.Class), teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = session).count() == 0:
+        new_term = BTUTOR(accounts=request.user, subject = previous.first_term.subject, Class = previous.first_term.Class, term = term, cader=cader(previous.first_term.Class), teacher_name = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = session)
         new_term.save()
         if term == '2nd Term':
             previous.second_term = new_term
@@ -78,7 +86,7 @@ def update_teacher_class(request, pk, tr):
                 previous.third_term = new_term
         previous.save()
         pk = new_term.id
-    if term == '3rd Term' and BTUTOR.objects.filter(accounts__exact=request.user, subject__exact = previous.first_term.subject, Class__exact = previous.first_term.Class, term__in = ['1st Term', '2nd Term'], cader__exact=cader(previous.first_term.Class), teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = SESSION.objects.get(pk=1).new).count() == 1:
+    if term == '3rd Term' and BTUTOR.objects.filter(accounts__exact=request.user, subject__exact = previous.first_term.subject, Class__exact = previous.first_term.Class, term__in = ['1st Term', '2nd Term'], cader__exact=cader(previous.first_term.Class), teacher_name__exact = f'{request.user.profile.title}{request.user.profile.last_name} : {request.user.profile.first_name}', session = session).count() == 1:
         return redirect('home')
     return redirect('upload_txt', pk=pk)
 

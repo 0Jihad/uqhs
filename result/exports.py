@@ -8,7 +8,7 @@ import os
 from django.shortcuts import get_object_or_404#, redirect
 import csv
 from wsgiref.util import FileWrapper
-from .models import QSUBJECT, BTUTOR, CNAME, SESSION
+from .models import QSUBJECT, BTUTOR, CNAME#, SESSION
 import pandas as pd
 from django.conf import settings
 import requests
@@ -17,6 +17,9 @@ from statistics import mean
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from result.flowerable import building
+
+from result.creates import session
+session = session()
 
 module_dir = os.path.dirname(__file__)  # get current directory
 file_path = os.path.join(module_dir, 'test1.txt')
@@ -59,9 +62,9 @@ def scores(request, pk, ty):
         df = pd.DataFrame(lists)
         df.index = [x+1 for x in range(len(df))]
         df.columns = headers
-        df.to_csv(os.path.join(settings.MEDIA_ROOT, 'csvs/'+tutor.Class+'_'+tutor.subject.name+'_'+tutor.term+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), encoding='ISO-8859-1')
+        df.to_csv(os.path.join(settings.MEDIA_ROOT, 'csvs/'+tutor.Class+'_'+tutor.subject.name+'_'+tutor.term+'_'+str(session)+'.csv'), encoding='ISO-8859-1')
         os.chdir(settings.MEDIA_ROOT)
-        with open(os.path.join(settings.MEDIA_ROOT, 'csvs/'+tutor.Class+'_'+tutor.subject.name+'_'+tutor.term+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), "r") as csvfile:
+        with open(os.path.join(settings.MEDIA_ROOT, 'csvs/'+tutor.Class+'_'+tutor.subject.name+'_'+tutor.term+'_'+str(session)+'.csv'), "r") as csvfile:
             data = list(csv.reader(csvfile)) 
             data[0][1] = 'STUDENT NAME'
         if tutor.model_in == 'annual':                                                                                                                                   #[sum, avg, count, class, sheet]
@@ -90,9 +93,9 @@ def broadscores(request, pk, ty):
             sd = sd+[i+1 for i in range(len(lists[0]))]
         df.index = sd
         df.columns = headers[1][0]
-        df.to_csv(os.path.join(settings.MEDIA_ROOT, 'csvs/'+request.user.profile.class_in+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), encoding='ISO-8859-1')
+        df.to_csv(os.path.join(settings.MEDIA_ROOT, 'csvs/'+request.user.profile.class_in+'_'+str(session)+'.csv'), encoding='ISO-8859-1')
         os.chdir(settings.MEDIA_ROOT)
-        with open(os.path.join(settings.MEDIA_ROOT, 'csvs/'+request.user.profile.class_in+'_'+str(SESSION.objects.get(pk=1).new)+'.csv'), "r") as csvfile:
+        with open(os.path.join(settings.MEDIA_ROOT, 'csvs/'+request.user.profile.class_in+'_'+str(session)+'.csv'), "r") as csvfile:
             data = list(csv.reader(csvfile)) 
         return building(request, [data, [sum([int(float(x[-3])) for x in lists[0]]), round(mean([int(float(x[-3])) for x in lists[0]]), 2), len(lists[0]), request.user.profile.class_in, 'BROADSHEET', headers[1][0], 'BROADSHEET', 'account: {}'.format(str(request.user.profile.last_name)+'  '+str(request.user.profile.first_name))]])
     else:

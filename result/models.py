@@ -26,6 +26,8 @@ class SESSION(models.Model):
     
     def __str__(self):
          return self.new
+
+    
         
         
 class DOWNLOADFORMAT(models.Model):
@@ -156,7 +158,10 @@ class REGISTERED_ID(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.student_id}'
-        
+ 
+from result.creates import session
+session = session()
+       
 class QSUBJECT(models.Model):#step5-subject 
      student_name = models.ForeignKey(CNAME, on_delete=models.CASCADE, null=True)#
      student_id = models.CharField(max_length=115, blank=True, null=True)
@@ -189,13 +194,13 @@ class QSUBJECT(models.Model):#step5-subject
      
      def save(self):
          if self.tutor != None:
-            if REGISTERED_ID.objects.filter(student_name__exact=self.student_name, student_class__exact=self.tutor.Class, session__exact=SESSION.objects.get(pk=1).new).count() == 0:
-                new = REGISTERED_ID(student_name=self.student_name, student_class=self.tutor.Class, session=SESSION.objects.get(pk=1).new)
+            if REGISTERED_ID.objects.filter(student_name__exact=self.student_name, student_class__exact=self.tutor.Class, session__exact=session).count() == 0:
+                new = REGISTERED_ID(student_name=self.student_name, student_class=self.tutor.Class, session=session)
                 new.save()
                 self.student_id = str(new.student_id)+'/'+ str(new.id)
                 new.student_id = self.student_id
                 new.save()
-            self.student_id = REGISTERED_ID.objects.get(student_name=self.student_name, student_class=self.tutor.Class, session=SESSION.objects.get(pk=1).new).student_id
+            self.student_id = REGISTERED_ID.objects.get(student_name=self.student_name, student_class=self.tutor.Class, session=session).student_id
             self.qteacher = self.tutor.teacher_name
          self.updated = datetime.datetime.today()
          self.gender = self.student_name.gender

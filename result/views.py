@@ -1,4 +1,4 @@
-from .models import QSUBJECT, Edit_User, ANNUAL, BTUTOR, CNAME, OVERALL_ANNUAL, SESSION, TUTOR_HOME, REGISTERED_ID, ASUBJECTS
+from .models import QSUBJECT, Edit_User, ANNUAL, BTUTOR, CNAME, OVERALL_ANNUAL, TUTOR_HOME, REGISTERED_ID, ASUBJECTS
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import name_class_Form
@@ -12,6 +12,8 @@ from django.db.models import Sum, Avg
 
 #########################################################################################################################
 start_time = time.time()
+from result.creates import session
+session = session()
 def home_page(request, pk):#Step 1:: list of tutor's subjects with class, term
     """
     Home page for every tutor!
@@ -113,7 +115,7 @@ def subject_grade_counter(pk, md):
         count = Counter([str(x[0]) for x in subjects.values_list('Grade') if x != None])
     else:
         user = get_object_or_404(User, pk=get_object_or_404(BTUTOR, pk=pk).class_teacher_id)
-        subjects = OVERALL_ANNUAL.objects.filter(teacher_in__exact=user, class_in__exact=user.profile.class_in, session__exact=SESSION.objects.get(pk=1).new)
+        subjects = OVERALL_ANNUAL.objects.filter(teacher_in__exact=user, class_in__exact=user.profile.class_in, session__exact=session)
         count = Counter([x[0] for x in subjects.values_list('grade') if x != None])
     return sorted(count.most_common()) #[('A1', 8), ('C6', 3), ('C4', 3), ('C5', 2), ('B3', 2), ('B2', 2)]
 
@@ -245,12 +247,12 @@ def student_on_all_subjects_list(request, pk):##Step 2::  every tutor home detai
         return render(request, 'result/student_on_all_subjects_detail.html',  {'all_page': paginator(request, mains), 'count_t': count_t, 'count_s':count_s})
 ###    
 def student_subject_list(request, pk):##Step 2::  every tutor home detail views
-    mains = QSUBJECT.objects.filter(student_id=QSUBJECT.objects.get(pk=pk).student_id, tutor__session__exact=SESSION.objects.get(pk=1).new).order_by('id')
+    mains = QSUBJECT.objects.filter(student_id=QSUBJECT.objects.get(pk=pk).student_id, tutor__session__exact=session).order_by('id')
     return render(request, 'result/student_subject_list.html',  {'all_page': paginator(request, mains), 'counts': mains.count(), 'name': QSUBJECT.objects.get(pk=pk).student_name, 'pk': pk})
 
 
 def all_student_subject_list(request, pk):##Step 2::  every tutor home detail views
-    mains = QSUBJECT.objects.filter(student_id=QSUBJECT.objects.get(pk=pk).student_id, tutor__session__exact=SESSION.objects.get(pk=1).new)
+    mains = QSUBJECT.objects.filter(student_id=QSUBJECT.objects.get(pk=pk).student_id, tutor__session__exact=session)
     return render(request, 'result/all_student_subject_list.html',  {'mains': mains, 'counts': mains.count(), 'name': QSUBJECT.objects.get(pk=pk).student_name, 'pk': pk, 'cnt': pk})
 
 ##########################PORTAL MANAGEMENT#################################### 
@@ -316,7 +318,7 @@ def student_subject_detail_all_subject(request, pk):#student subject detail(sing
 
 def searchs(request):
     query = request.GET.get("q")
-    reg = REGISTERED_ID.objects.filter(student_name__in=CNAME.objects.filter(last_name__icontains = query.upper()), session__exact=SESSION.objects.get(pk=1).new)
+    reg = REGISTERED_ID.objects.filter(student_name__in=CNAME.objects.filter(last_name__icontains = query.upper()), session__exact=session)
     return render(request, 'result/searched_names.html',  {'all_page' : reg}) 	
 
 def search_results(request, pk):
@@ -326,7 +328,7 @@ def search_results(request, pk):
 def broad_sheet_views(request, pk):
     start_time = time.time()
     from .explorer import subject_counter
-    al = OVERALL_ANNUAL.objects.filter(class_in__exact=BTUTOR.objects.get(pk=pk).Class, session__exact=SESSION.objects.get(pk=1).new)  
+    al = OVERALL_ANNUAL.objects.filter(class_in__exact=BTUTOR.objects.get(pk=pk).Class, session__exact=session)  
     elapsed_time_secs = time.time() - start_time
     msg = "Execution took: %s secs (Wall clock time)" % timedelta(seconds=round(elapsed_time_secs))
     print(msg)

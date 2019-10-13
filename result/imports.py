@@ -1,7 +1,7 @@
 ######################STAGE 2 ::: UPLOAD SCORES##################STARTS
 from .forms import new_student_name, student_name
 from collections import Counter
-from .models import QSUBJECT, CNAME, BTUTOR, SESSION, ASUBJECTS, ANNUAL, REGISTERED_ID, TUTOR_HOME
+from .models import QSUBJECT, CNAME, BTUTOR, ASUBJECTS, ANNUAL, REGISTERED_ID, TUTOR_HOME
 from django.shortcuts import render, redirect, get_object_or_404
 from result.utils import do_grades, do_positions, cader
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,10 @@ from django.contrib import messages
 from django.conf import settings
 import os
 import shutil
+
+
+from result.creates import session
+session = session()
 
 def bst1_plus_bst2(dim):
     result = []
@@ -150,12 +154,12 @@ def mass_upload(request):
             with open(files, 'r') as file:
                 new = files.split("_")#['99', 'SSS 3', '3', 'MAT.txt']
                 user = User.objects.get(pk=int(new[0]))#99   'MAT'                     'SSS 3'                                                     '3rd Term'                 's'
-                unique = BTUTOR.objects.filter(accounts__exact=user, term__exact=['empty', '1st Term', '2nd Term', '3rd Term'][int(new[2])], Class__exact=new[1], subject__exact = ASUBJECTS.objects.get(name=new[-1].split('.')[0]), session__exact = SESSION.objects.get(pk=1).new)
+                unique = BTUTOR.objects.filter(accounts__exact=user, term__exact=['empty', '1st Term', '2nd Term', '3rd Term'][int(new[2])], Class__exact=new[1], subject__exact = ASUBJECTS.objects.get(name=new[-1].split('.')[0]), session__exact = session)
                 if unique.count() == 0:
-                    tutor = BTUTOR(accounts=user, subject = ASUBJECTS.objects.get(name=new[-1].split('.')[0]), Class = new[1], term = ['empty', '1st Term', '2nd Term', '3rd Term'][int(new[2])], cader=cader(new[1]), teacher_name = f'{user.profile.title}{user.profile.last_name} : {user.profile.first_name}', session = SESSION.objects.get(pk=1).new)
+                    tutor = BTUTOR(accounts=user, subject = ASUBJECTS.objects.get(name=new[-1].split('.')[0]), Class = new[1], term = ['empty', '1st Term', '2nd Term', '3rd Term'][int(new[2])], cader=cader(new[1]), teacher_name = f'{user.profile.title}{user.profile.last_name} : {user.profile.first_name}', session = session)
                     tutor.save()
                 else:
-                    tutor = BTUTOR.objects.get(accounts=user, term=['empty', '1st Term', '2nd Term', '3rd Term'][int(new[2])], Class=new[1], subject = ASUBJECTS.objects.get(name=new[-1].split('.')[0]), session = SESSION.objects.get(pk=1).new)
+                    tutor = BTUTOR.objects.get(accounts=user, term=['empty', '1st Term', '2nd Term', '3rd Term'][int(new[2])], Class=new[1], subject = ASUBJECTS.objects.get(name=new[-1].split('.')[0]), session = session)
                 
                 file_txt = file.read()#.decode("ISO-8859-1")
                 contents = file_txt.split('\n');
@@ -272,7 +276,7 @@ def search_to_load(request, pk):
     if request.method == 'POST':
         result =  new_student_name(request.POST)
         if result.is_valid():
-            reg = REGISTERED_ID.objects.filter(student_name__in=CNAME.objects.filter(last_name__icontains = result.cleaned_data['student_name'].upper()), session__exact=SESSION.objects.get(pk=1).new)
+            reg = REGISTERED_ID.objects.filter(student_name__in=CNAME.objects.filter(last_name__icontains = result.cleaned_data['student_name'].upper()), session__exact=session)
             return render(request, 'result/searched_names.html',  {'all_page' : reg}) 
     else:
         result = new_student_name()

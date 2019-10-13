@@ -4,7 +4,7 @@ Created on Sat Oct  5 22:12:31 2019
 
 @author: AdeolaOlalekan
 """
-from .models import SESSION
+#from .models import SESSION
 import datetime
 import os
 from reportlab.lib.units import inch
@@ -15,7 +15,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from django.conf import settings
 import io
 from django.http import FileResponse
-
+from result.creates import session
+session = session()
 
 
 def add_page_number(canvas, doc):
@@ -26,7 +27,7 @@ def add_page_number(canvas, doc):
     canvas.drawCentredString(4 *inch, .25*inch, text)
     canvas.drawString(6.8 * inch, 0.5 * inch, '/'+str(Class)+'/'+str(sheet))
     canvas.drawRightString(6.8 * inch, 0.5 * inch, tutor)
-    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(SESSION.objects.get(pk=1).new))
+    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(session))
     canvas.setStrokeGray(0.90)
     canvas.setFillGray(0.90)
     canvas.drawCentredString(2.5 * inch, 1.25 * inch, 'UMUL_QURA HIGH SCHOOL MARK_SHEETS')
@@ -40,7 +41,7 @@ def logo(canvas, doc):
     canvas.drawCentredString(4 *inch, .25*inch, text)
     canvas.drawString(6.8 * inch, 0.5 * inch, '/'+str(Class)+'/'+str(sheet))
     canvas.drawRightString(6.8 * inch, 0.5 * inch, tutor)
-    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(SESSION.objects.get(pk=1).new))
+    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(session))
     canvas.setStrokeGray(0.90)
     canvas.setFillGray(0.90)
     canvas.drawImage(doc.watermark,83,760,width=68,height=57,mask='auto')
@@ -56,7 +57,7 @@ def broadsheet(canvas, doc):
     canvas.drawCentredString(5.75 *inch, .25*inch, text)
     canvas.drawString(8.3 * inch, 0.5 * inch, '/'+str(Class)+'/'+str(sheet))
     canvas.drawRightString(8.3 * inch, 0.5 * inch, tutor)
-    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(SESSION.objects.get(pk=1).new))
+    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(session))
     canvas.setStrokeGray(0.90)
     canvas.setFillGray(0.90)
     canvas.drawCentredString(2.5 * inch, 1.25 * inch, 'UMUL_QURA HIGH SCHOOL MARK_SHEETS')
@@ -70,7 +71,7 @@ def logo2(canvas, doc):
     canvas.drawCentredString(5.75 *inch, .25*inch, text)
     canvas.drawString(8.3 * inch, 0.5 * inch, '/'+str(Class)+'/'+str(sheet))
     canvas.drawRightString(8.3 * inch, 0.5 * inch, tutor)
-    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(SESSION.objects.get(pk=1).new))
+    canvas.drawString(0.5 * inch, 0.5 * inch, 'https://uqhs.herokuapp.com/'+str(datetime.datetime.today())+'/: {}'.format(session))
     canvas.setStrokeGray(0.90)
     canvas.setFillGray(0.90)
     canvas.drawImage(doc.watermark,83,500,width=68,height=57,mask='auto')
