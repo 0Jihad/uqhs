@@ -26,12 +26,6 @@ class SESSION(models.Model):
     
     def __str__(self):
          return self.new
-
-    def save(self):
-        if not self.id:
-            self.created = datetime.date.today()
-        self.updated = datetime.datetime.today()
-        super(SESSION, self).save()
         
         
 class DOWNLOADFORMAT(models.Model):
