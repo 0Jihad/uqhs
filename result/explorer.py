@@ -29,27 +29,31 @@ def create_student_annual(request):
         global dim
         trace = [['CHE', 'ACC', 'ARB'], ['GOV', 'ICT', 'HIS'], ['GEO', 'AGR', 'YOR'], ['BST', 'BIO', 'ECO'], ['BUS', 'PHY', 'LIT', 'COM'], ['ELE', 'CTR', 'GRM', 'PRV']]
         annuals = ANNUAL.objects.select_related('subject_by').filter(subject_by__subject__name__exact= 'ENG', subject_by__Class__exact=request.user.profile.class_in, subject_by__session__exact = session)
-        ids = [x for x in list(annuals.values_list('id'))]
-        c, j = [None, None]
-        for r in range(0, len(ids)):
-            name = ANNUAL.objects.get(id=ids[r][0])
-            a = return_value_or_None(request, ids[r][0], trace[0])
-            b = return_value_or_None(request, ids[r][0], trace[1])
-            if name.subject_by.Class== 'SSS 1' or name.subject_by.Class== 'SSS 2' or name.subject_by.Class== 'SSS 3':#yor
-                c = return_value_or_None(request, ids[r][0], trace[2])
-            d = return_value_or_None(request, ids[r][0], trace[3])
-            e = return_value_or_None(request, ids[r][0], trace[4])   
-            f = return_value_or_None(request, ids[r][0], trace[5])
-            #['MAT', 'NAV', 'IRS', 'AGR'] ['MAT', 'CIV', 'IRS']
-            g = return_value_or_None(request, ids[r][0], ['MAT'])
-            h = return_value_or_None(request, ids[r][0], ['CIV', 'NAV'])
-            i = return_value_or_None(request, ids[r][0], ['IRS'])     
-            if name.subject_by.Class== 'JSS 1' or name.subject_by.Class== 'JSS 2' or name.subject_by.Class== 'JSS 3':#agr
-                c = return_value_or_None(request, ids[r][0], ['YOR'])
-                j = return_value_or_None(request, ids[r][0], ['AGR'])            #i
-            if len(dim) != 0:
-                OVERALL_ANNUAL.objects.create(student_name=name.student_name, class_in=name.subject_by.Class, teacher_in=request.user,  session=name.subject_by.session, acc = a, ict = b, yor = c, bst = d, bus = e, prv = f, eng = name, mat = g, nva = h, irs = i, agr = j, AGR = round(sum(dim),2), AVR = round(mean(dim),2), GRD = do_grades([int(mean(dim))], cader(get_object_or_404(ANNUAL, pk=ids[r][0]).third.tutor.Class))[0]).save()
-            dim = []  
+        if len(annuals) != 0:
+            ids = [x for x in list(annuals.values_list('id'))]
+            c, j = [None, None]
+            for r in range(0, len(ids)):
+                name = ANNUAL.objects.get(id=ids[r][0])
+                a = return_value_or_None(request, ids[r][0], trace[0])
+                b = return_value_or_None(request, ids[r][0], trace[1])
+                if name.subject_by.Class== 'SSS 1' or name.subject_by.Class== 'SSS 2' or name.subject_by.Class== 'SSS 3':#yor
+                    c = return_value_or_None(request, ids[r][0], trace[2])
+                d = return_value_or_None(request, ids[r][0], trace[3])
+                e = return_value_or_None(request, ids[r][0], trace[4])   
+                f = return_value_or_None(request, ids[r][0], trace[5])
+                #['MAT', 'NAV', 'IRS', 'AGR'] ['MAT', 'CIV', 'IRS']
+                g = return_value_or_None(request, ids[r][0], ['MAT'])
+                h = return_value_or_None(request, ids[r][0], ['CIV', 'NAV'])
+                i = return_value_or_None(request, ids[r][0], ['IRS'])     
+                if name.subject_by.Class== 'JSS 1' or name.subject_by.Class== 'JSS 2' or name.subject_by.Class== 'JSS 3':#agr
+                    c = return_value_or_None(request, ids[r][0], ['YOR'])
+                    j = return_value_or_None(request, ids[r][0], ['AGR'])            #i
+                if len(dim) != 0:
+                    OVERALL_ANNUAL.objects.create(student_name=name.student_name, class_in=name.subject_by.Class, teacher_in=request.user,  session=name.subject_by.session, acc = a, ict = b, yor = c, bst = d, bus = e, prv = f, eng = name, mat = g, nva = h, irs = i, agr = j, AGR = round(sum(dim),2), AVR = round(mean(dim),2), GRD = do_grades([int(mean(dim))], cader(get_object_or_404(ANNUAL, pk=ids[r][0]).third.tutor.Class))[0]).save()
+                dim = []  
+        else:
+             return redirect('home')
+
 
 def subject_counter(request):
     acc = [x+':'+ str(OVERALL_ANNUAL.objects.select_related('teacher_in').filter(teacher_in__exact=request.user, class_in__exact=request.user.profile.class_in, session__exact=session, acc__third__tutor__subject__name__exact=x).count()) for x in ['CHE', 'ACC', 'ARB']]

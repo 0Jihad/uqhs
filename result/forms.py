@@ -53,7 +53,7 @@ class SignUpForm(UserCreationForm):
 class subject_class_term_Form(forms.ModelForm):
     class Meta:
         model = BTUTOR
-        fields = ('Class', 'term',)
+        fields = ('Class', 'term', )
         
 class sessions(forms.ModelForm):
     class Meta:
@@ -88,3 +88,4 @@ class new_student_name(forms.Form):
         data = self.cleaned_data['student_name']
         return data
     
+#

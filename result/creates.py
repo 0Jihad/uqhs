@@ -1,4 +1,4 @@
-from .models import QSUBJECT, ASUBJECTS, BTUTOR, TUTOR_HOME#, SESSION
+from .models import QSUBJECT, ASUBJECTS, BTUTOR, TUTOR_HOME
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import subjectforms, subject_class_term_Form, sessions, FORMARTS
