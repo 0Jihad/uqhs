@@ -11,8 +11,8 @@ from django.db.models import Sum, Avg
 
 #########################################################################################################################
 start_time = time.time()
-from result.utils import session
-session = session()
+#from result.utils import session
+session = '2024'
 def home_page(request, pk):#Step 1:: list of tutor's subjects with class, term
     """
     Home page for every tutor!
