@@ -91,9 +91,9 @@ class BTUTOR(models.Model):
 class TUTOR_HOME(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, help_text='loggon-account:move account here', related_name='home_tutor')
     teacher_name = models.CharField(max_length=50, blank=True, null=True, help_text='Subject Teacher')###
-    first_term = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, null=True, blank=True, help_text='Not editable', related_name='first')
-    second_term = models.ForeignKey(BTUTOR, on_delete=models.SET_NULL, null=True, blank=True, help_text='Not editable', related_name='second')
-    third_term = models.ForeignKey(BTUTOR, on_delete=models.SET_NULL, null=True, blank=True, help_text='Not editable', related_name='third')
+    first_term = models.ForeignKey(BTUTOR, on_delete=models.CASCADE, default='0', null=True, blank=True, help_text='Not editable', related_name='first')
+    second_term = models.ForeignKey(BTUTOR, on_delete=models.SET_NULL, null=True, default='0', blank=True, help_text='Not editable', related_name='second')
+    third_term = models.ForeignKey(BTUTOR, on_delete=models.SET_NULL, null=True, default='0', blank=True, help_text='Not editable', related_name='third')
     created = models.DateTimeField(auto_now_add=True) 
     updated = models.DateTimeField(editable=False, blank=True, null=True,)
     class Meta:
@@ -232,7 +232,29 @@ class ANNUAL(models.Model):
         """String for representing the Model object."""
         return f'{self.id}:{self.student_name}'
     
-    
+    def save(self):
+        if self.subject_by.term == '3rd Term':
+            from statistics import mean
+            from result.utils import do_grades, cader
+            qsubject = QSUBJECT.objects.filter(student_name__exact = self.student_name, tutor__Class__exact = self.subject_by.Class, tutor__subject__exact = self.subject_by.subject, tutor__session__exact = self.subject_by.session)
+            listed = [i[0] for i in list(qsubject.values_list('agr'))]
+            if len(listed) != 0:
+                if len(listed) == 3:
+                    self.first = qsubject[0]
+                    self.second = qsubject[1]
+                    self.anual = qsubject[0].agr + qsubject[1].agr + self.third.agr 
+                    self.Agr = round(mean([qsubject[0].agr , qsubject[1].agr, self.third.agr]), 2)
+                    self.Grade = do_grades([int(mean([qsubject[0].agr , qsubject[1].agr, self.third.agr]))], cader(self.third.tutor.Class))[0]
+                elif len(listed) == 2:
+                    self.second = qsubject[1]
+                    self.anual = qsubject[1].agr + self.third.agr 
+                    self.Agr = round(mean([qsubject[1].agr, self.third.agr]), 2)
+                    self.Grade = do_grades([int(mean([qsubject[1].agr, self.third.agr]))], cader(self.third.tutor.Class))[0]
+                elif len(listed) == 1:
+                    self.anual = self.third.agr 
+                    self.Agr = self.third.agr
+                    self.Grade = do_grades([int(mean([self.third.agr]))], cader(self.third.tutor.Class))[0]
+        super(ANNUAL, self).save()
     def get_absolute_url(self):
         """Returns the url to access a detail record for this student."""
         return reverse('annualmodel-detail', args=[str(self.id)])
